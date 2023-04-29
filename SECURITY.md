@@ -11,4 +11,4 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Go to issues page, create a new issue and select **Report a security vulnerabilit**.
+Go to issues page, create a new issue and select **Report a security vulnerability**.
