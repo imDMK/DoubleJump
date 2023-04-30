@@ -28,7 +28,7 @@ Currently, the plugin supports particle types that contain **no data** or only *
 [Here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html) you have a list of all (The description indicates the data).
 
 # API
-Set up the depedency using:
+To start using API you have include DoubleJump jar to your libraries or use Maven
 ### Maven
 ```xml
 <repositories>
@@ -46,16 +46,6 @@ Set up the depedency using:
     <scope>provided</scope>
   </dependency>
 </dependencies>
-```
-### Gradle
-```groovy
-repositories {
-  maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-  implementation 'com.github.imDMK:DoubleJump:VERSION'
-}
 ```
 ### Usage
 You can access the API using:
