@@ -13,9 +13,9 @@ public interface DoubleJumpApi {
     boolean enable(Player player);
 
     /**
-     * Checks if player has permission to use double jump
+     * Checks if the player is in a blocked world or has a blocked game mode. It then checks to see if the player has permission to double jump.
      * @param player The player for whom to check
-     * @return Whether the player have permission to use double jump
+     * @return Whether the player can use double jump.
      */
     boolean canUseDoubleJump(Player player);
 
