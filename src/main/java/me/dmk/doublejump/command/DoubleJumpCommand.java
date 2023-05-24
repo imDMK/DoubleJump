@@ -42,7 +42,8 @@ public class DoubleJumpCommand {
         if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
             this.jumpPlayerManager.disable(player);
             this.notificationSender.sendMessage(player, this.pluginConfiguration.getjumpModeDisabledNotification());
-        } else {
+        }
+        else {
             this.jumpPlayerManager.enable(player);
             this.notificationSender.sendMessage(player, this.pluginConfiguration.getjumpModeEnabledNotification());
         }

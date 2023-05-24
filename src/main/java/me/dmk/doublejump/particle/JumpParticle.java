@@ -28,7 +28,7 @@ public class JumpParticle extends OkaeriConfig {
     }
 
     public void setColor(String color) {
-        this.color = color  ;
+        this.color = color;
     }
 
     public int getSize() {

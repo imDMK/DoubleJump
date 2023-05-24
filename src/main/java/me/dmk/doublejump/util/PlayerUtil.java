@@ -6,13 +6,32 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerUtil {
 
     private PlayerUtil() {
         throw new UnsupportedOperationException("This is utility class.");
+    }
+
+    private static final Map<String, Color> colorNameMap = new ConcurrentHashMap<>();
+
+    static {
+        for (Field field : Color.class.getFields()) {
+            if (!field.getType().equals(Color.class)) {
+                continue;
+            }
+
+            try {
+                colorNameMap.put(field.getName(), (Color) field.get(Color.class));
+            } catch (IllegalAccessException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
     }
 
     public static void playSound(Player player, Sound sound, float volume, float pitch) {
@@ -34,30 +53,24 @@ public class PlayerUtil {
                         player.getLocation(),
                         count
                 );
-            } else {
+            }
+            else {
                 player.spawnParticle(
                         particle,
                         player.getLocation(),
                         count,
                         offsetX, offsetY, offsetZ, extra,
-                        new Particle.DustOptions(getColorFromName(jumpParticle.getColor()), jumpParticle.getSize())
+                        new Particle.DustOptions(
+                                getColorFromName(jumpParticle.getColor()),
+                                jumpParticle.getSize()
+                        )
                 );
             }
         }
     }
 
     public static Color getColorFromName(String colorName) {
-        return Arrays.stream(Color.class.getFields())
-                .filter(field -> field.getType().equals(Color.class))
-                .filter(field -> field.getName().equalsIgnoreCase(colorName))
-                .map(field -> {
-                    try {
-                        return (Color) field.get(Color.class);
-                    } catch (IllegalAccessException exception) {
-                        throw new RuntimeException(exception);
-                    }
-                })
-                .findFirst()
-                .orElse(Color.WHITE);
+        return Optional.ofNullable(colorNameMap.get(colorName))
+                .orElseThrow(() -> new IllegalStateException("Invalid color name: " + colorName));
     }
 }

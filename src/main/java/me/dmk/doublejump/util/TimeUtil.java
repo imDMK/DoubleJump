@@ -40,7 +40,8 @@ public class TimeUtil {
                 stringBuilder
                         .append(millis)
                         .append("ms");
-            } else {
+            }
+            else {
                 stringBuilder
                         .append("<1s");
             }

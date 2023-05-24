@@ -27,6 +27,7 @@ public class PluginConfiguration extends OkaeriConfig {
     public String doubleJumpUsePermission = "doublejump.use";
 
     @Comment("# Notifications (NotificationTypes: CHAT, ACTIONBAR, TITLE, SUBTITLE, To disable chosen notification leave message empty)")
+    @Comment("# {PERMISSIONS} - List of required permissions to execute command")
     public Notification missingPermissionNotification = new Notification(
             NotificationType.CHAT, "<red>Missing permission: <dark_red>{permissions}<dark_gray>."
     );
@@ -38,6 +39,7 @@ public class PluginConfiguration extends OkaeriConfig {
             NotificationType.CHAT, "<red>Disabled double jump mode!"
     );
 
+    @Comment("# {TIME} - Remaining time to next jump")
     public Notification jumpModeDelayNotification = new Notification(
             NotificationType.CHAT, "<red>Wait {time} before you again jump!"
     );
@@ -50,6 +52,7 @@ public class PluginConfiguration extends OkaeriConfig {
             NotificationType.CHAT, "<red>Double jump has been disabled in this world<dark_gray>."
     );
 
+    @Comment("# {STREAK} - Shows current jump streak")
     public Notification jumpStreakIncreaseNotification = new Notification(
             NotificationType.ACTIONBAR, "<green>Ye! Current streak: <dark_green>{streak}"
     );
@@ -82,7 +85,7 @@ public class PluginConfiguration extends OkaeriConfig {
     @Comment("# The pitch of the sound")
     public float jumpSoundPitch = 1;
 
-    @Comment("# List of particles which spawn when player use double jump (supported particles with dustoptions and without data, leave empty to disable)")
+    @Comment("# List of particles which spawn when player use double jump (supported particles with dust options and without data, leave empty to disable)")
     public List<JumpParticle> jumpParticles = List.of(
             new JumpParticle(Particle.NOTE, "AQUA", 20),
             new JumpParticle(Particle.REDSTONE, "RED", 40)
