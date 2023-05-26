@@ -113,6 +113,8 @@ public class DoubleJump extends JavaPlugin {
             this.liteCommands.getCommandService().getPlatform().unregisterAll();
         }
 
+        this.bukkitAudiences.close();
+
         Bukkit.getScheduler().cancelTasks(this);
 
         this.getLogger().info("Goodbye!");
