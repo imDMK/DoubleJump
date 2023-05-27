@@ -93,8 +93,10 @@ Example usage:
             return;
         }
         
-        player.teleport(
+        if (event.getJumpStreakResetType() == JumpStreakResetType.ON_GROUND) {
+            player.teleport(
                 new Location(player.getWorld(), 100, 100, 100)
-        );
+            );
+        }
     }
 ```
