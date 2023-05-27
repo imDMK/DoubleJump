@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerDoubleJumpEvent extends Event implements Cancellable {
+public class DoubleJumpEvent extends Event implements Cancellable {
 
     private final Player player;
     private final JumpPlayer jumpPlayer;
@@ -16,7 +16,7 @@ public class PlayerDoubleJumpEvent extends Event implements Cancellable {
 
     private static final HandlerList handlerList = new HandlerList();
 
-    public PlayerDoubleJumpEvent(Player player, JumpPlayer jumpPlayer) {
+    public DoubleJumpEvent(Player player, JumpPlayer jumpPlayer) {
         this.player = player;
         this.jumpPlayer = jumpPlayer;
     }

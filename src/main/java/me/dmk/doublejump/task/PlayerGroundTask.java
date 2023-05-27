@@ -1,7 +1,8 @@
 package me.dmk.doublejump.task;
 
 import me.dmk.doublejump.configuration.PluginConfiguration;
-import me.dmk.doublejump.event.PlayerJumpStreakResetEvent;
+import me.dmk.doublejump.event.reset.JumpStreakResetType;
+import me.dmk.doublejump.event.reset.JumpStreakResetEvent;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayerMap;
 import org.bukkit.Bukkit;
@@ -33,7 +34,7 @@ public class PlayerGroundTask implements Runnable {
             }
 
             if (player.isOnGround()) {
-                PlayerJumpStreakResetEvent jumpStreakResetEvent = new PlayerJumpStreakResetEvent(player, jumpPlayer);
+                JumpStreakResetEvent jumpStreakResetEvent = new JumpStreakResetEvent(player, jumpPlayer, JumpStreakResetType.ON_GROUND);
                 Bukkit.getPluginManager().callEvent(jumpStreakResetEvent);
 
                 if (jumpStreakResetEvent.isCancelled()) {

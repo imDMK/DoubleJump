@@ -2,7 +2,8 @@ package me.dmk.doublejump.listener;
 
 import me.dmk.doublejump.DoubleJump;
 import me.dmk.doublejump.configuration.PluginConfiguration;
-import me.dmk.doublejump.event.PlayerJumpStreakResetEvent;
+import me.dmk.doublejump.event.reset.JumpStreakResetType;
+import me.dmk.doublejump.event.reset.JumpStreakResetEvent;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
 import me.dmk.doublejump.player.JumpPlayerManager;
@@ -43,10 +44,10 @@ public class PlayerDeathListener implements Listener {
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
         if (this.pluginConfiguration.isJumpStreakResetOnDeath()) {
-            PlayerJumpStreakResetEvent playerJumpStreakResetEvent = new PlayerJumpStreakResetEvent(player, jumpPlayer);
-            Bukkit.getPluginManager().callEvent(playerJumpStreakResetEvent);
+            JumpStreakResetEvent jumpStreakResetEvent = new JumpStreakResetEvent(player, jumpPlayer, JumpStreakResetType.ON_DEATH);
+            Bukkit.getPluginManager().callEvent(jumpStreakResetEvent);
 
-            if (playerJumpStreakResetEvent.isCancelled()) {
+            if (jumpStreakResetEvent.isCancelled()) {
                 return;
             }
 

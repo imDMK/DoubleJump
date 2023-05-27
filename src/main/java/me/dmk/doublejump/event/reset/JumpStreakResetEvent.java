@@ -1,4 +1,4 @@
-package me.dmk.doublejump.event;
+package me.dmk.doublejump.event.reset;
 
 import me.dmk.doublejump.player.JumpPlayer;
 import org.bukkit.entity.Player;
@@ -7,18 +7,20 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerJumpStreakResetEvent extends Event implements Cancellable {
+public class JumpStreakResetEvent extends Event implements Cancellable {
 
     private final Player player;
     private final JumpPlayer jumpPlayer;
+    private final JumpStreakResetType jumpStreakResetType;
 
     private boolean canceled;
 
     private static final HandlerList handlerList = new HandlerList();
 
-    public PlayerJumpStreakResetEvent(Player player, JumpPlayer jumpPlayer) {
+    public JumpStreakResetEvent(Player player, JumpPlayer jumpPlayer, JumpStreakResetType jumpStreakResetType) {
         this.player = player;
         this.jumpPlayer = jumpPlayer;
+        this.jumpStreakResetType = jumpStreakResetType;
     }
 
     public Player getPlayer() {
@@ -27,6 +29,10 @@ public class PlayerJumpStreakResetEvent extends Event implements Cancellable {
 
     public JumpPlayer getJumpPlayer() {
         return this.jumpPlayer;
+    }
+
+    public JumpStreakResetType getJumpStreakResetType() {
+        return this.jumpStreakResetType;
     }
 
     @Override

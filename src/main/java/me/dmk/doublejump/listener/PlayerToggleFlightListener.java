@@ -1,7 +1,7 @@
 package me.dmk.doublejump.listener;
 
 import me.dmk.doublejump.configuration.PluginConfiguration;
-import me.dmk.doublejump.event.PlayerDoubleJumpEvent;
+import me.dmk.doublejump.event.DoubleJumpEvent;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
@@ -48,7 +48,7 @@ public class PlayerToggleFlightListener implements Listener {
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
         //Call double jump event
-        PlayerDoubleJumpEvent doubleJumpEvent = new PlayerDoubleJumpEvent(player, jumpPlayer);
+        DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
         Bukkit.getPluginManager().callEvent(doubleJumpEvent);
 
         if (doubleJumpEvent.isCancelled()) {
