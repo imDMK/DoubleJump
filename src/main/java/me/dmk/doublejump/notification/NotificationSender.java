@@ -45,16 +45,7 @@ public class NotificationSender {
         NotificationType type = notification.getType();
         String message = notification.getMessage();
 
-        if (message.isEmpty() || message.isBlank()) {
-            return;
-        }
-
-        switch (type) {
-            case CHAT -> this.sendMessage(player, message);
-            case ACTIONBAR -> this.sendActionBar(player, message);
-            case TITLE -> this.sendTitle(player, message, "");
-            case SUBTITLE -> this.sendTitle(player, "", message);
-        }
+        this.sendMessage(player, type, message);
     }
 
     /**
@@ -73,6 +64,7 @@ public class NotificationSender {
             case ACTIONBAR -> this.sendActionBar(player, message);
             case TITLE -> this.sendTitle(player, message, "");
             case SUBTITLE -> this.sendTitle(player, "", message);
+            default -> throw new IllegalStateException("Unexpected notification type: " + notificationType);
         }
     }
 
