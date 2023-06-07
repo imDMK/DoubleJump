@@ -18,7 +18,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
 
-import java.time.Instant;
 import java.util.Optional;
 
 public class PlayerToggleFlightListener implements Listener {
@@ -87,7 +86,7 @@ public class PlayerToggleFlightListener implements Listener {
 
         int jumpDelay = this.pluginConfiguration.jumpDelay;
         if (jumpDelay > 0) {
-            jumpPlayer.setDelay(Instant.now().plusMillis(jumpDelay));
+            jumpPlayer.addDelay(jumpDelay);
         }
 
         jumpPlayer.increaseStreak();

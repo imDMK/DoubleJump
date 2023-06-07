@@ -20,7 +20,7 @@ public class NotificationSender {
     }
 
     /**
-     * Sends a message
+     * Sends a component
      * @param player The player to send to
      * @param message The message to send
      */
