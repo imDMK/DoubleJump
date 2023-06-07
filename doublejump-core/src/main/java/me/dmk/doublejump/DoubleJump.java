@@ -28,6 +28,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
@@ -126,11 +127,13 @@ public class DoubleJump implements DoubleJumpApi {
                 .register();
     }
 
+    @Nonnull
     @Override
     public JumpPlayerManager getJumpPlayerManager() {
         return this.jumpPlayerManager;
     }
 
+    @Nonnull
     @Override
     public JumpPlayerMap getJumpPlayerMap() {
         return this.jumpPlayerMap;

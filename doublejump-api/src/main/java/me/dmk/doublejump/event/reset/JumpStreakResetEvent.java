@@ -1,24 +1,27 @@
-package me.dmk.doublejump.event;
+package me.dmk.doublejump.event.reset;
 
 import me.dmk.doublejump.player.JumpPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
-public class DoubleJumpEvent extends Event implements Cancellable {
+import javax.annotation.Nonnull;
+
+public class JumpStreakResetEvent extends Event implements Cancellable {
 
     private final Player player;
     private final JumpPlayer jumpPlayer;
+    private final JumpStreakResetReason jumpStreakResetReason;
 
     private boolean canceled;
 
     private static final HandlerList handlerList = new HandlerList();
 
-    public DoubleJumpEvent(Player player, JumpPlayer jumpPlayer) {
+    public JumpStreakResetEvent(Player player, JumpPlayer jumpPlayer, JumpStreakResetReason jumpStreakResetReason) {
         this.player = player;
         this.jumpPlayer = jumpPlayer;
+        this.jumpStreakResetReason = jumpStreakResetReason;
     }
 
     public Player getPlayer() {
@@ -27,6 +30,10 @@ public class DoubleJumpEvent extends Event implements Cancellable {
 
     public JumpPlayer getJumpPlayer() {
         return this.jumpPlayer;
+    }
+
+    public JumpStreakResetReason getJumpStreakResetReason() {
+        return this.jumpStreakResetReason;
     }
 
     @Override
@@ -39,7 +46,7 @@ public class DoubleJumpEvent extends Event implements Cancellable {
         this.canceled = cancel;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public HandlerList getHandlers() {
         return handlerList;
