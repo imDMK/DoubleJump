@@ -1,7 +1,0 @@
-name: DoubleJump
-version: ${project.version}
-api-version: 1.17
-main: me.dmk.doublejump.DoubleJump
-author: DMK
-description: Simple double jump plugin
-website: https://github.com/imDMK/DoubleJump
