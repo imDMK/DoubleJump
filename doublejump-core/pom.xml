@@ -40,7 +40,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>me.dmk.doublejump</groupId>
+            <groupId>me.dmk</groupId>
             <artifactId>doublejump-api</artifactId>
             <version>1.0.1</version>
             <scope>compile</scope>
