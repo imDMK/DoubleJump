@@ -31,26 +31,25 @@ Currently, the plugin supports particle types that contain **no data** or only *
 To start using API you have to include DoubleJump jar to your libraries or use Maven.
 ### Maven
 ```xml
-<repositories>
-  <repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-  </repository>
-</repositories>
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
 
-<dependencies>
-  <dependency>
-    <groupId>com.github.imDMK</groupId>
-    <artifactId>DoubleJump</artifactId>
-    <version>VERSION</version>
-    <scope>provided</scope>
-  </dependency>
-</dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.imDMK.DoubleJump</groupId>
+      <artifactId>doublejump-api</artifactId>
+      <version>VERSION</version>
+    </dependency>
+  </dependencies>
 ```
 ### Usage
 You can access the API using:
 ```java
-DoubleJump.getApi();
+DoubleJumpApiProvider.get();
 ```
 Example:
 ```java
@@ -59,16 +58,18 @@ Example:
         Player player = event.getPlayer();
         String message = event.getMessage();
 
-        DoubleJumpApi doubleJumpApi = DoubleJump.getApi();
+        DoubleJumpApi doubleJumpApi = DoubleJumpApiProvider.get();
+        JumpPlayerManager jumpPlayerManager = doubleJumpApi.getJumpPlayerManager();
 
         if (message.equalsIgnoreCase("!testdoublejump")) {
-            if (doubleJumpApi.isDoubleJumpMode(player)) {
+            if (jumpPlayerManager.isDoubleJumpMode(player)) {
                 return;
             }
 
             event.setCancelled(true);
+            
+            jumpPlayerManager.enable(player);
 
-            doubleJumpApi.enable(player);
             player.sendMessage("Now u can test our double jump plugin!");
         }
     }
@@ -78,14 +79,14 @@ You can listen events which are called before action.
 Example usage:
 ```java
     @EventHandler
-    public void onPlayerDoubleJump(PlayerDoubleJumpEvent event) {
+    public void onPlayerDoubleJump(DoubleJumpEvent event) {
         Player player = event.getPlayer();
 
         System.out.println(player.getName() + " used double jump.");
     }
     
     @EventHandler
-    public void onPlayerJumpStreakReset(PlayerJumpStreakResetEvent event) {
+    public void onJumpStreakReset(JumpStreakResetEvent event) {
         Player player = event.getPlayer();
         
         if (player.isOp()) {
@@ -93,7 +94,7 @@ Example usage:
             return;
         }
         
-        if (event.getJumpStreakResetType() == JumpStreakResetType.ON_GROUND) {
+        if (event.getJumpStreakResetReason() == JumpStreakResetReason.PLAYER_ON_GROUND) {
             player.teleport(
                 new Location(player.getWorld(), 100, 100, 100)
             );
