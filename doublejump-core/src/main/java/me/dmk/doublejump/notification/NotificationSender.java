@@ -19,13 +19,17 @@ public class NotificationSender {
         this.miniMessage = miniMessage;
     }
 
+    public NotificationBuilder builder() {
+        return new NotificationBuilder(this);
+    }
+
     /**
      * Sends a component
      * @param player The player to send to
      * @param message The message to send
      */
     public void sendMessage(Player player, String message) {
-        if (message.isEmpty() || message.isBlank()) {
+        if (message == null || message.isEmpty() || message.isBlank()) {
             return;
         }
 
@@ -42,10 +46,7 @@ public class NotificationSender {
      * @param notification The notification to send
      */
     public void sendMessage(Player player, Notification notification) {
-        NotificationType type = notification.getType();
-        String message = notification.getMessage();
-
-        this.sendMessage(player, type, message);
+        this.sendMessage(player, notification.getType(), notification.getMessage());
     }
 
     /**
@@ -55,7 +56,7 @@ public class NotificationSender {
      * @param message The message to send
      */
     public void sendMessage(Player player, NotificationType notificationType, String message) {
-        if (message.isEmpty() || message.isBlank()) {
+        if (message == null || message.isEmpty() || message.isBlank()) {
             return;
         }
 

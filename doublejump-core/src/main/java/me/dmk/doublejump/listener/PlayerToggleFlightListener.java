@@ -2,7 +2,6 @@ package me.dmk.doublejump.listener;
 
 import me.dmk.doublejump.configuration.PluginConfiguration;
 import me.dmk.doublejump.event.DoubleJumpEvent;
-import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
 import me.dmk.doublejump.player.JumpPlayerMap;
@@ -70,11 +69,10 @@ public class PlayerToggleFlightListener implements Listener {
         }
 
         if (!jumpPlayer.canUseJump()) {
-            Notification notification = this.pluginConfiguration.jumpModeDelayNotification;
-            String message = notification.getMessage()
-                    .replace("{time}", TimeUtil.instantToString(jumpPlayer.getDelay()));
-
-            this.notificationSender.sendMessage(player, notification.getType(), message);
+            this.notificationSender.builder()
+                    .fromNotification(this.pluginConfiguration.jumpModeDelayNotification)
+                    .placeholder("{time}", TimeUtil.instantToString(jumpPlayer.getDelay()))
+                    .send(player);
             return;
         }
 
@@ -94,10 +92,9 @@ public class PlayerToggleFlightListener implements Listener {
         PlayerUtil.playSound(player, this.pluginConfiguration.jumpSound, this.pluginConfiguration.jumpSoundVolume, this.pluginConfiguration.jumpSoundPitch);
         PlayerUtil.spawnParticles(player, this.pluginConfiguration.jumpParticles, this.pluginConfiguration.jumpParticlesCount, this.pluginConfiguration.jumpParticlesOffsetX, this.pluginConfiguration.jumpParticlesOffsetY, this.pluginConfiguration.jumpParticlesOffsetZ, this.pluginConfiguration.jumpParticlesExtra);
 
-        Notification notification = this.pluginConfiguration.jumpStreakIncreaseNotification;
-        String message = notification.getMessage()
-                .replace("{streak}", String.valueOf(jumpPlayer.getStreak()));
-
-        this.notificationSender.sendMessage(player, notification.getType(), message);
+        this.notificationSender.builder()
+                .fromNotification(this.pluginConfiguration.jumpStreakIncreaseNotification)
+                .placeholder("{streak}", jumpPlayer.getStreak())
+                .send(player);
     }
 }
