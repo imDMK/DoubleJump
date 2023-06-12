@@ -14,11 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class PlayerUtil {
 
+    private static final Map<String, Color> colors = new ConcurrentHashMap<>();
+
     private PlayerUtil() {
         throw new UnsupportedOperationException("This is utility class.");
     }
-
-    private static final Map<String, Color> colors = new ConcurrentHashMap<>();
 
     static {
         for (Field field : Color.class.getFields()) {
