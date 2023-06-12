@@ -10,16 +10,26 @@ import javax.annotation.Nonnull;
 
 public class DoubleJumpEvent extends Event implements Cancellable {
 
+    private static final HandlerList handlerList = new HandlerList();
+
     private final Player player;
     private final JumpPlayer jumpPlayer;
 
     private boolean canceled;
 
-    private static final HandlerList handlerList = new HandlerList();
-
     public DoubleJumpEvent(Player player, JumpPlayer jumpPlayer) {
         this.player = player;
         this.jumpPlayer = jumpPlayer;
+    }
+
+    @Nonnull
+    @Override
+    public HandlerList getHandlers() {
+        return handlerList;
+    }
+
+    public static HandlerList getHandlerList() { //Required for work
+        return handlerList;
     }
 
     public Player getPlayer() {
@@ -38,15 +48,5 @@ public class DoubleJumpEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean cancel) {
         this.canceled = cancel;
-    }
-
-    @Nonnull
-    @Override
-    public HandlerList getHandlers() {
-        return handlerList;
-    }
-
-    public static HandlerList getHandlerList() { //Required for work
-        return handlerList;
     }
 }

@@ -10,18 +10,28 @@ import javax.annotation.Nonnull;
 
 public class JumpStreakResetEvent extends Event implements Cancellable {
 
+    private static final HandlerList handlerList = new HandlerList();
+
     private final Player player;
     private final JumpPlayer jumpPlayer;
     private final JumpStreakResetReason jumpStreakResetReason;
 
     private boolean canceled;
 
-    private static final HandlerList handlerList = new HandlerList();
-
     public JumpStreakResetEvent(Player player, JumpPlayer jumpPlayer, JumpStreakResetReason jumpStreakResetReason) {
         this.player = player;
         this.jumpPlayer = jumpPlayer;
         this.jumpStreakResetReason = jumpStreakResetReason;
+    }
+
+    @Nonnull
+    @Override
+    public HandlerList getHandlers() {
+        return handlerList;
+    }
+
+    public static HandlerList getHandlerList() { //Required for work
+        return handlerList;
     }
 
     public Player getPlayer() {
@@ -44,15 +54,5 @@ public class JumpStreakResetEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean cancel) {
         this.canceled = cancel;
-    }
-
-    @Nonnull
-    @Override
-    public HandlerList getHandlers() {
-        return handlerList;
-    }
-
-    public static HandlerList getHandlerList() { //Required for work
-        return handlerList;
     }
 }
