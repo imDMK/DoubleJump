@@ -26,7 +26,7 @@ public class PlayerJoinListener implements Listener {
 
         if (this.pluginConfiguration.enableJumpModeOnJoinForAdmins && player.isOp()
                 || this.pluginConfiguration.enableJumpModeOnJoinForPlayers && this.jumpPlayerManager.canUseDoubleJump(player)) {
-            this.taskScheduler.runLaterAsync(() -> this.jumpPlayerManager.enable(player), 40L);
+            this.taskScheduler.runLaterAsync(() -> this.jumpPlayerManager.enable(player, true), 40L);
         }
     }
 }

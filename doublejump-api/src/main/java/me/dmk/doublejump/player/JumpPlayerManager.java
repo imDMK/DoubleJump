@@ -28,10 +28,11 @@ public class JumpPlayerManager {
     /**
      * Denies flying, allows flight and adds a player to {@link JumpPlayerMap}
      * @param player The player for whom to enable
+     * @param force Whether to skip checking if a player can use double jump.
      * @return Whether the double jump mode has been enabled
      */
-    public boolean enable(Player player) {
-        if (!this.canUseDoubleJump(player)) {
+    public boolean enable(Player player, boolean force) {
+        if (!force && !this.canUseDoubleJump(player)) {
             return false;
         }
 

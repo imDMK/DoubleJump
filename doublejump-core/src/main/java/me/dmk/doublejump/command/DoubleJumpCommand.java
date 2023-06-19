@@ -44,7 +44,7 @@ public class DoubleJumpCommand {
             this.notificationSender.sendMessage(player, this.pluginConfiguration.jumpModeDisabledNotification);
         }
         else {
-            this.jumpPlayerManager.enable(player);
+            this.jumpPlayerManager.enable(player, true);
             this.notificationSender.sendMessage(player, this.pluginConfiguration.jumpModeEnabledNotification);
         }
     }
