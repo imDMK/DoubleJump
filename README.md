@@ -78,7 +78,7 @@ Example:
 
             event.setCancelled(true);
             
-            jumpPlayerManager.enable(player);
+            jumpPlayerManager.enable(player, true);
 
             player.sendMessage("Now u can test our double jump plugin!");
         }
