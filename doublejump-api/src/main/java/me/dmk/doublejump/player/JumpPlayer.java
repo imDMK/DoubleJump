@@ -1,5 +1,6 @@
 package me.dmk.doublejump.player;
 
+import java.time.Duration;
 import java.time.Instant;
 
 /**
@@ -16,6 +17,7 @@ public class JumpPlayer {
     }
 
     public JumpPlayer() {
+        this.delay = Instant.MIN;
         this.streak = 0;
     }
 
@@ -23,24 +25,24 @@ public class JumpPlayer {
         return this.delay;
     }
 
-    public void setDelay(Instant delay) {
-        this.delay = delay;
+    public boolean canUseJump() {
+        return Instant.now().isAfter(this.delay);
     }
 
     /**
      * Sets a delay from the current time
-     * @param millis milliseconds to add
+     * @param duration duration to add
      */
-    public void addDelay(long millis) {
-        this.delay = Instant.now().plusMillis(millis);
+    public void addDelay(Duration duration) {
+        this.delay = Instant.now().plus(duration);
+    }
+
+    public void setDelay(Instant delay) {
+        this.delay = delay;
     }
 
     public int getStreak() {
         return this.streak;
-    }
-
-    public void setStreak(int streak) {
-        this.streak = streak;
     }
 
     /**
@@ -51,11 +53,7 @@ public class JumpPlayer {
         return this.streak += 1;
     }
 
-    public boolean canUseJump() {
-        if (this.delay == null) {
-            return true;
-        }
-
-        return Instant.now().isAfter(this.delay);
+    public void setStreak(int streak) {
+        this.streak = streak;
     }
 }
