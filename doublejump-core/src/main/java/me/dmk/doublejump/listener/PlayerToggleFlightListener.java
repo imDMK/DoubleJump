@@ -55,7 +55,9 @@ public class PlayerToggleFlightListener implements Listener {
         }
 
         event.setCancelled(true);
+
         player.setFlying(false);
+        player.setAllowFlight(false);
 
         if (this.pluginConfiguration.disabledGameModes.contains(playerGameMode)) {
             this.jumpPlayerMap.remove(player);

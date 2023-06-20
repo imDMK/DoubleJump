@@ -65,6 +65,9 @@ public class PluginConfiguration extends OkaeriConfig {
     public double jumpMultiple = 0.5;
     public double jumpUp = 0.5;
 
+    @Comment("# Should fall damage be enabled? (This option has no effect if the jump delay is 0)")
+    public boolean jumpFallDamage = true;
+
     @Comment("# Auto enable double jump mode when player join to server (player must have double jump use permission)")
     public boolean enableJumpModeOnJoinForPlayers = true;
     public boolean enableJumpModeOnJoinForAdmins = true;

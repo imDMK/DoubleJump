@@ -11,8 +11,10 @@ import me.dmk.doublejump.command.editor.CommandPermissionEditor;
 import me.dmk.doublejump.command.handler.MissingPermissionHandler;
 import me.dmk.doublejump.configuration.PluginConfiguration;
 import me.dmk.doublejump.listener.PlayerDeathListener;
+import me.dmk.doublejump.listener.PlayerFallDamageListener;
 import me.dmk.doublejump.listener.PlayerGameModeChangeListener;
 import me.dmk.doublejump.listener.PlayerJoinListener;
+import me.dmk.doublejump.listener.PlayerMoveListener;
 import me.dmk.doublejump.listener.PlayerQuitListener;
 import me.dmk.doublejump.listener.PlayerToggleFlightListener;
 import me.dmk.doublejump.notification.NotificationSender;
@@ -72,7 +74,7 @@ public class DoubleJump implements DoubleJumpApi {
         this.jumpPlayerMap = new JumpPlayerMap();
 
         /* Managers */
-        this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.disabledWorlds, this.pluginConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpCommandPermission, this.jumpPlayerMap);
+        this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.disabledWorlds, this.pluginConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.jumpPlayerMap);
 
         /* Task Scheduler */
         TaskScheduler taskScheduler = new TaskSchedulerImpl(plugin, server);
@@ -80,8 +82,10 @@ public class DoubleJump implements DoubleJumpApi {
         /* Listeners */
         Stream.of(
                 new PlayerDeathListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap, this.jumpPlayerManager, taskScheduler),
+                new PlayerFallDamageListener(this.pluginConfiguration),
                 new PlayerGameModeChangeListener(this.jumpPlayerManager, taskScheduler),
                 new PlayerJoinListener(this.pluginConfiguration, this.jumpPlayerManager, taskScheduler),
+                new PlayerMoveListener(this.jumpPlayerMap),
                 new PlayerQuitListener(this.jumpPlayerManager),
                 new PlayerToggleFlightListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap)
         ).forEach(listener -> server.getPluginManager().registerEvents(listener, plugin));

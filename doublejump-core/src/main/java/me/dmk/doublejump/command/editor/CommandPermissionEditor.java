@@ -16,8 +16,7 @@ public class CommandPermissionEditor implements CommandEditor {
     @Override
     public State edit(State state) {
         return state.permission(List.of(
-                this.pluginConfiguration.doubleJumpCommandPermission,
-                this.pluginConfiguration.doubleJumpUsePermission
+                this.pluginConfiguration.doubleJumpCommandPermission
         ));
     }
 }
