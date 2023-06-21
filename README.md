@@ -11,7 +11,7 @@ A simple double jump plugin with a lot of configuration options.
 * Spawn particles when player use double jump, 
 * Playing sound when player use double jump,
 * Double jump streaks,
-* Possibility to customize messages (also type, e.g. ACTIONBAR or CHAT),
+* Possibility to customize messages (disable or type, e.g. ACTIONBAR or CHAT),
 * Possibility to disable using double jump in selected worlds,
 * Possibility to enable double jump mode when joining the server (U can set only for administrators),
 * Ability to disable using double jump in selected game modes,
@@ -78,7 +78,7 @@ Example:
 
             event.setCancelled(true);
             
-            jumpPlayerManager.enable(player, true); //Force enable double jump mode (skip checking if player can use double jump).
+            jumpPlayerManager.enable(player, true); //true to skip checking if player can use double jump
 
             player.sendMessage("Now u can test our double jump plugin!");
         }
