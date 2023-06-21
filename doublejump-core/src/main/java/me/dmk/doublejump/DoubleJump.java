@@ -82,7 +82,7 @@ public class DoubleJump implements DoubleJumpApi {
         /* Listeners */
         Stream.of(
                 new PlayerDeathListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap, this.jumpPlayerManager, taskScheduler),
-                new PlayerFallDamageListener(this.pluginConfiguration),
+                new PlayerFallDamageListener(this.pluginConfiguration, this.jumpPlayerManager),
                 new PlayerGameModeChangeListener(this.jumpPlayerManager, taskScheduler),
                 new PlayerJoinListener(this.pluginConfiguration, this.jumpPlayerManager, taskScheduler),
                 new PlayerMoveListener(this.jumpPlayerMap),
