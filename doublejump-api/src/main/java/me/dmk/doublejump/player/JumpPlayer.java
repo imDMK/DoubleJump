@@ -30,11 +30,11 @@ public class JumpPlayer {
     }
 
     /**
-     * Sets a delay from the current time
-     * @param duration duration to add
+     * Adds a delay to the current time
+     * @param delay delay to add
      */
-    public void addDelay(Duration duration) {
-        this.delay = Instant.now().plus(duration);
+    public void addDelay(Duration delay) {
+        this.delay = Instant.now().plus(delay);
     }
 
     public void setDelay(Instant delay) {
