@@ -18,6 +18,15 @@ public class PlayerMoveListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
+        if (player.isFlying()) {
+            return;
+        }
+
+        if (player.getFallDistance() > 0) {
+            player.setAllowFlight(false);
+            return;
+        }
+
         this.jumpPlayerMap.get(player).ifPresent(jumpPlayer -> {
             if (!jumpPlayer.canUseJump()) {
                 return;
