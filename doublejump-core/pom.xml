@@ -36,6 +36,12 @@
             <id>panda-repository</id>
             <url>https://repo.panda-lang.org/releases</url>
         </repository>
+
+        <!-- Eternal code -->
+        <repository>
+            <id>eternalcode-releases</id>
+            <url>https://repo.eternalcode.pl/releases</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -88,6 +94,13 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.3.0</version>
+        </dependency>
+
+        <!-- Git check -->
+        <dependency>
+            <groupId>com.eternalcode</groupId>
+            <artifactId>gitcheck</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

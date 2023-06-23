@@ -20,6 +20,9 @@ import java.util.List;
 public class PluginConfiguration extends OkaeriConfig {
 
     @Comment("# Booleans")
+    @Comment("# Check if you are using the latest version when enabling the plugin?")
+    public boolean checkForUpdate = true;
+
     public boolean doubleJumpCommandEnabled = true;
 
     @Comment("# To auto enable jump mode player must have double jump use permission")

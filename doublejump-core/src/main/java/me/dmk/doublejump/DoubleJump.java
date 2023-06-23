@@ -1,5 +1,10 @@
 package me.dmk.doublejump;
 
+import com.eternalcode.gitcheck.GitCheck;
+import com.eternalcode.gitcheck.GitCheckResult;
+import com.eternalcode.gitcheck.git.GitRelease;
+import com.eternalcode.gitcheck.git.GitRepository;
+import com.eternalcode.gitcheck.git.GitTag;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
@@ -23,6 +28,7 @@ import me.dmk.doublejump.player.JumpPlayerMap;
 import me.dmk.doublejump.task.PlayerGroundTask;
 import me.dmk.doublejump.task.scheduler.TaskScheduler;
 import me.dmk.doublejump.task.scheduler.TaskSchedulerImpl;
+import me.dmk.doublejump.util.AnsiColor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Server;
@@ -38,6 +44,8 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class DoubleJump implements DoubleJumpApi {
+
+    private static final GitRepository GIT_REPOSITORY = GitRepository.of("imDMK", "DoubleJump");
 
     private final PluginConfiguration pluginConfiguration;
 
@@ -100,6 +108,12 @@ public class DoubleJump implements DoubleJumpApi {
             taskScheduler.runTimerAsync(new PlayerGroundTask(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap, server), 10L, 10L);
         }
 
+        /* Update check */
+        if (this.pluginConfiguration.checkForUpdate) {
+            String version = plugin.getDescription().getVersion();
+            this.checkForUpdate(version, logger);
+        }
+
         Duration timeElapsed = Duration.between(start, Instant.now());
         logger.info("Enabled plugin in " + timeElapsed.toMillis() + "ms.");
     }
@@ -129,6 +143,23 @@ public class DoubleJump implements DoubleJumpApi {
                 )
 
                 .register();
+    }
+
+    private void checkForUpdate(String version, Logger logger) {
+        GitCheck gitCheck = new GitCheck();
+
+        GitTag gitTag = GitTag.of("v" + version);
+        GitCheckResult checkResult = gitCheck.checkRelease(GIT_REPOSITORY, gitTag);
+
+        if (checkResult.isUpToDate()) {
+            logger.info(AnsiColor.GREEN + "You are using latest version. Thank you." + AnsiColor.RESET);
+        }
+        else {
+            GitRelease latestRelease = checkResult.getLatestRelease();
+
+            logger.info(AnsiColor.YELLOW + "A new version is available: " + latestRelease.getTag() + AnsiColor.RESET);
+            logger.info(AnsiColor.YELLOW + "Download it here: " + latestRelease.getPageUrl() + AnsiColor.RESET);
+        }
     }
 
     @Nonnull
