@@ -47,6 +47,12 @@ public class NotificationBuilder {
     }
 
     @CheckReturnValue
+    public NotificationBuilder placeholder(@Nonnull String from, Iterable<? extends CharSequence> sequences) {
+        this.placeholders.put(from, String.join(", ", sequences));
+        return this;
+    }
+
+    @CheckReturnValue
     public <T> NotificationBuilder placeholder(@Nonnull String from, T to) {
         this.placeholders.put(from, to.toString());
         return this;
