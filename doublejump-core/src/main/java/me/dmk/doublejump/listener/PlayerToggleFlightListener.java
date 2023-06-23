@@ -6,7 +6,6 @@ import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
 import me.dmk.doublejump.player.JumpPlayerMap;
 import me.dmk.doublejump.util.PlayerUtil;
-import me.dmk.doublejump.util.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -17,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
 
-import java.time.Duration;
 import java.util.Optional;
 
 public class PlayerToggleFlightListener implements Listener {
@@ -47,17 +45,9 @@ public class PlayerToggleFlightListener implements Listener {
 
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
-        DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
-
-        Bukkit.getPluginManager().callEvent(doubleJumpEvent);
-        if (doubleJumpEvent.isCancelled()) {
+        if (!jumpPlayer.canUseJump()) {
             return;
         }
-
-        event.setCancelled(true);
-
-        player.setFlying(false);
-        player.setAllowFlight(false);
 
         if (this.pluginConfiguration.disabledGameModes.contains(playerGameMode)) {
             this.jumpPlayerMap.remove(player);
@@ -71,13 +61,17 @@ public class PlayerToggleFlightListener implements Listener {
             return;
         }
 
-        if (!jumpPlayer.canUseJump()) {
-            this.notificationSender.builder()
-                    .fromNotification(this.pluginConfiguration.jumpModeDelayNotification)
-                    .placeholder("{time}", TimeUtil.instantToString(jumpPlayer.getDelay()))
-                    .send(player);
+        DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
+
+        Bukkit.getPluginManager().callEvent(doubleJumpEvent);
+        if (doubleJumpEvent.isCancelled()) {
             return;
         }
+
+        event.setCancelled(true);
+
+        player.setFlying(false);
+        player.setAllowFlight(false);
 
         Vector vector = playerLocation.getDirection()
                 .multiply(this.pluginConfiguration.jumpMultiple)
@@ -85,19 +79,25 @@ public class PlayerToggleFlightListener implements Listener {
 
         player.setVelocity(vector);
 
-        int jumpDelay = this.pluginConfiguration.jumpDelay;
-        if (jumpDelay > 0) {
-            jumpPlayer.addDelay(Duration.ofMillis(jumpDelay));
+        if (this.pluginConfiguration.jumpDelayEnabled) {
+            jumpPlayer.addDelay(this.pluginConfiguration.jumpDelay);
         }
 
-        jumpPlayer.increaseStreak();
+        if (this.pluginConfiguration.jumpSoundsEnabled) {
+            PlayerUtil.playSound(player, this.pluginConfiguration.jumpSound, this.pluginConfiguration.jumpSoundVolume, this.pluginConfiguration.jumpSoundPitch);
+        }
 
-        PlayerUtil.playSound(player, this.pluginConfiguration.jumpSound, this.pluginConfiguration.jumpSoundVolume, this.pluginConfiguration.jumpSoundPitch);
-        PlayerUtil.spawnParticles(player, this.pluginConfiguration.jumpParticles, this.pluginConfiguration.jumpParticlesCount, this.pluginConfiguration.jumpParticlesOffsetX, this.pluginConfiguration.jumpParticlesOffsetY, this.pluginConfiguration.jumpParticlesOffsetZ, this.pluginConfiguration.jumpParticlesExtra);
+        if (this.pluginConfiguration.jumpParticlesEnabled) {
+            PlayerUtil.spawnParticles(player, this.pluginConfiguration.jumpParticles, this.pluginConfiguration.jumpParticlesCount, this.pluginConfiguration.jumpParticlesOffsetX, this.pluginConfiguration.jumpParticlesOffsetY, this.pluginConfiguration.jumpParticlesOffsetZ, this.pluginConfiguration.jumpParticlesExtra);
+        }
 
-        this.notificationSender.builder()
-                .fromNotification(this.pluginConfiguration.jumpStreakIncreaseNotification)
-                .placeholder("{streak}", jumpPlayer.getStreak())
-                .send(player);
+        if (this.pluginConfiguration.jumpStreaksEnabled) {
+            jumpPlayer.increaseStreak();
+
+            this.notificationSender.builder()
+                    .fromNotification(this.pluginConfiguration.jumpStreakIncreaseNotification)
+                    .placeholder("{streak}", jumpPlayer.getStreak())
+                    .send(player);
+        }
     }
 }

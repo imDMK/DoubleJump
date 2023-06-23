@@ -4,5 +4,6 @@ public enum NotificationType {
     CHAT,
     ACTIONBAR,
     TITLE,
-    SUBTITLE
+    SUBTITLE,
+    DISABLED
 }

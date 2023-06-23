@@ -65,6 +65,8 @@ public class NotificationSender {
             case ACTIONBAR -> this.sendActionBar(player, message);
             case TITLE -> this.sendTitle(player, message, "");
             case SUBTITLE -> this.sendTitle(player, "", message);
+            case DISABLED -> {
+            }
             default -> throw new IllegalStateException("Unexpected notification type: " + notificationType);
         }
     }

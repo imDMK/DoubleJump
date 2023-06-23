@@ -10,6 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,18 +19,68 @@ import java.util.List;
 @Header("#")
 public class PluginConfiguration extends OkaeriConfig {
 
-    @Comment("# Commands")
-    @Comment("# Enable or disable doublejump command.")
+    @Comment("# Booleans")
     public boolean doubleJumpCommandEnabled = true;
+
+    @Comment("# To auto enable jump mode player must have double jump use permission")
+    public boolean enableJumpModeOnJoinForPlayers = true;
+    public boolean enableJumpModeOnJoinForAdmins = true;
+
+    @Comment("# NOTE: It is not guaranteed that the player will receive fall damage")
+    public boolean jumpFallDamageEnabled = true;
+    public boolean jumpParticlesEnabled = true;
+    public boolean jumpSoundsEnabled = true;
+    public boolean jumpDelayEnabled = true;
+
+    @Comment("# Jump streak")
+    public boolean jumpStreaksEnabled = true;
+    public boolean jumpStreakResetOnGround = false;
+    public boolean jumpStreakResetOnDeath = true;
 
     @Comment("# Permissions")
     public String doubleJumpCommandPermission = "command.doublejump";
     public String doubleJumpUsePermission = "doublejump.use";
 
-    @Comment("# Notifications (Notification types: CHAT, ACTIONBAR, TITLE, SUBTITLE, To disable chosen notification leave message empty)")
-    @Comment("# {PERMISSIONS} - List of required permissions to execute command")
-    public Notification missingPermissionNotification = new Notification(
-            NotificationType.CHAT, "<red>Missing permission: <dark_red>{permissions}<dark_gray>."
+    @Comment("# Jump settings")
+    public double jumpMultiple = 0.5;
+    public double jumpUp = 0.5;
+
+    public Duration jumpDelay = Duration.ofSeconds(2);
+
+    @Comment({
+            "# Jump sound",
+            "# Sound types: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html"
+    })
+    public Sound jumpSound = Sound.ENTITY_EXPERIENCE_BOTTLE_THROW;
+    public float jumpSoundVolume = 0.20F;
+    public float jumpSoundPitch = 1;
+
+    @Comment("# Jump particles")
+    public int jumpParticlesCount = 10;
+    public int jumpParticlesExtra = 0;
+    public double jumpParticlesOffsetX = 0;
+    public double jumpParticlesOffsetY = 0;
+    public double jumpParticlesOffsetZ = 0;
+
+    public List<JumpParticle> jumpParticles = new ArrayList<>(List.of(
+            new JumpParticle(Particle.NOTE, "AQUA", 20),
+            new JumpParticle(Particle.REDSTONE, "RED", 40)
+    ));
+
+    @Comment("# Restrictions")
+    public List<String> disabledWorlds = new ArrayList<>();
+    public List<GameMode> disabledGameModes = new ArrayList<>(List.of(
+            GameMode.SPECTATOR,
+            GameMode.CREATIVE
+    ));
+
+    @Comment({
+            "# Notifications",
+            "# Types: CHAT, ACTIONBAR, TITLE, SUBTITLE, DISABLED",
+            "# {PERMISSIONS} - Required permissions"
+    })
+    public Notification missingPermissionsNotification = new Notification(
+            NotificationType.CHAT, "<red>Missing permissions: <dark_red>{permissions}<dark_gray>."
     );
 
     public Notification jumpModeEnabledNotification = new Notification(
@@ -37,11 +88,6 @@ public class PluginConfiguration extends OkaeriConfig {
     );
     public Notification jumpModeDisabledNotification = new Notification(
             NotificationType.CHAT, "<red>Disabled double jump mode!"
-    );
-
-    @Comment("# {TIME} - Remaining time to next jump")
-    public Notification jumpModeDelayNotification = new Notification(
-            NotificationType.CHAT, "<red>Wait {time} before you again jump!"
     );
 
     public Notification jumpModeDisabledGameModeNotification = new Notification(
@@ -59,56 +105,5 @@ public class PluginConfiguration extends OkaeriConfig {
 
     public Notification jumpStreakResetNotification = new Notification(
             NotificationType.ACTIONBAR, "<red>Ops! Your jump streak has been reset."
-    );
-
-    @Comment("# Jump settings")
-    public double jumpMultiple = 0.5;
-    public double jumpUp = 0.5;
-
-    @Comment("# Should fall damage be enabled? (This option has no effect if the jump delay is 0)")
-    public boolean jumpFallDamage = true;
-
-    @Comment("# Auto enable double jump mode when player join to server (player must have double jump use permission)")
-    public boolean enableJumpModeOnJoinForPlayers = true;
-    public boolean enableJumpModeOnJoinForAdmins = true;
-
-    @Comment("# Reset jump series when player touch ground")
-    public boolean jumpStreakResetOnGround = false;
-    @Comment("# Reset jump series when player death")
-    public boolean jumpStreakResetOnDeath = true;
-
-    @Comment("# Jump delay (in ms, 1 second = 1000ms, Negative value to disable)")
-    public int jumpDelay = 2000;
-
-    @Comment("# Name of minecraft sound when player jumps (null value to disable)")
-    public Sound jumpSound = Sound.ENTITY_EXPERIENCE_BOTTLE_THROW;
-
-    @Comment("# The volume of the sound")
-    public float jumpSoundVolume = 0.20F;
-    @Comment("# The pitch of the sound")
-    public float jumpSoundPitch = 1;
-
-    @Comment("# List of particles which spawn when player use double jump (supported particles with dust options and without data, leave empty to disable)")
-    public List<JumpParticle> jumpParticles = List.of(
-            new JumpParticle(Particle.NOTE, "AQUA", 20),
-            new JumpParticle(Particle.REDSTONE, "RED", 40)
-    );
-
-    @Comment("# Particle data")
-    @Comment("# The number of particles")
-    public int jumpParticlesCount = 10;
-    @Comment("# The maximum random offset of the X/Y/Z axis")
-    public double jumpParticlesOffsetX = 0;
-    public double jumpParticlesOffsetY = 0;
-    public double jumpParticlesOffsetZ = 0;
-    @Comment("# The extra data")
-    public int jumpParticlesExtra = 0;
-
-    @Comment("# List name of worlds were double jumps will not work")
-    public List<String> disabledWorlds = new ArrayList<>();
-
-    @Comment("# List of game modes that cannot use double jump")
-    public List<GameMode> disabledGameModes = List.of(
-            GameMode.SPECTATOR
     );
 }

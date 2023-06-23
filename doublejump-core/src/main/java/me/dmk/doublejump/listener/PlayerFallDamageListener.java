@@ -19,7 +19,7 @@ public class PlayerFallDamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (this.pluginConfiguration.jumpFallDamage) {
+        if (this.pluginConfiguration.jumpFallDamageEnabled) {
             return;
         }
 

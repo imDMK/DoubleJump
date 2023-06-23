@@ -22,7 +22,7 @@ public class MissingPermissionHandler implements PermissionHandler<CommandSender
     @Override
     public void handle(CommandSender commandSender, LiteInvocation liteInvocation, RequiredPermissions requiredPermissions) {
         NotificationBuilder notificationBuilder = this.notificationSender.builder()
-                .fromNotification(this.pluginConfiguration.missingPermissionNotification)
+                .fromNotification(this.pluginConfiguration.missingPermissionsNotification)
                 .placeholder("{permissions}", requiredPermissions.getPermissions());
 
         if (commandSender instanceof Player player) {

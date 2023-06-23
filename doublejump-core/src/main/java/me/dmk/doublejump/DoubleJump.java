@@ -4,8 +4,8 @@ import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
 import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
-import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import me.dmk.doublejump.command.DoubleJumpCommand;
 import me.dmk.doublejump.command.editor.CommandPermissionEditor;
 import me.dmk.doublejump.command.handler.MissingPermissionHandler;
@@ -59,7 +59,7 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Configuration */
         this.pluginConfiguration = ConfigManager.create(PluginConfiguration.class, (it) -> {
-            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons());
             it.withBindFile(new File(plugin.getDataFolder(), "configuration.yml"));
             it.withRemoveOrphans(true);
             it.saveDefaults();
@@ -85,7 +85,7 @@ public class DoubleJump implements DoubleJumpApi {
                 new PlayerFallDamageListener(this.pluginConfiguration, this.jumpPlayerManager),
                 new PlayerGameModeChangeListener(this.jumpPlayerManager, taskScheduler),
                 new PlayerJoinListener(this.pluginConfiguration, this.jumpPlayerManager, taskScheduler),
-                new PlayerMoveListener(this.jumpPlayerMap),
+                new PlayerMoveListener(this.pluginConfiguration, this.jumpPlayerMap),
                 new PlayerQuitListener(this.jumpPlayerManager),
                 new PlayerToggleFlightListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap)
         ).forEach(listener -> server.getPluginManager().registerEvents(listener, plugin));
@@ -115,7 +115,7 @@ public class DoubleJump implements DoubleJumpApi {
     }
 
     private LiteCommands<CommandSender> registerLiteCommands(Plugin plugin) {
-        return LiteBukkitAdventurePlatformFactory.builder(plugin.getServer(), plugin.getName(), true, this.bukkitAudiences, true)
+        return LiteBukkitAdventurePlatformFactory.builder(plugin.getServer(), plugin.getName(), false, this.bukkitAudiences, true)
                 .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Only player can use this command."))
 
                 .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration, this.notificationSender))
