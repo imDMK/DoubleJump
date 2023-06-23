@@ -21,7 +21,7 @@ A simple double jump plugin with a lot of configuration options.
 
 # FAQ
 #### **Q: What are the notification types?**
-**A:** CHAT, ACTIONBAR, TITLE, SUBTITLE
+**A:** CHAT, ACTIONBAR, TITLE, SUBTITLE, DISABLED
 
 #### **Q: An error occurred while configuring particles. How to fix it?**
 **A:** Propably the error is because the particle type needs additional data. 
