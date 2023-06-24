@@ -24,7 +24,7 @@ A simple double jump plugin with a lot of configuration options.
 **A:** CHAT, ACTIONBAR, TITLE, SUBTITLE, DISABLED
 
 #### **Q: An error occurred while configuring particles. How to fix it?**
-**A:** Propably the error is because the particle type needs additional data. 
+**A:** Probably the error is because the particle type needs additional data. 
 Currently, the plugin supports particle types that contain **no data** or only **DustOptions**. 
 [Here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html) you have a list of all (The description indicates the data).
 
