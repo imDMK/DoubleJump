@@ -2,7 +2,7 @@
 
 [![Release](https://jitpack.io/v/imDMK/DoubleJump.svg)](https://jitpack.io/#imDMK/DoubleJump)
 [![Build Status](https://github.com/imDMK/DoubleJump/actions/workflows/maven.yml/badge.svg)](https://github.com/imDMK/DoubleJump/actions/workflows/maven.yml)
-![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.19.2-green.svg)
+![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.20.1-green.svg)
 ![JDK](https://img.shields.io/badge/JDK-1.17-blue.svg)
 
 A simple double jump plugin with a lot of configuration options.
