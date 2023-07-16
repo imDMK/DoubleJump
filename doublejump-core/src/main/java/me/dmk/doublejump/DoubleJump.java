@@ -2,6 +2,7 @@ package me.dmk.doublejump;
 
 import com.eternalcode.gitcheck.GitCheck;
 import com.eternalcode.gitcheck.GitCheckResult;
+import com.eternalcode.gitcheck.git.GitException;
 import com.eternalcode.gitcheck.git.GitRelease;
 import com.eternalcode.gitcheck.git.GitRepository;
 import com.eternalcode.gitcheck.git.GitTag;
@@ -111,7 +112,13 @@ public class DoubleJump implements DoubleJumpApi {
         /* Update check */
         if (this.pluginConfiguration.checkForUpdate) {
             String version = plugin.getDescription().getVersion();
-            this.checkForUpdate(version, logger);
+
+            try {
+                this.checkForUpdate(version, logger);
+            }
+            catch (GitException gitException) {
+                logger.info(AnsiColor.RED + "An error occurred while checking for update: " + gitException.getMessage() + AnsiColor.RESET);
+            }
         }
 
         Duration timeElapsed = Duration.between(start, Instant.now());
