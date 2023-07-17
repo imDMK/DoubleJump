@@ -3,6 +3,7 @@ package me.dmk.doublejump.listener;
 import me.dmk.doublejump.configuration.PluginConfiguration;
 import me.dmk.doublejump.player.JumpPlayerManager;
 import me.dmk.doublejump.task.scheduler.TaskScheduler;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,8 +25,18 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (this.pluginConfiguration.enableJumpModeOnJoinForAdmins && player.isOp()
-                || this.pluginConfiguration.enableJumpModeOnJoinForPlayers && this.jumpPlayerManager.canUseDoubleJump(player)) {
+        GameMode playerGameMode = player.getGameMode();
+        String playerWorldName = player.getWorld().getName();
+
+        if (this.pluginConfiguration.disabledGameModes.contains(playerGameMode)) {
+            return;
+        }
+
+        if (this.pluginConfiguration.disabledWorlds.contains(playerWorldName)) {
+            return;
+        }
+
+        if (this.pluginConfiguration.enableJumpModeOnJoinForPlayers || this.pluginConfiguration.enableJumpModeOnJoinForAdmins && player.isOp()) {
             this.taskScheduler.runLaterAsync(() -> this.jumpPlayerManager.enable(player, true), 40L);
         }
     }
