@@ -26,7 +26,6 @@ import me.dmk.doublejump.listener.PlayerToggleFlightListener;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayerManager;
 import me.dmk.doublejump.player.JumpPlayerMap;
-import me.dmk.doublejump.task.PlayerGroundTask;
 import me.dmk.doublejump.task.scheduler.TaskScheduler;
 import me.dmk.doublejump.task.scheduler.TaskSchedulerImpl;
 import me.dmk.doublejump.util.AnsiColor;
@@ -94,7 +93,7 @@ public class DoubleJump implements DoubleJumpApi {
                 new PlayerFallDamageListener(this.pluginConfiguration, this.jumpPlayerManager),
                 new PlayerGameModeChangeListener(this.jumpPlayerManager, taskScheduler),
                 new PlayerJoinListener(this.pluginConfiguration, this.jumpPlayerManager, taskScheduler),
-                new PlayerMoveListener(this.pluginConfiguration, this.jumpPlayerMap),
+                new PlayerMoveListener(server, this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap),
                 new PlayerQuitListener(this.jumpPlayerManager),
                 new PlayerToggleFlightListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap)
         ).forEach(listener -> server.getPluginManager().registerEvents(listener, plugin));
@@ -102,11 +101,6 @@ public class DoubleJump implements DoubleJumpApi {
         /* Lite Commands */
         if (this.pluginConfiguration.doubleJumpCommandEnabled) {
             this.liteCommands = this.registerLiteCommands(plugin);
-        }
-
-        /* Ground Task */
-        if (this.pluginConfiguration.jumpStreakResetOnGround) {
-            taskScheduler.runTimerAsync(new PlayerGroundTask(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap, server), 10L, 10L);
         }
 
         /* Update check */
