@@ -1,14 +1,13 @@
 package me.dmk.doublejump.notification;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Notification sender with adventure support
- */
 public class NotificationSender {
 
     private final AudienceProvider audienceProvider;
@@ -19,86 +18,36 @@ public class NotificationSender {
         this.miniMessage = miniMessage;
     }
 
-    public NotificationBuilder builder() {
-        return new NotificationBuilder(this);
-    }
+    public void sendMessage(CommandSender sender, Notification notification) {
+        NotificationType type = notification.getType();
 
-    /**
-     * Sends a component
-     * @param player The player to send to
-     * @param message The message to send
-     */
-    public void sendMessage(Player player, String message) {
-        if (message == null || message.isEmpty() || message.isBlank()) {
-            return;
-        }
+        Audience audience = this.createAudience(sender);
+        Component message = this.miniMessage.deserialize(notification.getMessage());
 
-        Component component = this.miniMessage.deserialize(message);
+        switch (type) {
+            case CHAT -> audience.sendMessage(message);
+            case ACTIONBAR -> audience.sendActionBar(message);
+            case TITLE -> {
+                Title title = Title.title(message, Component.empty(), Title.DEFAULT_TIMES);
 
-        this.audienceProvider
-                .player(player.getUniqueId())
-                .sendMessage(component);
-    }
+                audience.showTitle(title);
+            }
+            case SUBTITLE -> {
+                Title subtitle = Title.title(Component.empty(), message, Title.DEFAULT_TIMES);
 
-    /**
-     * Sends a notification
-     * @param player The player to send to
-     * @param notification The notification to send
-     */
-    public void sendMessage(Player player, Notification notification) {
-        this.sendMessage(player, notification.getType(), notification.getMessage());
-    }
-
-    /**
-     * Sends a notification
-     * @param player The player to send to
-     * @param notificationType notification type
-     * @param message The message to send
-     */
-    public void sendMessage(Player player, NotificationType notificationType, String message) {
-        if (message == null || message.isEmpty() || message.isBlank()) {
-            return;
-        }
-
-        switch (notificationType) {
-            case CHAT -> this.sendMessage(player, message);
-            case ACTIONBAR -> this.sendActionBar(player, message);
-            case TITLE -> this.sendTitle(player, message, "");
-            case SUBTITLE -> this.sendTitle(player, "", message);
+                audience.showTitle(subtitle);
+            }
             case DISABLED -> {
             }
-            default -> throw new IllegalStateException("Unexpected notification type: " + notificationType);
+            default -> throw new IllegalStateException("Unexpected notification type: " + type);
         }
     }
 
-    /**
-     * Sends an actionbar message
-     * @param player The player to send to
-     * @param message The message to send
-     */
-    public void sendActionBar(Player player, String message) {
-        Component component = this.miniMessage.deserialize(message);
+    public Audience createAudience(CommandSender sender) {
+        if (sender instanceof Player player) {
+            return this.audienceProvider.player(player.getUniqueId());
+        }
 
-        this.audienceProvider
-                .player(player.getUniqueId())
-                .sendActionBar(component);
-    }
-
-    /**
-     * Sends an title
-     * @param player The player to send to
-     * @param title The title message to send
-     * @param subtitle The subtitle message to send
-     */
-    public void sendTitle(Player player, String title, String subtitle) {
-        Title titleMessage = Title.title(
-                this.miniMessage.deserialize(title),
-                this.miniMessage.deserialize(subtitle),
-                Title.DEFAULT_TIMES
-        );
-
-        this.audienceProvider
-                .player(player.getUniqueId())
-                .showTitle(titleMessage);
+        return this.audienceProvider.console();
     }
 }

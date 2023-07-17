@@ -4,10 +4,9 @@ import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.command.permission.RequiredPermissions;
 import dev.rollczi.litecommands.handle.PermissionHandler;
 import me.dmk.doublejump.configuration.PluginConfiguration;
-import me.dmk.doublejump.notification.NotificationBuilder;
+import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class MissingPermissionHandler implements PermissionHandler<CommandSender> {
 
@@ -21,15 +20,11 @@ public class MissingPermissionHandler implements PermissionHandler<CommandSender
 
     @Override
     public void handle(CommandSender commandSender, LiteInvocation liteInvocation, RequiredPermissions requiredPermissions) {
-        NotificationBuilder notificationBuilder = this.notificationSender.builder()
+        Notification notification = Notification.builder()
                 .fromNotification(this.pluginConfiguration.missingPermissionsNotification)
-                .placeholder("{permissions}", requiredPermissions.getPermissions());
+                .placeholder("{permissions}", requiredPermissions.getPermissions())
+                .build();
 
-        if (commandSender instanceof Player player) {
-            notificationBuilder.send(player);
-        }
-        else {
-            notificationBuilder.send(commandSender);
-        }
+        this.notificationSender.sendMessage(commandSender, notification);
     }
 }

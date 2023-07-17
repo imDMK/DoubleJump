@@ -2,6 +2,7 @@ package me.dmk.doublejump.listener;
 
 import me.dmk.doublejump.configuration.PluginConfiguration;
 import me.dmk.doublejump.event.DoubleJumpEvent;
+import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
 import me.dmk.doublejump.player.JumpPlayerMap;
@@ -94,10 +95,12 @@ public class PlayerToggleFlightListener implements Listener {
         if (this.pluginConfiguration.jumpStreaksEnabled) {
             jumpPlayer.increaseStreak();
 
-            this.notificationSender.builder()
+            Notification notification = Notification.builder()
                     .fromNotification(this.pluginConfiguration.jumpStreakIncreaseNotification)
                     .placeholder("{streak}", jumpPlayer.getStreak())
-                    .send(player);
+                    .build();
+
+            this.notificationSender.sendMessage(player, notification);
         }
     }
 }
