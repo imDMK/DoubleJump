@@ -25,7 +25,6 @@ import me.dmk.doublejump.listener.PlayerQuitListener;
 import me.dmk.doublejump.listener.PlayerToggleFlightListener;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayerManager;
-import me.dmk.doublejump.player.JumpPlayerMap;
 import me.dmk.doublejump.task.scheduler.TaskScheduler;
 import me.dmk.doublejump.task.scheduler.TaskSchedulerImpl;
 import me.dmk.doublejump.util.AnsiColor;
@@ -52,7 +51,6 @@ public class DoubleJump implements DoubleJumpApi {
     private final BukkitAudiences bukkitAudiences;
     private final NotificationSender notificationSender;
 
-    private final JumpPlayerMap jumpPlayerMap;
     private final JumpPlayerManager jumpPlayerManager;
 
     private LiteCommands<CommandSender> liteCommands;
@@ -78,24 +76,21 @@ public class DoubleJump implements DoubleJumpApi {
         this.bukkitAudiences = BukkitAudiences.create(plugin);
         this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
 
-        /* Maps */
-        this.jumpPlayerMap = new JumpPlayerMap();
-
         /* Managers */
-        this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.disabledWorlds, this.pluginConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.jumpPlayerMap);
+        this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.disabledWorlds, this.pluginConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
 
         /* Task Scheduler */
         TaskScheduler taskScheduler = new TaskSchedulerImpl(plugin, server);
 
         /* Listeners */
         Stream.of(
-                new PlayerDeathListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap, this.jumpPlayerManager, taskScheduler),
+                new PlayerDeathListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager, taskScheduler),
                 new PlayerFallDamageListener(this.pluginConfiguration, this.jumpPlayerManager),
                 new PlayerGameModeChangeListener(this.jumpPlayerManager, taskScheduler),
                 new PlayerJoinListener(this.pluginConfiguration, this.jumpPlayerManager, taskScheduler),
-                new PlayerMoveListener(server, this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap),
+                new PlayerMoveListener(server, this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager),
                 new PlayerQuitListener(this.jumpPlayerManager),
-                new PlayerToggleFlightListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerMap)
+                new PlayerToggleFlightListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager)
         ).forEach(listener -> server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
@@ -167,11 +162,5 @@ public class DoubleJump implements DoubleJumpApi {
     @Override
     public JumpPlayerManager getJumpPlayerManager() {
         return this.jumpPlayerManager;
-    }
-
-    @Nonnull
-    @Override
-    public JumpPlayerMap getJumpPlayerMap() {
-        return this.jumpPlayerMap;
     }
 }

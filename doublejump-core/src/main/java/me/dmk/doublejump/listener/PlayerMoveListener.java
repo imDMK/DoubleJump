@@ -4,7 +4,7 @@ import me.dmk.doublejump.configuration.PluginConfiguration;
 import me.dmk.doublejump.event.reset.JumpStreakResetEvent;
 import me.dmk.doublejump.event.reset.JumpStreakResetReason;
 import me.dmk.doublejump.notification.NotificationSender;
-import me.dmk.doublejump.player.JumpPlayerMap;
+import me.dmk.doublejump.player.JumpPlayerManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -21,13 +21,13 @@ public class PlayerMoveListener implements Listener {
     private final Server server;
     private final PluginConfiguration pluginConfiguration;
     private final NotificationSender notificationSender;
-    private final JumpPlayerMap jumpPlayerMap;
+    private final JumpPlayerManager jumpPlayerManager;
 
-    public PlayerMoveListener(Server server, PluginConfiguration pluginConfiguration, NotificationSender notificationSender, JumpPlayerMap jumpPlayerMap) {
+    public PlayerMoveListener(Server server, PluginConfiguration pluginConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
         this.server = server;
         this.pluginConfiguration = pluginConfiguration;
         this.notificationSender = notificationSender;
-        this.jumpPlayerMap = jumpPlayerMap;
+        this.jumpPlayerManager = jumpPlayerManager;
     }
 
     @EventHandler
@@ -38,7 +38,7 @@ public class PlayerMoveListener implements Listener {
             return;
         }
 
-        this.jumpPlayerMap.get(player).ifPresent(jumpPlayer -> {
+        this.jumpPlayerManager.getJumpPlayer(player.getUniqueId()).ifPresent(jumpPlayer -> {
             if (this.pluginConfiguration.jumpFallDamageEnabled && this.shouldTakeFallDamage(player)) {
                 player.setAllowFlight(false);
                 return;

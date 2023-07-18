@@ -5,7 +5,7 @@ import me.dmk.doublejump.event.DoubleJumpEvent;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
-import me.dmk.doublejump.player.JumpPlayerMap;
+import me.dmk.doublejump.player.JumpPlayerManager;
 import me.dmk.doublejump.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -23,12 +23,12 @@ public class PlayerToggleFlightListener implements Listener {
 
     private final PluginConfiguration pluginConfiguration;
     private final NotificationSender notificationSender;
-    private final JumpPlayerMap jumpPlayerMap;
+    private final JumpPlayerManager jumpPlayerManager;
 
-    public PlayerToggleFlightListener(PluginConfiguration pluginConfiguration, NotificationSender notificationSender, JumpPlayerMap jumpPlayerMap) {
+    public PlayerToggleFlightListener(PluginConfiguration pluginConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
         this.pluginConfiguration = pluginConfiguration;
         this.notificationSender = notificationSender;
-        this.jumpPlayerMap = jumpPlayerMap;
+        this.jumpPlayerManager = jumpPlayerManager;
     }
 
     @EventHandler
@@ -39,7 +39,7 @@ public class PlayerToggleFlightListener implements Listener {
         World playerWorld = player.getWorld();
         Location playerLocation = player.getLocation();
 
-        Optional<JumpPlayer> jumpPlayerOptional = this.jumpPlayerMap.get(player);
+        Optional<JumpPlayer> jumpPlayerOptional = this.jumpPlayerManager.getJumpPlayer(player.getUniqueId());
         if (jumpPlayerOptional.isEmpty()) {
             return;
         }
@@ -51,13 +51,13 @@ public class PlayerToggleFlightListener implements Listener {
         }
 
         if (this.pluginConfiguration.disabledGameModes.contains(playerGameMode)) {
-            this.jumpPlayerMap.remove(player);
+            this.jumpPlayerManager.disable(player);
             this.notificationSender.sendMessage(player, this.pluginConfiguration.jumpModeDisabledGameModeNotification);
             return;
         }
 
         if (this.pluginConfiguration.disabledWorlds.contains(playerWorld.getName())) {
-            this.jumpPlayerMap.remove(player);
+            this.jumpPlayerManager.disable(player);
             this.notificationSender.sendMessage(player, this.pluginConfiguration.jumpModeDisabledWorldNotification);
             return;
         }

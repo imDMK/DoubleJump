@@ -4,11 +4,15 @@ import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
-* Class used to change the player's double jump mode with change of flying and flying ability.
-* And you can use it to check if the player has permission to double jump.
+ * A class used to change the player's double jump mode or check if the player has permission to use double jump.
 */
 public class JumpPlayerManager {
 
@@ -16,19 +20,38 @@ public class JumpPlayerManager {
     private final List<GameMode> disabledGameModes;
     private final String doubleJumpUsePermission;
 
-    private final JumpPlayerMap jumpPlayerMap;
+    private final Map<UUID, JumpPlayer> jumpPlayers = new ConcurrentHashMap<>();
 
-    public JumpPlayerManager(List<String> disabledWorlds, List<GameMode> disabledGameModes, String doubleJumpUsePermission, JumpPlayerMap jumpPlayerMap) {
+    public JumpPlayerManager(List<String> disabledWorlds, List<GameMode> disabledGameModes, String doubleJumpUsePermission) {
         this.disabledWorlds = disabledWorlds;
         this.disabledGameModes = disabledGameModes;
         this.doubleJumpUsePermission = doubleJumpUsePermission;
-        this.jumpPlayerMap = jumpPlayerMap;
     }
 
     /**
-     * Denies flying, allows flight and adds a player to {@link JumpPlayerMap}
+     * Adds to the map.
+     *
+     * @param uuid The uuid to add
+     * @param jumpPlayer The jump player to add
+     */
+    public void add(UUID uuid, JumpPlayer jumpPlayer) {
+        this.jumpPlayers.put(uuid, jumpPlayer);
+    }
+
+    /**
+     * Removes from the map.
+     *
+     * @param uuid The uuid to remove
+     */
+    public void remove(UUID uuid) {
+        this.jumpPlayers.remove(uuid);
+    }
+
+    /**
+     * Denies flying, allows flight and adds a player to the map.
+     *
      * @param player The player for whom to enable
-     * @param force Whether to skip checking if a player can use double jump.
+     * @param force Whether to skip checking if a player can use double jump
      * @return Whether the double jump mode has been enabled
      */
     public boolean enable(Player player, boolean force) {
@@ -36,16 +59,17 @@ public class JumpPlayerManager {
             return false;
         }
 
-        this.jumpPlayerMap.add(player);
+        this.add(player.getUniqueId(), new JumpPlayer());
 
         player.setFlying(false);
         player.setAllowFlight(true);
+
         return true;
     }
 
     /**
      * Checks whether the player has the double jump mode enabled and whether he has permission to.
-     * If it has, it changes flying to false and ability to fly to true.
+     * If so, it enables player to allow flight and disables flying.
      *
      * @return Whether changes have been made
      */
@@ -64,29 +88,34 @@ public class JumpPlayerManager {
     }
 
     /**
-     * Disables flying only when player has game mode that can't fly and removes player from the {@link JumpPlayerMap}
+     * Removes a player from the map and disables flying only when a player has game mode that can't fly.
+     *
      * @param player The player for whom to disable
      */
     public void disable(Player player) {
-        this.jumpPlayerMap.remove(player);
-
+        UUID playerUniqueId = player.getUniqueId();
         GameMode playerGameMode = player.getGameMode();
-        if (playerGameMode == GameMode.SURVIVAL || playerGameMode == GameMode.ADVENTURE) {
+
+        this.remove(playerUniqueId);
+
+        if (!this.isGameModeCanFly(playerGameMode)) {
             player.setAllowFlight(false);
         }
     }
 
     /**
-     * Checks if player has enabled double jump mode
+     * Checks if player has enabled double jump mode.
+     *
      * @param player The player for whom to check
      * @return boolean whether the player has enabled double jump mode
      */
     public boolean isDoubleJumpMode(Player player) {
-        return this.jumpPlayerMap.contains(player);
+        return this.jumpPlayers.containsKey(player.getUniqueId());
     }
 
     /**
      * Checks if the player is in a blocked world or has a blocked game mode. It then checks to see if the player has permission to double jump.
+     *
      * @param player The player for whom to check
      * @return Whether the player can use double jump.
      */
@@ -109,7 +138,34 @@ public class JumpPlayerManager {
         return player.hasPermission(this.doubleJumpUsePermission);
     }
 
+    /**
+     * Checks if the game mode is allowed to fly.
+     *
+     * @param gameMode Game mode to check
+     * @return Whether the game mode has permission to fly
+     */
+    public boolean isGameModeCanFly(GameMode gameMode) {
+        return gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE;
+    }
+
     public String getDoubleJumpUsePermission() {
         return this.doubleJumpUsePermission;
+    }
+
+    /**
+     * @param uuid The uuid of player
+     * @return Optional {@link JumpPlayer}
+     */
+    public Optional<JumpPlayer> getJumpPlayer(UUID uuid) {
+        return Optional.ofNullable(this.jumpPlayers.get(uuid));
+    }
+
+    /**
+     * A collection that has players who have double jump mode enabled.
+     *
+     * @return A map that contains the player's uuid as the key and the {@link JumpPlayer} as the value
+     */
+    public Map<UUID, JumpPlayer> getJumpPlayers() {
+        return Collections.unmodifiableMap(this.jumpPlayers);
     }
 }
