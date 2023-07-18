@@ -41,6 +41,10 @@ public class PlayerDeathListener implements Listener {
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
         if (this.pluginConfiguration.jumpStreakResetOnDeath) {
+            if (jumpPlayer.getStreak() == 0) {
+                return;
+            }
+
             JumpStreakResetEvent jumpStreakResetEvent = new JumpStreakResetEvent(player, jumpPlayer, JumpStreakResetReason.PLAYER_DEATH);
 
             Bukkit.getPluginManager().callEvent(jumpStreakResetEvent);
