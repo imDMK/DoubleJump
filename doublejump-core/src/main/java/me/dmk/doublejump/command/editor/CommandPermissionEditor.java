@@ -15,8 +15,10 @@ public class CommandPermissionEditor implements CommandEditor {
 
     @Override
     public State edit(State state) {
-        return state.permission(List.of(
-                this.pluginConfiguration.doubleJumpCommandPermission
-        ));
+        state.permission(List.of(this.pluginConfiguration.doubleJumpCommandPermission));
+
+        state.editChild("enable-for", s -> s.permission(List.of(this.pluginConfiguration.doubleJumpEnableForPermission)));
+        state.editChild("disable-for", s -> s.permission(List.of(this.pluginConfiguration.doubleJumpEnableForPermission)));
+        return state;
     }
 }

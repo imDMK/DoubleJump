@@ -13,8 +13,11 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import me.dmk.doublejump.command.DoubleJumpCommand;
+import me.dmk.doublejump.command.argument.PlayerArgument;
 import me.dmk.doublejump.command.editor.CommandPermissionEditor;
 import me.dmk.doublejump.command.handler.MissingPermissionHandler;
+import me.dmk.doublejump.command.handler.NotificationHandler;
+import me.dmk.doublejump.command.handler.UsageHandler;
 import me.dmk.doublejump.configuration.PluginConfiguration;
 import me.dmk.doublejump.listener.PlayerDeathListener;
 import me.dmk.doublejump.listener.PlayerFallDamageListener;
@@ -23,6 +26,7 @@ import me.dmk.doublejump.listener.PlayerJoinListener;
 import me.dmk.doublejump.listener.PlayerMoveListener;
 import me.dmk.doublejump.listener.PlayerQuitListener;
 import me.dmk.doublejump.listener.PlayerToggleFlightListener;
+import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayerManager;
 import me.dmk.doublejump.task.scheduler.TaskScheduler;
@@ -132,7 +136,11 @@ public class DoubleJump implements DoubleJumpApi {
         return LiteBukkitAdventurePlatformFactory.builder(this.server, "DoubleJump", false, this.bukkitAudiences, true)
                 .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Only player can use this command."))
 
+                .argument(Player.class, new PlayerArgument(this.server, this.pluginConfiguration))
+
                 .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration, this.notificationSender))
+                .resultHandler(Notification.class, new NotificationHandler(this.notificationSender))
+                .invalidUsageHandler(new UsageHandler(this.pluginConfiguration, this.notificationSender))
 
                 .commandInstance(
                         new DoubleJumpCommand(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager)
