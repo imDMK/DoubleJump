@@ -46,6 +46,7 @@ public class DoubleJump implements DoubleJumpApi {
 
     private static final GitRepository GIT_REPOSITORY = GitRepository.of("imDMK", "DoubleJump");
 
+    private final Server server;
     private final PluginConfiguration pluginConfiguration;
 
     private final BukkitAudiences bukkitAudiences;
@@ -53,15 +54,17 @@ public class DoubleJump implements DoubleJumpApi {
 
     private final JumpPlayerManager jumpPlayerManager;
 
+    private final TaskScheduler taskScheduler;
+
     private LiteCommands<CommandSender> liteCommands;
 
     public DoubleJump(Plugin plugin) {
         DoubleJumpApiProvider.register(this);
 
-        Logger logger = plugin.getLogger();
-        Server server = plugin.getServer();
-
         Instant start = Instant.now();
+        Logger logger = plugin.getLogger();
+
+        this.server = plugin.getServer();
 
         /* Configuration */
         this.pluginConfiguration = ConfigManager.create(PluginConfiguration.class, (it) -> {
@@ -80,22 +83,22 @@ public class DoubleJump implements DoubleJumpApi {
         this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.disabledWorlds, this.pluginConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
 
         /* Task Scheduler */
-        TaskScheduler taskScheduler = new TaskSchedulerImpl(plugin, server);
+        this.taskScheduler = new TaskSchedulerImpl(plugin, this.server);
 
         /* Listeners */
         Stream.of(
-                new PlayerDeathListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager, taskScheduler),
+                new PlayerDeathListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager, this.taskScheduler),
                 new PlayerFallDamageListener(this.pluginConfiguration, this.jumpPlayerManager),
-                new PlayerGameModeChangeListener(this.jumpPlayerManager, taskScheduler),
-                new PlayerJoinListener(this.pluginConfiguration, this.jumpPlayerManager, taskScheduler),
-                new PlayerMoveListener(server, this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager),
+                new PlayerGameModeChangeListener(this.jumpPlayerManager, this.taskScheduler),
+                new PlayerJoinListener(this.pluginConfiguration, this.jumpPlayerManager, this.taskScheduler),
+                new PlayerMoveListener(this.server, this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager),
                 new PlayerQuitListener(this.jumpPlayerManager),
                 new PlayerToggleFlightListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager)
-        ).forEach(listener -> server.getPluginManager().registerEvents(listener, plugin));
+        ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
         if (this.pluginConfiguration.doubleJumpCommandEnabled) {
-            this.liteCommands = this.registerLiteCommands(plugin);
+            this.liteCommands = this.registerLiteCommands();
         }
 
         /* Update check */
@@ -121,11 +124,12 @@ public class DoubleJump implements DoubleJumpApi {
             this.liteCommands.getPlatform().unregisterAll();
         }
 
+        this.disableAllowFlightForOnlinePlayers();
         this.bukkitAudiences.close();
     }
 
-    private LiteCommands<CommandSender> registerLiteCommands(Plugin plugin) {
-        return LiteBukkitAdventurePlatformFactory.builder(plugin.getServer(), plugin.getName(), false, this.bukkitAudiences, true)
+    private LiteCommands<CommandSender> registerLiteCommands() {
+        return LiteBukkitAdventurePlatformFactory.builder(this.server, "DoubleJump", false, this.bukkitAudiences, true)
                 .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Only player can use this command."))
 
                 .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration, this.notificationSender))
@@ -139,6 +143,18 @@ public class DoubleJump implements DoubleJumpApi {
                 )
 
                 .register();
+    }
+
+    private void disableAllowFlightForOnlinePlayers() {
+        for (Player player : this.server.getOnlinePlayers()) {
+            if (!this.jumpPlayerManager.isDoubleJumpMode(player)) {
+                return;
+            }
+
+            if (player.getAllowFlight()) {
+                player.setAllowFlight(false);
+            }
+        }
     }
 
     private void checkForUpdate(String version, Logger logger) {
