@@ -14,14 +14,14 @@ public class JumpStreakResetEvent extends Event implements Cancellable {
 
     private final Player player;
     private final JumpPlayer jumpPlayer;
-    private final JumpStreakResetReason jumpStreakResetReason;
+    private final JumpStreakResetReason resetReason;
 
     private boolean canceled;
 
     public JumpStreakResetEvent(Player player, JumpPlayer jumpPlayer, JumpStreakResetReason jumpStreakResetReason) {
         this.player = player;
         this.jumpPlayer = jumpPlayer;
-        this.jumpStreakResetReason = jumpStreakResetReason;
+        this.resetReason = jumpStreakResetReason;
     }
 
     @Nonnull
@@ -42,8 +42,8 @@ public class JumpStreakResetEvent extends Event implements Cancellable {
         return this.jumpPlayer;
     }
 
-    public JumpStreakResetReason getJumpStreakResetReason() {
-        return this.jumpStreakResetReason;
+    public JumpStreakResetReason getResetReason() {
+        return this.resetReason;
     }
 
     @Override
