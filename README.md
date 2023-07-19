@@ -105,7 +105,7 @@ Example usage:
             return;
         }
         
-        if (event.getJumpStreakResetReason() == JumpStreakResetReason.PLAYER_ON_GROUND) {
+        if (event.getResetReason() == JumpStreakResetReason.PLAYER_ON_GROUND) {
             player.teleport(
                 new Location(player.getWorld(), 100, 100, 100)
             );
