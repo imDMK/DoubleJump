@@ -1,6 +1,7 @@
 package me.dmk.doublejump.listener;
 
-import me.dmk.doublejump.configuration.PluginConfiguration;
+import me.dmk.doublejump.configuration.JumpConfiguration;
+import me.dmk.doublejump.configuration.MessageConfiguration;
 import me.dmk.doublejump.event.DoubleJumpEvent;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
@@ -21,12 +22,14 @@ import java.util.Optional;
 
 public class PlayerToggleFlightListener implements Listener {
 
-    private final PluginConfiguration pluginConfiguration;
+    private final JumpConfiguration jumpConfiguration;
+    private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public PlayerToggleFlightListener(PluginConfiguration pluginConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
-        this.pluginConfiguration = pluginConfiguration;
+    public PlayerToggleFlightListener(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
+        this.jumpConfiguration = jumpConfiguration;
+        this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
     }
@@ -50,15 +53,15 @@ public class PlayerToggleFlightListener implements Listener {
             return;
         }
 
-        if (this.pluginConfiguration.disabledGameModes.contains(playerGameMode)) {
+        if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
             this.jumpPlayerManager.disable(player);
-            this.notificationSender.sendMessage(player, this.pluginConfiguration.jumpModeDisabledGameModeNotification);
+            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
             return;
         }
 
-        if (this.pluginConfiguration.disabledWorlds.contains(playerWorld.getName())) {
+        if (this.jumpConfiguration.disabledWorlds.contains(playerWorld.getName())) {
             this.jumpPlayerManager.disable(player);
-            this.notificationSender.sendMessage(player, this.pluginConfiguration.jumpModeDisabledWorldNotification);
+            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
             return;
         }
 
@@ -75,28 +78,28 @@ public class PlayerToggleFlightListener implements Listener {
         player.setAllowFlight(false);
 
         Vector vector = playerLocation.getDirection()
-                .multiply(this.pluginConfiguration.jumpMultiple)
-                .setY(this.pluginConfiguration.jumpUp);
+                .multiply(this.jumpConfiguration.jumpMultiple)
+                .setY(this.jumpConfiguration.jumpUp);
 
         player.setVelocity(vector);
 
-        if (this.pluginConfiguration.jumpDelayEnabled) {
-            jumpPlayer.addDelay(this.pluginConfiguration.jumpDelay);
+        if (this.jumpConfiguration.jumpDelayEnabled) {
+            jumpPlayer.addDelay(this.jumpConfiguration.jumpDelay);
         }
 
-        if (this.pluginConfiguration.jumpSoundsEnabled) {
-            PlayerUtil.playSound(player, this.pluginConfiguration.jumpSound, this.pluginConfiguration.jumpSoundVolume, this.pluginConfiguration.jumpSoundPitch);
+        if (this.jumpConfiguration.jumpSoundsEnabled) {
+            PlayerUtil.playSound(player, this.jumpConfiguration.jumpSound, this.jumpConfiguration.jumpSoundVolume, this.jumpConfiguration.jumpSoundPitch);
         }
 
-        if (this.pluginConfiguration.jumpParticlesEnabled) {
-            PlayerUtil.spawnParticles(player, this.pluginConfiguration.jumpParticles, this.pluginConfiguration.jumpParticlesCount, this.pluginConfiguration.jumpParticlesOffsetX, this.pluginConfiguration.jumpParticlesOffsetY, this.pluginConfiguration.jumpParticlesOffsetZ, this.pluginConfiguration.jumpParticlesExtra);
+        if (this.jumpConfiguration.jumpParticlesEnabled) {
+            PlayerUtil.spawnParticles(player, this.jumpConfiguration.jumpParticles, this.jumpConfiguration.jumpParticlesCount, this.jumpConfiguration.jumpParticlesOffsetX, this.jumpConfiguration.jumpParticlesOffsetY, this.jumpConfiguration.jumpParticlesOffsetZ, this.jumpConfiguration.jumpParticlesExtra);
         }
 
-        if (this.pluginConfiguration.jumpStreaksEnabled) {
+        if (this.jumpConfiguration.jumpStreaksEnabled) {
             jumpPlayer.increaseStreak();
 
             Notification notification = Notification.builder()
-                    .fromNotification(this.pluginConfiguration.jumpStreakIncreaseNotification)
+                    .fromNotification(this.messageConfiguration.jumpStreakIncreaseNotification)
                     .placeholder("{streak}", jumpPlayer.getStreak())
                     .build();
 

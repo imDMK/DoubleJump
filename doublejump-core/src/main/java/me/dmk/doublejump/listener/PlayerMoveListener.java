@@ -1,6 +1,7 @@
 package me.dmk.doublejump.listener;
 
-import me.dmk.doublejump.configuration.PluginConfiguration;
+import me.dmk.doublejump.configuration.JumpConfiguration;
+import me.dmk.doublejump.configuration.MessageConfiguration;
 import me.dmk.doublejump.event.reset.JumpStreakResetEvent;
 import me.dmk.doublejump.event.reset.JumpStreakResetReason;
 import me.dmk.doublejump.notification.NotificationSender;
@@ -19,13 +20,15 @@ import org.bukkit.util.Vector;
 public class PlayerMoveListener implements Listener {
 
     private final Server server;
-    private final PluginConfiguration pluginConfiguration;
+    private final JumpConfiguration jumpConfiguration;
+    private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public PlayerMoveListener(Server server, PluginConfiguration pluginConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
+    public PlayerMoveListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
         this.server = server;
-        this.pluginConfiguration = pluginConfiguration;
+        this.jumpConfiguration = jumpConfiguration;
+        this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
     }
@@ -39,12 +42,12 @@ public class PlayerMoveListener implements Listener {
         }
 
         this.jumpPlayerManager.getJumpPlayer(player.getUniqueId()).ifPresent(jumpPlayer -> {
-            if (this.pluginConfiguration.jumpFallDamageEnabled && this.shouldTakeFallDamage(player)) {
+            if (this.jumpConfiguration.jumpFallDamageEnabled && this.shouldTakeFallDamage(player)) {
                 player.setAllowFlight(false);
                 return;
             }
 
-            if (this.pluginConfiguration.jumpStreakResetOnGround && player.isOnGround()) {
+            if (this.jumpConfiguration.jumpStreakResetOnGround && player.isOnGround()) {
                 if (jumpPlayer.getStreak() == 0) {
                     return;
                 }
@@ -59,7 +62,7 @@ public class PlayerMoveListener implements Listener {
 
                 jumpPlayer.setStreak(0);
 
-                this.notificationSender.sendMessage(player, this.pluginConfiguration.jumpStreakResetNotification);
+                this.notificationSender.sendMessage(player, this.messageConfiguration.jumpStreakResetNotification);
             }
 
             if (!jumpPlayer.canUseJump()) {

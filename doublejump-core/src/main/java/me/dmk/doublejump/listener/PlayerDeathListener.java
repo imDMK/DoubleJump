@@ -1,6 +1,7 @@
 package me.dmk.doublejump.listener;
 
-import me.dmk.doublejump.configuration.PluginConfiguration;
+import me.dmk.doublejump.configuration.JumpConfiguration;
+import me.dmk.doublejump.configuration.MessageConfiguration;
 import me.dmk.doublejump.event.reset.JumpStreakResetEvent;
 import me.dmk.doublejump.event.reset.JumpStreakResetReason;
 import me.dmk.doublejump.notification.NotificationSender;
@@ -17,13 +18,15 @@ import java.util.Optional;
 
 public class PlayerDeathListener implements Listener {
 
-    private final PluginConfiguration pluginConfiguration;
+    private final JumpConfiguration jumpConfiguration;
+    private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
     private final TaskScheduler taskScheduler;
 
-    public PlayerDeathListener(PluginConfiguration pluginConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, TaskScheduler taskScheduler) {
-        this.pluginConfiguration = pluginConfiguration;
+    public PlayerDeathListener(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, TaskScheduler taskScheduler) {
+        this.jumpConfiguration = jumpConfiguration;
+        this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
         this.taskScheduler = taskScheduler;
@@ -40,7 +43,7 @@ public class PlayerDeathListener implements Listener {
 
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
-        if (this.pluginConfiguration.jumpStreakResetOnDeath) {
+        if (this.jumpConfiguration.jumpStreakResetOnDeath) {
             if (jumpPlayer.getStreak() == 0) {
                 return;
             }
@@ -54,7 +57,7 @@ public class PlayerDeathListener implements Listener {
 
             jumpPlayer.setStreak(0);
 
-            this.notificationSender.sendMessage(player, this.pluginConfiguration.jumpStreakResetNotification);
+            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpStreakResetNotification);
         }
 
         this.taskScheduler.runLaterAsync(() -> this.jumpPlayerManager.refresh(player), 40L);

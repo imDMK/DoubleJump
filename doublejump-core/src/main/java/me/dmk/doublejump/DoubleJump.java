@@ -84,20 +84,20 @@ public class DoubleJump implements DoubleJumpApi {
         this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
 
         /* Managers */
-        this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.disabledWorlds, this.pluginConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
+        this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.jumpConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
 
         /* Task Scheduler */
         this.taskScheduler = new TaskSchedulerImpl(plugin, this.server);
 
         /* Listeners */
         Stream.of(
-                new PlayerDeathListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager, this.taskScheduler),
-                new PlayerFallDamageListener(this.pluginConfiguration, this.jumpPlayerManager),
+                new PlayerDeathListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.taskScheduler),
+                new PlayerFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
                 new PlayerGameModeChangeListener(this.jumpPlayerManager, this.taskScheduler),
-                new PlayerJoinListener(this.pluginConfiguration, this.jumpPlayerManager, this.taskScheduler),
-                new PlayerMoveListener(this.server, this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager),
+                new PlayerJoinListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager, this.taskScheduler),
+                new PlayerMoveListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
                 new PlayerQuitListener(this.jumpPlayerManager),
-                new PlayerToggleFlightListener(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager)
+                new PlayerToggleFlightListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
@@ -136,14 +136,14 @@ public class DoubleJump implements DoubleJumpApi {
         return LiteBukkitAdventurePlatformFactory.builder(this.server, "DoubleJump", false, this.bukkitAudiences, true)
                 .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Only player can use this command."))
 
-                .argument(Player.class, new PlayerArgument(this.server, this.pluginConfiguration))
+                .argument(Player.class, new PlayerArgument(this.server, this.pluginConfiguration.messageConfiguration))
 
-                .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration, this.notificationSender))
+                .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration.messageConfiguration, this.notificationSender))
                 .resultHandler(Notification.class, new NotificationHandler(this.notificationSender))
-                .invalidUsageHandler(new UsageHandler(this.pluginConfiguration, this.notificationSender))
+                .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.messageConfiguration, this.notificationSender))
 
                 .commandInstance(
-                        new DoubleJumpCommand(this.pluginConfiguration, this.notificationSender, this.jumpPlayerManager)
+                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager)
                 )
 
                 .commandEditor(
