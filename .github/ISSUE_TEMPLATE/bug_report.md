@@ -22,8 +22,11 @@ Use **/ver** command and paste here.
 **Plugin version**
 Use **/ver DoubleJump** command and paste here.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Plugin configuration**
+Paste here your plugin configuration.
+
+**Screenshots or Video**
+If applicable, add screenshots or link to video to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
