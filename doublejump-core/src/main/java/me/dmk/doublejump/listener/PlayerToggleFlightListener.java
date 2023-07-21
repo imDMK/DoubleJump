@@ -50,17 +50,22 @@ public class PlayerToggleFlightListener implements Listener {
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
         if (!jumpPlayer.canUseJump()) {
+            event.setCancelled(true);
             return;
         }
 
         if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
-            this.jumpPlayerManager.disable(player);
+            event.setCancelled(true);
+
+            this.jumpPlayerManager.remove(player.getUniqueId());
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
             return;
         }
 
         if (this.jumpConfiguration.disabledWorlds.contains(playerWorld.getName())) {
-            this.jumpPlayerManager.disable(player);
+            event.setCancelled(true);
+
+            this.jumpPlayerManager.remove(player.getUniqueId());
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
             return;
         }
