@@ -8,37 +8,41 @@ import java.time.Instant;
  */
 public class JumpPlayer {
 
-    private Instant delay;
+    private Instant endOfDelay;
     private int streak;
 
-    public JumpPlayer(Instant delay, int streak) {
-        this.delay = delay;
-        this.streak = streak;
-    }
-
     public JumpPlayer() {
-        this.delay = Instant.MIN;
+        this.endOfDelay = Instant.MIN;
         this.streak = 0;
     }
 
-    public Instant getDelay() {
-        return this.delay;
+    public JumpPlayer(Instant delay, int streak) {
+        this.endOfDelay = delay;
+        this.streak = streak;
+    }
+
+    public Instant getEndOfDelay() {
+        return this.endOfDelay;
+    }
+
+    public Duration getRemainingDelayDuration() {
+        return Duration.between(Instant.now(), this.endOfDelay);
     }
 
     public boolean canUseJump() {
-        return Instant.now().isAfter(this.delay);
+        return Instant.now().isAfter(this.endOfDelay);
     }
 
     /**
      * Adds a delay to the current time
-     * @param delay delay to add
+     * @param durationToAdd duration to add
      */
-    public void addDelay(Duration delay) {
-        this.delay = Instant.now().plus(delay);
+    public void addDelay(Duration durationToAdd) {
+        this.endOfDelay = Instant.now().plus(durationToAdd);
     }
 
-    public void setDelay(Instant delay) {
-        this.delay = delay;
+    public void setEndOfDelay(Instant endOfDelay) {
+        this.endOfDelay = endOfDelay;
     }
 
     public int getStreak() {
