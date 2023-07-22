@@ -33,18 +33,21 @@ public class JumpPlayerManager {
      *
      * @param uuid The uuid to add
      * @param jumpPlayer The jump player to add
+     * @return The jump player that has been added
      */
-    public void add(UUID uuid, JumpPlayer jumpPlayer) {
+    public JumpPlayer add(UUID uuid, JumpPlayer jumpPlayer) {
         this.jumpPlayers.put(uuid, jumpPlayer);
+        return jumpPlayer;
     }
 
     /**
      * Removes from the map.
      *
      * @param uuid The uuid to remove
+     * @return The jump player associated with uuid or null
      */
-    public void remove(UUID uuid) {
-        this.jumpPlayers.remove(uuid);
+    public JumpPlayer remove(UUID uuid) {
+        return this.jumpPlayers.remove(uuid);
     }
 
     /**
@@ -146,6 +149,14 @@ public class JumpPlayerManager {
      */
     public boolean isGameModeCanFly(GameMode gameMode) {
         return gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE;
+    }
+
+    public List<String> getDisabledWorlds() {
+        return this.disabledWorlds;
+    }
+
+    public List<GameMode> getDisabledGameModes() {
+        return this.disabledGameModes;
     }
 
     public String getDoubleJumpUsePermission() {
