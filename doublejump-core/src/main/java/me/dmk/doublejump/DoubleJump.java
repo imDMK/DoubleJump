@@ -10,6 +10,7 @@ import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
 import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import me.dmk.doublejump.command.DoubleJumpCommand;
@@ -19,13 +20,17 @@ import me.dmk.doublejump.command.handler.MissingPermissionHandler;
 import me.dmk.doublejump.command.handler.NotificationHandler;
 import me.dmk.doublejump.command.handler.UsageHandler;
 import me.dmk.doublejump.configuration.PluginConfiguration;
-import me.dmk.doublejump.listener.PlayerDeathListener;
-import me.dmk.doublejump.listener.PlayerFallDamageListener;
-import me.dmk.doublejump.listener.PlayerGameModeChangeListener;
-import me.dmk.doublejump.listener.PlayerJoinListener;
-import me.dmk.doublejump.listener.PlayerMoveListener;
-import me.dmk.doublejump.listener.PlayerQuitListener;
-import me.dmk.doublejump.listener.PlayerToggleFlightListener;
+import me.dmk.doublejump.configuration.pack.JumpSerdesPack;
+import me.dmk.doublejump.listener.DoubleJumpListener;
+import me.dmk.doublejump.listener.JumpDisableListener;
+import me.dmk.doublejump.listener.JumpEnableListener;
+import me.dmk.doublejump.listener.JumpFallDamageListener;
+import me.dmk.doublejump.listener.JumpRefreshListener;
+import me.dmk.doublejump.listener.JumpStreakResetListener;
+import me.dmk.doublejump.listener.item.JumpItemDisableListener;
+import me.dmk.doublejump.listener.item.JumpItemDropListener;
+import me.dmk.doublejump.listener.item.JumpItemEnableListener;
+import me.dmk.doublejump.listener.item.JumpItemInteractListener;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayerManager;
@@ -65,14 +70,18 @@ public class DoubleJump implements DoubleJumpApi {
     public DoubleJump(Plugin plugin) {
         DoubleJumpApiProvider.register(this);
 
-        Instant start = Instant.now();
         Logger logger = plugin.getLogger();
+
+        Instant start = Instant.now();
+        MiniMessage miniMessage = MiniMessage.miniMessage();
 
         this.server = plugin.getServer();
 
         /* Configuration */
+        OkaeriSerdesPack jumpPack = new JumpSerdesPack(miniMessage);
+
         this.pluginConfiguration = ConfigManager.create(PluginConfiguration.class, (it) -> {
-            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons());
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons(), jumpPack);
             it.withBindFile(new File(plugin.getDataFolder(), "configuration.yml"));
             it.withRemoveOrphans(true);
             it.saveDefaults();
@@ -81,7 +90,7 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
-        this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
+        this.notificationSender = new NotificationSender(this.bukkitAudiences, miniMessage);
 
         /* Managers */
         this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.jumpConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
@@ -91,13 +100,16 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Listeners */
         Stream.of(
-                new PlayerDeathListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.taskScheduler),
-                new PlayerFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
-                new PlayerGameModeChangeListener(this.jumpPlayerManager, this.taskScheduler),
-                new PlayerJoinListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager, this.taskScheduler),
-                new PlayerMoveListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
-                new PlayerQuitListener(this.jumpPlayerManager),
-                new PlayerToggleFlightListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager)
+                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
+                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
+                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
+                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
+                new DoubleJumpListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender),
+                new JumpDisableListener(this.jumpPlayerManager),
+                new JumpEnableListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, this.taskScheduler),
+                new JumpFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
+                new JumpRefreshListener(this.jumpPlayerManager, this.taskScheduler),
+                new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */

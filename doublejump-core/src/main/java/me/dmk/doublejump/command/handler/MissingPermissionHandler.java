@@ -22,7 +22,7 @@ public class MissingPermissionHandler implements PermissionHandler<CommandSender
     public void handle(CommandSender commandSender, LiteInvocation liteInvocation, RequiredPermissions requiredPermissions) {
         Notification notification = Notification.builder()
                 .fromNotification(this.messageConfiguration.missingPermissionsNotification)
-                .placeholder("{permissions}", requiredPermissions.getPermissions())
+                .placeholder("{PERMISSIONS}", requiredPermissions.getPermissions())
                 .build();
 
         this.notificationSender.sendMessage(commandSender, notification);

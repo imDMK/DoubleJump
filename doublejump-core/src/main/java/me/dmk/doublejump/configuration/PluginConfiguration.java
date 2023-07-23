@@ -18,6 +18,7 @@ public class PluginConfiguration extends OkaeriConfig {
     public String doubleJumpUsePermission = "doublejump.use";
     public String doubleJumpCommandPermission = "command.doublejump";
     public String doubleJumpEnableForPermission = "command.doublejump.enablefor";
+    public String doubleJumpGiveItemPermission = "command.doublejump.giveitem";
 
     @Comment("Jump configuration")
     public JumpConfiguration jumpConfiguration = new JumpConfiguration();

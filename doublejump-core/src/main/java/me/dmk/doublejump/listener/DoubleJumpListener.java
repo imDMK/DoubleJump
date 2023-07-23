@@ -6,78 +6,36 @@ import me.dmk.doublejump.event.DoubleJumpEvent;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
-import me.dmk.doublejump.player.JumpPlayerManager;
 import me.dmk.doublejump.util.PlayerUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
 
-import java.util.Optional;
-
-public class PlayerToggleFlightListener implements Listener {
+public class DoubleJumpListener implements Listener {
 
     private final JumpConfiguration jumpConfiguration;
     private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
-    private final JumpPlayerManager jumpPlayerManager;
 
-    public PlayerToggleFlightListener(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
+    public DoubleJumpListener(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender) {
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
-        this.jumpPlayerManager = jumpPlayerManager;
     }
 
-    @EventHandler
-    public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDoubleJump(DoubleJumpEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        JumpPlayer jumpPlayer = event.getJumpPlayer();
+
         Player player = event.getPlayer();
-
-        GameMode playerGameMode = player.getGameMode();
-        World playerWorld = player.getWorld();
         Location playerLocation = player.getLocation();
-
-        Optional<JumpPlayer> jumpPlayerOptional = this.jumpPlayerManager.getJumpPlayer(player.getUniqueId());
-        if (jumpPlayerOptional.isEmpty()) {
-            return;
-        }
-
-        JumpPlayer jumpPlayer = jumpPlayerOptional.get();
-
-        if (!jumpPlayer.canUseJump()) {
-            event.setCancelled(true);
-            return;
-        }
-
-        if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
-            event.setCancelled(true);
-
-            this.jumpPlayerManager.remove(player.getUniqueId());
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
-            return;
-        }
-
-        if (this.jumpConfiguration.disabledWorlds.contains(playerWorld.getName())) {
-            event.setCancelled(true);
-
-            this.jumpPlayerManager.remove(player.getUniqueId());
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
-            return;
-        }
-
-        DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
-
-        Bukkit.getPluginManager().callEvent(doubleJumpEvent);
-        if (doubleJumpEvent.isCancelled()) {
-            return;
-        }
-
-        event.setCancelled(true);
 
         player.setFlying(false);
         player.setAllowFlight(false);
@@ -105,7 +63,7 @@ public class PlayerToggleFlightListener implements Listener {
 
             Notification notification = Notification.builder()
                     .fromNotification(this.messageConfiguration.jumpStreakIncreaseNotification)
-                    .placeholder("{streak}", jumpPlayer.getStreak())
+                    .placeholder("{STREAK}", jumpPlayer.getStreak())
                     .build();
 
             this.notificationSender.sendMessage(player, notification);

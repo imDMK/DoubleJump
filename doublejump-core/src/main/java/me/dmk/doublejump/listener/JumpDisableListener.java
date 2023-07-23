@@ -6,11 +6,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerQuitListener implements Listener {
+public class JumpDisableListener implements Listener {
 
     private final JumpPlayerManager jumpPlayerManager;
 
-    public PlayerQuitListener(JumpPlayerManager jumpPlayerManager) {
+    public JumpDisableListener(JumpPlayerManager jumpPlayerManager) {
         this.jumpPlayerManager = jumpPlayerManager;
     }
 

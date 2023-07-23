@@ -11,7 +11,10 @@ import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayerManager;
 import org.bukkit.GameMode;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 @Route(name = "doublejump")
 public class DoubleJumpCommand {
@@ -91,5 +94,55 @@ public class DoubleJumpCommand {
                 .build();
 
         this.notificationSender.sendMessage(player, notification);
+    }
+
+    @Async
+    @Execute(route = "give-item", required = 1)
+    void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
+        if (!this.jumpConfiguration.jumpItemEnabled) {
+            this.notificationSender.sendMessage(sender, this.messageConfiguration.jumpItemDisabledNotification);
+            return;
+        }
+
+        ItemStack jumpItem = this.jumpConfiguration.jumpItem;
+        Inventory targetInventory = target.getInventory();
+
+        if (targetInventory.firstEmpty() == -1) {
+            this.notificationSender.sendMessage(sender, this.messageConfiguration.targetFullInventoryNotification);
+            return;
+        }
+
+        targetInventory.addItem(jumpItem);
+
+        Notification notification = Notification.builder()
+                .fromNotification(this.messageConfiguration.jumpItemAddedNotification)
+                .placeholder("{PLAYER}", target.getName())
+                .build();
+
+        this.notificationSender.sendMessage(sender, notification);
+    }
+
+    @Async
+    @Execute(route = "remove-item", required = 1)
+    void removeItem(CommandSender sender, @Arg @Name("target") Player target) {
+        ItemStack jumpItem = this.jumpConfiguration.jumpItem;
+
+        Inventory targetInventory = target.getInventory();
+        Inventory targetEnderChest = target.getEnderChest();
+
+        if (!targetInventory.contains(jumpItem) && !targetEnderChest.contains(jumpItem)) {
+            this.notificationSender.sendMessage(sender, this.messageConfiguration.targetHasNoJumpItemNotification);
+            return;
+        }
+
+        targetInventory.remove(jumpItem);
+        targetEnderChest.remove(jumpItem);
+
+        Notification notification = Notification.builder()
+                .fromNotification(this.messageConfiguration.jumpItemRemovedNotification)
+                .placeholder("{PLAYER}", target.getName())
+                .build();
+
+        this.notificationSender.sendMessage(sender, notification);
     }
 }
