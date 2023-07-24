@@ -31,11 +31,11 @@ public class JumpConfiguration extends OkaeriConfig {
     public boolean jumpStreakResetOnDeath = true;
 
     @Comment("# Jump settings")
-    public double jumpMultiple = 0.5;
-    public double jumpUp = 0.5;
+    public double jumpMultiple = 0.3;
+    public double jumpUp = 0.6;
 
     @Comment("# Jump delay settings")
-    public boolean jumpDelayEnabled = true;
+    public boolean jumpDelayEnabled = false;
 
     public Duration jumpDelay = Duration.ofSeconds(2);
 
@@ -107,15 +107,15 @@ public class JumpConfiguration extends OkaeriConfig {
     @Comment("# Jump particles settings")
     public boolean jumpParticlesEnabled = true;
 
-    public int jumpParticlesCount = 10;
-    public int jumpParticlesExtra = 0;
+    public int jumpParticlesCount = 3;
+    public int jumpParticlesExtra = 2;
     public double jumpParticlesOffsetX = 0;
     public double jumpParticlesOffsetY = 0;
     public double jumpParticlesOffsetZ = 0;
 
     public List<JumpParticle> jumpParticles = new ArrayList<>(List.of(
-            new JumpParticle(Particle.NOTE, "AQUA", 20),
-            new JumpParticle(Particle.REDSTONE, "RED", 40)
+            new JumpParticle(Particle.NOTE, "WHITE", 20),
+            new JumpParticle(Particle.REDSTONE, "WHITE", 40)
     ));
 
     @Comment("# Restrictions")
