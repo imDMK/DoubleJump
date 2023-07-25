@@ -27,6 +27,7 @@ import me.dmk.doublejump.listener.JumpEnableListener;
 import me.dmk.doublejump.listener.JumpFallDamageListener;
 import me.dmk.doublejump.listener.JumpRefreshListener;
 import me.dmk.doublejump.listener.JumpStreakResetListener;
+import me.dmk.doublejump.listener.item.JumpItemActionBlockListener;
 import me.dmk.doublejump.listener.item.JumpItemDisableListener;
 import me.dmk.doublejump.listener.item.JumpItemDropListener;
 import me.dmk.doublejump.listener.item.JumpItemEnableListener;
@@ -100,6 +101,7 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Listeners */
         Stream.of(
+                new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration),
                 new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
                 new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
                 new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),

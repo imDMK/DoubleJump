@@ -9,6 +9,7 @@ import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
 import me.dmk.doublejump.player.JumpPlayerManager;
 import me.dmk.doublejump.util.DurationUtil;
+import me.dmk.doublejump.util.ItemUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -54,7 +55,7 @@ public class JumpItemInteractListener implements Listener {
         }
 
         ItemStack item = event.getItem();
-        if (item == null || !item.equals(this.jumpConfiguration.jumpItem)) {
+        if (item == null || !ItemUtil.compareItemByIgnoreDurability(item, this.jumpConfiguration.jumpItem)) {
             return;
         }
 
@@ -108,9 +109,9 @@ public class JumpItemInteractListener implements Listener {
 
         int reduceJumpItemDurability = this.jumpConfiguration.reduceJumpItemDurability;
         if (reduceJumpItemDurability > 0) {
-            if (item.getItemMeta() instanceof Damageable damageable) {
-                damageable.setDamage(-(reduceJumpItemDurability - item.getType().getMaxDurability()));
-                item.setItemMeta(damageable);
+            if (item.getItemMeta() instanceof Damageable itemDamageable) {
+                itemDamageable.setDamage(-(reduceJumpItemDurability - item.getType().getMaxDurability()));
+                item.setItemMeta(itemDamageable);
             }
         }
 

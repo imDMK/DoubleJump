@@ -58,7 +58,7 @@ public class JumpConfiguration extends OkaeriConfig {
     })
     public boolean cancelJumpItemUse = true;
     @Comment("# Use a double jump after using a double jump item?")
-    public boolean jumpItemUseDoubleJump = false;
+    public boolean jumpItemUseDoubleJump = true;
 
     @Comment("# Remove jump item after player use jump item?")
     public boolean removeJumpItemAfterUse = true;
@@ -76,6 +76,12 @@ public class JumpConfiguration extends OkaeriConfig {
     public boolean jumpItemDropDelete = false;
     @Comment("# Cancel drop item when player tries to drop jump item?")
     public boolean jumpItemDropCancel = false;
+
+    @Comment({
+            "# Cancel jump item repair in anvil?",
+            "# If you allow it, the player will be able to repair the item, but cannot rename it (Renaming will make the item inoperable)."
+    })
+    public boolean jumpItemCancelRepair = false;
 
     @Comment({
             "# This specifies the use of a double jump",

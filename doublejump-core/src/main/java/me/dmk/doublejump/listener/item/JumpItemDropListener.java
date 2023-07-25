@@ -2,6 +2,7 @@ package me.dmk.doublejump.listener.item;
 
 import me.dmk.doublejump.configuration.JumpConfiguration;
 import me.dmk.doublejump.player.JumpPlayerManager;
+import me.dmk.doublejump.util.ItemUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +24,7 @@ public class JumpItemDropListener implements Listener {
         Player player = event.getPlayer();
 
         ItemStack itemDrop = event.getItemDrop().getItemStack();
-        if (!itemDrop.equals(this.jumpConfiguration.jumpItem)) {
+        if (!ItemUtil.compareItemByIgnoreDurability(itemDrop, this.jumpConfiguration.jumpItem)) {
             return;
         }
 

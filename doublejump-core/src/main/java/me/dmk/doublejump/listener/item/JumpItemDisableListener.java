@@ -3,7 +3,7 @@ package me.dmk.doublejump.listener.item;
 import me.dmk.doublejump.configuration.JumpConfiguration;
 import me.dmk.doublejump.configuration.JumpItemUsage;
 import me.dmk.doublejump.player.JumpPlayerManager;
-import me.dmk.doublejump.util.PlayerUtil;
+import me.dmk.doublejump.util.ItemUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,7 +41,7 @@ public class JumpItemDisableListener implements Listener {
             return;
         }
 
-        if (!PlayerUtil.isWearingItem(player, this.jumpConfiguration.jumpItem)) {
+        if (!ItemUtil.isWearingItem(player, this.jumpConfiguration.jumpItem)) {
             this.jumpPlayerManager.disable(player);
         }
     }
@@ -77,9 +77,9 @@ public class JumpItemDisableListener implements Listener {
         }
 
         Inventory playerInventory = player.getInventory();
-        ItemStack previousItem = playerInventory.getItem(event.getPreviousSlot());
 
-        if (previousItem == null || !previousItem.equals(this.jumpConfiguration.jumpItem)) {
+        ItemStack previousItem = playerInventory.getItem(event.getPreviousSlot());
+        if (previousItem == null || !ItemUtil.compareItemByIgnoreDurability(previousItem, this.jumpConfiguration.jumpItem)) {
             return;
         }
 
