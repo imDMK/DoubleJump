@@ -20,6 +20,7 @@ import java.util.Optional;
 
 public class ItemMetaSerializer implements ObjectSerializer<ItemMeta> {
 
+    private static final CharSequence LEGACY_CHAR = "§";
     private final MiniMessage miniMessage;
 
     public ItemMetaSerializer(MiniMessage miniMessage) {
@@ -35,16 +36,15 @@ public class ItemMetaSerializer implements ObjectSerializer<ItemMeta> {
     public void serialize(@NonNull ItemMeta itemMeta, @NonNull SerializationData data, @NonNull GenericsDeclaration generics) {
         if (itemMeta.hasDisplayName()) {
             Component displayName = this.deserialize(itemMeta.getDisplayName());
-            data.add("display-name", this.serialize(displayName), String.class);
+            data.add("display-name", displayName, Component.class);
         }
 
         if (itemMeta.hasLore()) {
-            List<String> lore = itemMeta.getLore().stream()
+            List<Component> lore = itemMeta.getLore().stream()
                     .map(this::deserialize)
-                    .map(this::serialize)
                     .toList();
 
-            data.addCollection("lore", lore, String.class);
+            data.addCollection("lore", lore, Component.class);
         }
 
         if (itemMeta.hasEnchants()) {
@@ -76,20 +76,14 @@ public class ItemMetaSerializer implements ObjectSerializer<ItemMeta> {
     }
 
     private Component deserialize(String text) {
-        if (text.contains("§")) {
-            return LegacyComponentSerializer.legacySection().deserialize(text);
-        }
-
-        return this.miniMessage.deserialize(text);
+        return text.contains(LEGACY_CHAR)
+                ? LegacyComponentSerializer.legacySection().deserialize(text)
+                : this.miniMessage.deserialize(text);
     }
 
     private List<Component> deserialize(List<String> strings) {
         return strings.stream()
                 .map(this::deserialize)
                 .toList();
-    }
-
-    private String serialize(Component component) {
-        return this.miniMessage.serialize(component);
     }
 }
