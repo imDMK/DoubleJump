@@ -5,7 +5,7 @@
 ![JDK](https://img.shields.io/badge/JDK-1.17-blue.svg)
 ![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.20.1-green.svg)
 [![SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/doublejump-1-17-1-20-1.110632/)
-[![Bukkit](https://img.shields.io/badge/Bukkit-yellow.svg)](https://dev.bukkit.org/projects/d-doublejump)
+[![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://dev.bukkit.org/projects/d-doublejump)
 
 A simple double jump plugin with a lot of configuration options.
 
