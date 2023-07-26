@@ -55,13 +55,12 @@ public class ItemStackSerializer implements ObjectSerializer<ItemStack> {
 
         ItemStack itemStack = new ItemStack(material, amount);
 
-        itemMetaOptional.ifPresent(itemMeta -> {
-            itemStack.setItemMeta(itemMeta);
+        itemMetaOptional.ifPresent(itemStack::setItemMeta);
 
-            if (itemMeta instanceof Damageable damageable) {
-                damageable.setDamage(durability);
-            }
-        });
+        if (itemStack.getItemMeta() instanceof Damageable damageable) {
+            damageable.setDamage(durability);
+            itemStack.setItemMeta(damageable);
+        }
 
         return itemStack;
     }
