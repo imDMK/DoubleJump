@@ -7,7 +7,7 @@
 [![SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/doublejump-1-17-1-20-1.110632/)
 [![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://dev.bukkit.org/projects/d-doublejump)
 
-A simple double jump plugin with a lot of configuration options.
+Simple and efficient double jump plugin with many features and configuration possibilities.
 
 # Features
 * Spawn particles when player use double jump, 
