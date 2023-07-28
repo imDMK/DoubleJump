@@ -1,3 +1,5 @@
+package me.dmk.doublejump;
+
 import me.dmk.doublejump.util.DurationUtil;
 import org.junit.jupiter.api.Test;
 
