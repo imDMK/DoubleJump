@@ -13,6 +13,7 @@ Simple and efficient double jump plugin with many features and configuration pos
 * Spawn particles when player use double jump, 
 * Playing sound when player use double jump,
 * Double jump streaks,
+* Double jump item (You can completely configure this item),
 * Possibility to customize messages (disable or type, e.g. ACTIONBAR or CHAT),
 * Possibility to disable using double jump in selected worlds,
 * Possibility to enable double jump mode when joining the server (U can set only for administrators),
