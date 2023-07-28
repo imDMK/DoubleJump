@@ -1,13 +1,10 @@
 package me.dmk.doublejump.util;
 
-import me.dmk.doublejump.configuration.JumpItemUsage;
 import me.dmk.doublejump.particle.JumpParticle;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -36,20 +33,6 @@ public final class PlayerUtil {
                 throw new RuntimeException(exception);
             }
         }
-    }
-
-    public static boolean isCorrectlyUsed(Player player, ItemStack item, JumpItemUsage itemUsage) {
-        PlayerInventory playerInventory = player.getInventory();
-
-        ItemStack itemInMainHand = playerInventory.getItemInMainHand();
-        ItemStack itemInOffHand = playerInventory.getItemInOffHand();
-
-        return switch (itemUsage) {
-            case WEAR_ITEM -> ItemUtil.isWearingItem(player, item);
-            case HOLD_ITEM -> itemInMainHand.equals(item) || itemInOffHand.equals(item);
-            case HAVE_ITEM -> playerInventory.contains(item);
-            default -> false;
-        };
     }
 
     public static void playSound(Player player, Sound sound, float volume, float pitch) {

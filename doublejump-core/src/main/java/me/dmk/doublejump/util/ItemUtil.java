@@ -1,5 +1,6 @@
 package me.dmk.doublejump.util;
 
+import me.dmk.doublejump.configuration.JumpItemUsage;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -25,6 +26,20 @@ public class ItemUtil {
         toCompare.setItemMeta(toCompareDamageable);
 
         return item.equals(toCompareClone);
+    }
+
+    public static boolean isCorrectlyUsed(Player player, ItemStack item, JumpItemUsage itemUsage) {
+        PlayerInventory playerInventory = player.getInventory();
+
+        ItemStack itemInMainHand = playerInventory.getItemInMainHand();
+        ItemStack itemInOffHand = playerInventory.getItemInOffHand();
+
+        return switch (itemUsage) {
+            case WEAR_ITEM -> ItemUtil.isWearingItem(player, item);
+            case HOLD_ITEM -> itemInMainHand.equals(item) || itemInOffHand.equals(item);
+            case HAVE_ITEM -> playerInventory.contains(item);
+            default -> false;
+        };
     }
 
     public static boolean isWearingItem(Player player, ItemStack itemStack) {

@@ -3,7 +3,7 @@ package me.dmk.doublejump.listener.item;
 import me.dmk.doublejump.configuration.JumpConfiguration;
 import me.dmk.doublejump.configuration.JumpItemUsage;
 import me.dmk.doublejump.player.JumpPlayerManager;
-import me.dmk.doublejump.util.PlayerUtil;
+import me.dmk.doublejump.util.ItemUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,7 +39,7 @@ public class JumpItemEnableListener implements Listener {
         ItemStack jumpItem = this.jumpConfiguration.jumpItem;
         JumpItemUsage jumpItemUsage = this.jumpConfiguration.jumpItemUsage;
 
-        if (PlayerUtil.isCorrectlyUsed(player, jumpItem, jumpItemUsage)) {
+        if (ItemUtil.isCorrectlyUsed(player, jumpItem, jumpItemUsage)) {
             this.jumpPlayerManager.enable(player, false);
         }
     }
