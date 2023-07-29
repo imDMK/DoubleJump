@@ -1,37 +1,11 @@
 package me.dmk.doublejump.notification;
 
-import eu.okaeri.configs.OkaeriConfig;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Notification extends OkaeriConfig {
-
-    private NotificationType type;
-    private String message;
-
-    public Notification(NotificationType notificationType, String message) {
-        this.type = notificationType;
-        this.message = message;
-    }
-
-    public NotificationType getType() {
-        return this.type;
-    }
-
-    public void setType(NotificationType type) {
-        this.type = type;
-    }
-
-    public String getMessage() {
-        return this.message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+public record Notification(NotificationType type, String message) {
 
     public static NotificationBuilder builder() {
         return new NotificationBuilder();
@@ -46,8 +20,8 @@ public class Notification extends OkaeriConfig {
 
         @CheckReturnValue
         public NotificationBuilder fromNotification(@Nonnull Notification notification) {
-            this.type = notification.getType();
-            this.message = notification.getMessage();
+            this.type = notification.type();
+            this.message = notification.message();
             return this;
         }
 

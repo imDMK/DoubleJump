@@ -19,10 +19,10 @@ public class NotificationSender {
     }
 
     public void sendMessage(CommandSender sender, Notification notification) {
-        NotificationType type = notification.getType();
+        NotificationType type = notification.type();
 
         Audience audience = this.createAudience(sender);
-        Component message = this.miniMessage.deserialize(notification.getMessage());
+        Component message = this.miniMessage.deserialize(notification.message());
 
         switch (type) {
             case CHAT -> audience.sendMessage(message);
