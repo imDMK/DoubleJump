@@ -20,7 +20,7 @@ import me.dmk.doublejump.command.handler.MissingPermissionHandler;
 import me.dmk.doublejump.command.handler.NotificationHandler;
 import me.dmk.doublejump.command.handler.UsageHandler;
 import me.dmk.doublejump.configuration.PluginConfiguration;
-import me.dmk.doublejump.configuration.pack.JumpSerdesPack;
+import me.dmk.doublejump.configuration.serializer.pack.DoubleJumpPack;
 import me.dmk.doublejump.listener.DoubleJumpListener;
 import me.dmk.doublejump.listener.JumpDisableListener;
 import me.dmk.doublejump.listener.JumpEnableListener;
@@ -72,14 +72,12 @@ public class DoubleJump implements DoubleJumpApi {
         DoubleJumpApiProvider.register(this);
 
         Logger logger = plugin.getLogger();
-
         Instant start = Instant.now();
-        MiniMessage miniMessage = MiniMessage.miniMessage();
 
         this.server = plugin.getServer();
 
         /* Configuration */
-        OkaeriSerdesPack jumpPack = new JumpSerdesPack(miniMessage);
+        OkaeriSerdesPack jumpPack = new DoubleJumpPack();
 
         this.pluginConfiguration = ConfigManager.create(PluginConfiguration.class, (it) -> {
             it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons(), jumpPack);
@@ -91,7 +89,7 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
-        this.notificationSender = new NotificationSender(this.bukkitAudiences, miniMessage);
+        this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
 
         /* Managers */
         this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.jumpConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);

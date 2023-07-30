@@ -5,9 +5,9 @@ import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
 import eu.okaeri.configs.serdes.SerializationData;
+import me.dmk.doublejump.util.ComponentUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -20,13 +20,6 @@ import java.util.Optional;
 
 public class ItemMetaSerializer implements ObjectSerializer<ItemMeta> {
 
-    private static final CharSequence LEGACY_CHAR = "§";
-    private final MiniMessage miniMessage;
-
-    public ItemMetaSerializer(MiniMessage miniMessage) {
-        this.miniMessage = miniMessage;
-    }
-
     @Override
     public boolean supports(@NonNull Class<? super ItemMeta> type) {
         return ItemMeta.class.isAssignableFrom(type);
@@ -35,13 +28,13 @@ public class ItemMetaSerializer implements ObjectSerializer<ItemMeta> {
     @Override
     public void serialize(@NonNull ItemMeta itemMeta, @NonNull SerializationData data, @NonNull GenericsDeclaration generics) {
         if (itemMeta.hasDisplayName()) {
-            Component displayName = this.deserialize(itemMeta.getDisplayName());
+            Component displayName = ComponentUtil.deserialize(itemMeta.getDisplayName());
             data.add("display-name", displayName, Component.class);
         }
 
         if (itemMeta.hasLore()) {
             List<Component> lore = itemMeta.getLore().stream()
-                    .map(this::deserialize)
+                    .map(ComponentUtil::deserialize)
                     .toList();
 
             data.addCollection("lore", lore, Component.class);
@@ -66,24 +59,12 @@ public class ItemMetaSerializer implements ObjectSerializer<ItemMeta> {
 
         ItemBuilder itemBuilder = ItemBuilder.from(Material.STONE);
 
-        displayNameOptional.ifPresent(displayName -> itemBuilder.name(this.deserialize(displayName)));
-        loreOptional.ifPresent(lore -> itemBuilder.lore(this.deserialize(lore)));
+        displayNameOptional.ifPresent(displayName -> itemBuilder.name(ComponentUtil.deserialize(displayName)));
+        loreOptional.ifPresent(lore -> itemBuilder.lore(ComponentUtil.deserialize(lore)));
 
         enchantmentsOptional.ifPresent(itemBuilder::enchant);
         itemFlagsOptional.ifPresent(itemFlags -> itemBuilder.flags(itemFlags.toArray(new ItemFlag[0])));
 
         return itemBuilder.build().getItemMeta();
-    }
-
-    private Component deserialize(String text) {
-        return text.contains(LEGACY_CHAR)
-                ? LegacyComponentSerializer.legacySection().deserialize(text)
-                : this.miniMessage.deserialize(text);
-    }
-
-    private List<Component> deserialize(List<String> strings) {
-        return strings.stream()
-                .map(this::deserialize)
-                .toList();
     }
 }
