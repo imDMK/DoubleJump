@@ -22,11 +22,16 @@ public class JumpItemActionBlockListener implements Listener {
 
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
-        ItemStack item = event.getItem();
-
-        if (item.equals(this.jumpConfiguration.jumpItem)) {
-            event.setCancelled(true);
+        if (!this.jumpConfiguration.jumpItemCancelEnchant) {
+            return;
         }
+
+        ItemStack item = event.getItem();
+        if (!item.equals(this.jumpConfiguration.jumpItem)) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -42,7 +47,7 @@ public class JumpItemActionBlockListener implements Listener {
         }
 
         ItemStack itemToRepair = clickedInventory.getItem(0);
-        if (itemToRepair == null || !ItemUtil.compareItemByIgnoreDurability(itemToRepair, this.jumpConfiguration.jumpItem)) {
+        if (itemToRepair == null || !ItemUtil.compareItem(itemToRepair, this.jumpConfiguration.jumpItem, true, !this.jumpConfiguration.jumpItemCancelEnchant)) {
             return;
         }
 

@@ -55,7 +55,7 @@ public class JumpItemInteractListener implements Listener {
         }
 
         ItemStack item = event.getItem();
-        if (item == null || !ItemUtil.compareItemByIgnoreDurability(item, this.jumpConfiguration.jumpItem)) {
+        if (item == null || !ItemUtil.compareItem(item, this.jumpConfiguration.jumpItem, true, !this.jumpConfiguration.jumpItemCancelEnchant)) {
             return;
         }
 

@@ -10,7 +10,6 @@ import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
 import eu.okaeri.configs.ConfigManager;
-import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import me.dmk.doublejump.command.DoubleJumpCommand;
@@ -77,10 +76,8 @@ public class DoubleJump implements DoubleJumpApi {
         this.server = plugin.getServer();
 
         /* Configuration */
-        OkaeriSerdesPack jumpPack = new DoubleJumpPack();
-
         this.pluginConfiguration = ConfigManager.create(PluginConfiguration.class, (it) -> {
-            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons(), jumpPack);
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons(), new DoubleJumpPack());
             it.withBindFile(new File(plugin.getDataFolder(), "configuration.yml"));
             it.withRemoveOrphans(true);
             it.saveDefaults();

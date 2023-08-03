@@ -79,7 +79,7 @@ public class JumpItemDisableListener implements Listener {
         Inventory playerInventory = player.getInventory();
 
         ItemStack previousItem = playerInventory.getItem(event.getPreviousSlot());
-        if (previousItem == null || !ItemUtil.compareItemByIgnoreDurability(previousItem, this.jumpConfiguration.jumpItem)) {
+        if (previousItem == null || !ItemUtil.compareItem(previousItem, this.jumpConfiguration.jumpItem, true, this.jumpConfiguration.jumpItemCancelEnchant)) {
             return;
         }
 

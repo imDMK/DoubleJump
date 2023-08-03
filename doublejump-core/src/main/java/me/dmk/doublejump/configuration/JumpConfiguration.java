@@ -82,6 +82,11 @@ public class JumpConfiguration extends OkaeriConfig {
             "# If you allow it, the player will be able to repair the item, but cannot rename it (Renaming will make the item inoperable)."
     })
     public boolean jumpItemCancelRepair = false;
+    @Comment({
+            "# Cancel enchant jump item in enchanting?",
+            "# If you disable this option, the plugin will start ignoring enchants on items",
+    })
+    public boolean jumpItemCancelEnchant = true;
 
     @Comment({
             "# This specifies the use of a double jump",

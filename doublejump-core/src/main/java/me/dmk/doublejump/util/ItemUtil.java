@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemUtil {
 
@@ -12,18 +13,31 @@ public class ItemUtil {
         throw new UnsupportedOperationException("This is utility class.");
     }
 
-    public static boolean compareItemByIgnoreDurability(ItemStack item, ItemStack toCompare) {
-        if (!(item.getItemMeta() instanceof Damageable itemDamageable)) {
+    public static boolean compareItem(ItemStack item, ItemStack toCompare, boolean ignoreDurability, boolean ignoreEnchants) {
+        if (item.getType() != toCompare.getType()) {
             return false;
         }
+
+        ItemMeta itemMeta = item.getItemMeta();
 
         ItemStack toCompareClone = new ItemStack(toCompare.clone());
-        if (!(toCompareClone.getItemMeta() instanceof Damageable toCompareDamageable)) {
-            return false;
+        ItemMeta toCompareMeta = toCompareClone.getItemMeta();
+
+        if (toCompareMeta == null) {
+            return item.equals(toCompare);
         }
 
-        toCompareDamageable.setDamage(itemDamageable.getDamage());
-        toCompare.setItemMeta(toCompareDamageable);
+        if (ignoreDurability) {
+            if (itemMeta instanceof Damageable itemDamageable && toCompareMeta instanceof Damageable toCompareDamageable) {
+                toCompareDamageable.setDamage(itemDamageable.getDamage());
+                toCompareClone.setItemMeta(toCompareDamageable);
+            }
+        }
+
+        if (ignoreEnchants) {
+            item.getEnchantments().putAll(toCompareMeta.getEnchants());
+            toCompareMeta.getEnchants().putAll(item.getEnchantments());
+        }
 
         return item.equals(toCompareClone);
     }
