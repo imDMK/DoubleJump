@@ -39,10 +39,12 @@ import me.dmk.doublejump.task.scheduler.TaskSchedulerImpl;
 import me.dmk.doublejump.util.AnsiColor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -66,6 +68,8 @@ public class DoubleJump implements DoubleJumpApi {
     private final TaskScheduler taskScheduler;
 
     private LiteCommands<CommandSender> liteCommands;
+
+    private final Metrics metrics;
 
     public DoubleJump(Plugin plugin) {
         DoubleJumpApiProvider.register(this);
@@ -126,6 +130,9 @@ public class DoubleJump implements DoubleJumpApi {
             }
         }
 
+        /* Metrics */
+        this.metrics = new Metrics((JavaPlugin) plugin, 19387);
+
         Duration timeElapsed = Duration.between(start, Instant.now());
         logger.info("Enabled plugin in " + timeElapsed.toMillis() + "ms.");
     }
@@ -139,6 +146,8 @@ public class DoubleJump implements DoubleJumpApi {
 
         this.disableAllowFlightForOnlinePlayers();
         this.bukkitAudiences.close();
+
+        this.metrics.shutdown();
     }
 
     private LiteCommands<CommandSender> registerLiteCommands() {

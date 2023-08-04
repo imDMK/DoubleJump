@@ -84,6 +84,14 @@
             <version>5.0.0-beta.5</version>
         </dependency>
 
+        <!-- bStats -->
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- LiteCommands -->
         <dependency>
             <groupId>dev.rollczi.litecommands</groupId>
@@ -161,6 +169,11 @@
                                 <relocation>
                                     <pattern>dev.triumphteam.gui</pattern>
                                     <shadedPattern>me.dmk.doublejump.gui</shadedPattern>
+                                </relocation>
+
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>me.dmk.doublejump.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
