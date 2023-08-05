@@ -21,7 +21,7 @@ Simple and efficient double jump plugin with many features and configuration pos
 * Possibility to enable double jump mode when joining the server (U can set only for administrators),
 * Ability to disable using double jump in selected game modes,
 * Ability to set double jump series to reset after dying or touching the ground.
-* Adventure components support.
+* [Adventure](https://github.com/KyoriPowered/adventure) components support.
 * Easy to use API.
 
 # FAQ
