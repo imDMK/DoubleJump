@@ -1,11 +1,6 @@
 package me.dmk.doublejump;
 
-import com.eternalcode.gitcheck.GitCheck;
-import com.eternalcode.gitcheck.GitCheckResult;
 import com.eternalcode.gitcheck.git.GitException;
-import com.eternalcode.gitcheck.git.GitRelease;
-import com.eternalcode.gitcheck.git.GitRepository;
-import com.eternalcode.gitcheck.git.GitTag;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
@@ -37,6 +32,7 @@ import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayerManager;
 import me.dmk.doublejump.task.scheduler.TaskScheduler;
 import me.dmk.doublejump.task.scheduler.TaskSchedulerImpl;
+import me.dmk.doublejump.update.UpdateService;
 import me.dmk.doublejump.util.AnsiColor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -56,9 +52,9 @@ import java.util.stream.Stream;
 
 public class DoubleJump implements DoubleJumpApi {
 
-    private static final GitRepository GIT_REPOSITORY = GitRepository.of("imDMK", "DoubleJump");
-
     private final Server server;
+    private final Logger logger;
+
     private final PluginConfiguration pluginConfiguration;
 
     private final BukkitAudiences bukkitAudiences;
@@ -77,9 +73,9 @@ public class DoubleJump implements DoubleJumpApi {
     public DoubleJump(Plugin plugin) {
         DoubleJumpApiProvider.register(this);
 
-        Logger logger = plugin.getLogger();
         Instant start = Instant.now();
 
+        this.logger = plugin.getLogger();
         this.server = plugin.getServer();
 
         /* Configuration */
@@ -96,7 +92,7 @@ public class DoubleJump implements DoubleJumpApi {
         this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
 
         /* Hooks */
-        this.worldGuardHook = new WorldGuardHook(this.pluginConfiguration.hookWorldGuard, this.pluginConfiguration.jumpConfiguration.disabledRegions);
+        this.worldGuardHook = this.hookWorldGuard();
 
         /* Managers */
         this.jumpPlayerManager = new JumpPlayerManager(this.worldGuardHook, this.pluginConfiguration.jumpConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
@@ -126,13 +122,11 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Update check */
         if (this.pluginConfiguration.checkForUpdate) {
-            String version = plugin.getDescription().getVersion();
-
             try {
-                this.checkForUpdate(version, logger);
+                new UpdateService(plugin.getDescription(), this.logger).check();
             }
             catch (GitException gitException) {
-                logger.info(AnsiColor.RED + "An error occurred while checking for update: " + gitException.getMessage() + AnsiColor.RESET);
+                this.logger.info(AnsiColor.RED + "An error occurred while checking for update: " + gitException.getMessage() + AnsiColor.RESET);
             }
         }
 
@@ -140,7 +134,7 @@ public class DoubleJump implements DoubleJumpApi {
         this.metrics = new Metrics((JavaPlugin) plugin, 19387);
 
         Duration timeElapsed = Duration.between(start, Instant.now());
-        logger.info("Enabled plugin in " + timeElapsed.toMillis() + "ms.");
+        this.logger.info("Enabled plugin in " + timeElapsed.toMillis() + "ms.");
     }
 
     public void disable() {
@@ -189,21 +183,12 @@ public class DoubleJump implements DoubleJumpApi {
         }
     }
 
-    private void checkForUpdate(String version, Logger logger) {
-        GitCheck gitCheck = new GitCheck();
-
-        GitTag gitTag = GitTag.of("v" + version);
-        GitCheckResult checkResult = gitCheck.checkRelease(GIT_REPOSITORY, gitTag);
-
-        if (checkResult.isUpToDate()) {
-            logger.info(AnsiColor.GREEN + "You are using latest version. Thank you." + AnsiColor.RESET);
+    private WorldGuardHook hookWorldGuard() {
+        if (this.server.getPluginManager().getPlugin("WorldGuard") != null) {
+            return new WorldGuardHook(this.pluginConfiguration.jumpConfiguration.disabledRegions);
         }
-        else {
-            GitRelease latestRelease = checkResult.getLatestRelease();
 
-            logger.info(AnsiColor.YELLOW + "A new version is available: " + latestRelease.getTag() + AnsiColor.RESET);
-            logger.info(AnsiColor.YELLOW + "Download it here: " + latestRelease.getPageUrl() + AnsiColor.RESET);
-        }
+        return new WorldGuardHook();
     }
 
     @Nonnull

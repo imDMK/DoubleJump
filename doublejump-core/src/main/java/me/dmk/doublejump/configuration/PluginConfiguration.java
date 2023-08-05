@@ -11,13 +11,10 @@ public class PluginConfiguration extends OkaeriConfig {
 
     @Comment({
             "# Booleans",
-            "# Hook World Guard plugin?",
-            "# It is used to check if a player is in a disabled region"
+            "# Check if you are using the latest version when enabling the plugin?"
     })
-    public boolean hookWorldGuard = false;
-
-    @Comment("# Check if you are using the latest version when enabling the plugin?")
     public boolean checkForUpdate = true;
+
     public boolean doubleJumpCommandEnabled = true;
 
     @Comment("# Permissions")

@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 
 public class WorldGuardHook {
@@ -15,9 +16,14 @@ public class WorldGuardHook {
     private final boolean hooked;
     private final List<String> disabledRegions;
 
-    public WorldGuardHook(boolean hooked, List<String> disabledRegions) {
-        this.hooked = hooked;
+    public WorldGuardHook(List<String> disabledRegions) {
+        this.hooked = true;
         this.disabledRegions = disabledRegions;
+    }
+
+    public WorldGuardHook() {
+        this.hooked = false;
+        this.disabledRegions = Collections.emptyList();
     }
 
     public boolean isInRegion(Player player) {
