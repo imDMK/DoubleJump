@@ -20,6 +20,7 @@ import me.dmk.doublejump.command.handler.NotificationHandler;
 import me.dmk.doublejump.command.handler.UsageHandler;
 import me.dmk.doublejump.configuration.PluginConfiguration;
 import me.dmk.doublejump.configuration.serializer.pack.DoubleJumpPack;
+import me.dmk.doublejump.hook.WorldGuardHook;
 import me.dmk.doublejump.listener.DoubleJumpListener;
 import me.dmk.doublejump.listener.JumpDisableListener;
 import me.dmk.doublejump.listener.JumpEnableListener;
@@ -63,6 +64,8 @@ public class DoubleJump implements DoubleJumpApi {
     private final BukkitAudiences bukkitAudiences;
     private final NotificationSender notificationSender;
 
+    private final WorldGuardHook worldGuardHook;
+
     private final JumpPlayerManager jumpPlayerManager;
 
     private final TaskScheduler taskScheduler;
@@ -92,8 +95,11 @@ public class DoubleJump implements DoubleJumpApi {
         this.bukkitAudiences = BukkitAudiences.create(plugin);
         this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
 
+        /* Hooks */
+        this.worldGuardHook = new WorldGuardHook(this.pluginConfiguration.hookWorldGuard, this.pluginConfiguration.jumpConfiguration.disabledRegions);
+
         /* Managers */
-        this.jumpPlayerManager = new JumpPlayerManager(this.pluginConfiguration.jumpConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
+        this.jumpPlayerManager = new JumpPlayerManager(this.worldGuardHook, this.pluginConfiguration.jumpConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
 
         /* Task Scheduler */
         this.taskScheduler = new TaskSchedulerImpl(plugin, this.server);
@@ -104,10 +110,10 @@ public class DoubleJump implements DoubleJumpApi {
                 new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
                 new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
                 new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
-                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
+                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.worldGuardHook),
                 new DoubleJumpListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender),
                 new JumpDisableListener(this.jumpPlayerManager),
-                new JumpEnableListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, this.taskScheduler),
+                new JumpEnableListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, this.taskScheduler, this.worldGuardHook),
                 new JumpFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
                 new JumpRefreshListener(this.jumpPlayerManager, this.taskScheduler),
                 new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager)
@@ -161,7 +167,7 @@ public class DoubleJump implements DoubleJumpApi {
                 .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.messageConfiguration, this.notificationSender))
 
                 .commandInstance(
-                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager)
+                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.worldGuardHook)
                 )
 
                 .commandEditor(

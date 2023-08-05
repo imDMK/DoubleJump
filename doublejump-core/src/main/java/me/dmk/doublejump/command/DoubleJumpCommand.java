@@ -7,6 +7,7 @@ import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
 import me.dmk.doublejump.configuration.JumpConfiguration;
 import me.dmk.doublejump.configuration.MessageConfiguration;
+import me.dmk.doublejump.hook.WorldGuardHook;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayerManager;
@@ -23,12 +24,14 @@ public class DoubleJumpCommand {
     private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
+    private final WorldGuardHook worldGuardHook;
 
-    public DoubleJumpCommand(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
+    public DoubleJumpCommand(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, WorldGuardHook worldGuardHook) {
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
+        this.worldGuardHook = worldGuardHook;
     }
 
     @Async
@@ -36,6 +39,11 @@ public class DoubleJumpCommand {
     void execute(Player player) {
         GameMode playerGameMode = player.getGameMode();
         String playerWorldName = player.getWorld().getName();
+
+        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+            this.notificationSender.sendMessage(player, this.messageConfiguration.targetInDisabledRegionNotification);
+            return;
+        }
 
         if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
@@ -62,6 +70,11 @@ public class DoubleJumpCommand {
     void enableFor(Player player, @Arg @Name("target") Player target) {
         GameMode targetGameMode = target.getGameMode();
         String targetWorldName = target.getWorld().getName();
+
+        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+            this.notificationSender.sendMessage(player, this.messageConfiguration.targetInDisabledRegionNotification);
+            return;
+        }
 
         if (this.jumpConfiguration.disabledGameModes.contains(targetGameMode)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.targetHasDisabledGameModeNotification);

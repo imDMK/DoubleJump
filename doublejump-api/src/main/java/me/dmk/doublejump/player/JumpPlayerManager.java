@@ -1,5 +1,6 @@
 package me.dmk.doublejump.player;
 
+import me.dmk.doublejump.hook.WorldGuardHook;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -16,13 +17,15 @@ import java.util.concurrent.ConcurrentHashMap;
 */
 public class JumpPlayerManager {
 
+    private final WorldGuardHook worldGuardHook;
     private final List<String> disabledWorlds;
     private final List<GameMode> disabledGameModes;
     private final String doubleJumpUsePermission;
 
     private final Map<UUID, JumpPlayer> jumpPlayers = new ConcurrentHashMap<>();
 
-    public JumpPlayerManager(List<String> disabledWorlds, List<GameMode> disabledGameModes, String doubleJumpUsePermission) {
+    public JumpPlayerManager(WorldGuardHook worldGuardHook, List<String> disabledWorlds, List<GameMode> disabledGameModes, String doubleJumpUsePermission) {
+        this.worldGuardHook = worldGuardHook;
         this.disabledWorlds = disabledWorlds;
         this.disabledGameModes = disabledGameModes;
         this.doubleJumpUsePermission = doubleJumpUsePermission;
@@ -125,6 +128,10 @@ public class JumpPlayerManager {
     public boolean canUseDoubleJump(Player player) {
         GameMode playerGameMode = player.getGameMode();
         World playerWorld = player.getWorld();
+
+        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+            return false;
+        }
 
         if (this.disabledGameModes.contains(playerGameMode)) {
             return false;

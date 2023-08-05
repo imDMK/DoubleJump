@@ -32,9 +32,11 @@ public class MessageConfiguration extends OkaeriConfig {
     public Notification jumpModeEnabledForNotification = new Notification(NotificationType.CHAT, "<green>Enabled double jump mode for player {PLAYER}<dark_gray>.");
     public Notification jumpModeDisabledForNotification = new Notification(NotificationType.CHAT, "<red>Disabled double jump mode for player {PLAYER}<dark_gray>.");
 
-    public Notification jumpModeDisabledGameModeNotification = new Notification(NotificationType.CHAT, "<red>U cannot use this command on this game mode.");
+    public Notification jumpModeDisableRegionNotification = new Notification(NotificationType.CHAT, "<red>You are in disabled region<dark_gray>.");
+    public Notification jumpModeDisabledGameModeNotification = new Notification(NotificationType.CHAT, "<red>You cannot use this command on this game mode.");
     public Notification jumpModeDisabledWorldNotification = new Notification(NotificationType.CHAT, "<red>Double jump has been disabled in this world<dark_gray>.");
 
+    public Notification targetInDisabledRegionNotification = new Notification(NotificationType.CHAT, "<red>The player is in disabled region<dark_gray>.");
     public Notification targetHasDisabledGameModeNotification = new Notification(NotificationType.CHAT, "<red>The player has the game mode disabled<dark_gray>.");
     public Notification targetInDisabledWorldNotification = new Notification(NotificationType.CHAT, "<red>The player is in disabled world<dark_gray>.");
 

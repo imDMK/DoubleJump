@@ -4,6 +4,7 @@ import me.dmk.doublejump.configuration.JumpConfiguration;
 import me.dmk.doublejump.configuration.JumpItemUsage;
 import me.dmk.doublejump.configuration.MessageConfiguration;
 import me.dmk.doublejump.event.DoubleJumpEvent;
+import me.dmk.doublejump.hook.WorldGuardHook;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
@@ -28,13 +29,15 @@ public class JumpItemInteractListener implements Listener {
     private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
+    private final WorldGuardHook worldGuardHook;
 
-    public JumpItemInteractListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
+    public JumpItemInteractListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, WorldGuardHook worldGuardHook) {
         this.server = server;
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
+        this.worldGuardHook = worldGuardHook;
     }
 
     @EventHandler
@@ -56,6 +59,13 @@ public class JumpItemInteractListener implements Listener {
 
         ItemStack item = event.getItem();
         if (item == null || !ItemUtil.compareItem(item, this.jumpConfiguration.jumpItem, true, !this.jumpConfiguration.jumpItemCancelEnchant)) {
+            return;
+        }
+
+        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+            event.setCancelled(true);
+
+            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisableRegionNotification);
             return;
         }
 

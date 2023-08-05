@@ -130,7 +130,12 @@ public class JumpConfiguration extends OkaeriConfig {
     ));
 
     @Comment("# Restrictions")
-    public List<String> disabledWorlds = new ArrayList<>();
+    public List<String> disabledRegions = new ArrayList<>(List.of(
+            "example-region"
+    ));
+    public List<String> disabledWorlds = new ArrayList<>(List.of(
+            "example-world"
+    ));
     public List<GameMode> disabledGameModes = new ArrayList<>(List.of(
             GameMode.SPECTATOR,
             GameMode.CREATIVE

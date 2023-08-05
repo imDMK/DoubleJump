@@ -3,6 +3,7 @@ package me.dmk.doublejump.listener;
 import me.dmk.doublejump.configuration.JumpConfiguration;
 import me.dmk.doublejump.configuration.MessageConfiguration;
 import me.dmk.doublejump.event.DoubleJumpEvent;
+import me.dmk.doublejump.hook.WorldGuardHook;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.player.JumpPlayer;
@@ -29,14 +30,16 @@ public class JumpEnableListener implements Listener {
     private final JumpPlayerManager jumpPlayerManager;
     private final NotificationSender notificationSender;
     private final TaskScheduler taskScheduler;
+    private final WorldGuardHook worldGuardHook;
 
-    public JumpEnableListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, NotificationSender notificationSender, TaskScheduler taskScheduler) {
+    public JumpEnableListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, NotificationSender notificationSender, TaskScheduler taskScheduler, WorldGuardHook worldGuardHook) {
         this.server = server;
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.jumpPlayerManager = jumpPlayerManager;
         this.notificationSender = notificationSender;
         this.taskScheduler = taskScheduler;
+        this.worldGuardHook = worldGuardHook;
     }
 
     @EventHandler
@@ -65,6 +68,12 @@ public class JumpEnableListener implements Listener {
                     .build();
 
             this.notificationSender.sendMessage(player, notification);
+            return;
+        }
+
+        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+            this.jumpPlayerManager.remove(player.getUniqueId());
+            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisableRegionNotification);
             return;
         }
 
@@ -115,6 +124,10 @@ public class JumpEnableListener implements Listener {
 
         GameMode playerGameMode = player.getGameMode();
         String playerWorldName = player.getWorld().getName();
+
+        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+            return;
+        }
 
         if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
             return;
