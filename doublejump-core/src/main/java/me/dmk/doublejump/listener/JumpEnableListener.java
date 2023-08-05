@@ -55,6 +55,9 @@ public class JumpEnableListener implements Listener {
 
         event.setCancelled(true);
 
+        player.setFlying(false);
+        player.setAllowFlight(false);
+
         if (!jumpPlayer.canUseJump()) {
             Notification notification = Notification.builder()
                     .fromNotification(this.messageConfiguration.jumpDelayNotification)
