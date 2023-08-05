@@ -10,17 +10,19 @@
 Simple and efficient double jump plugin with many features and configuration possibilities.
 
 # Features
-* Spawn particles when player use double jump, 
+* Spawn particles when player use double jump,
 * Playing sound when player use double jump,
 * Double jump streaks,
 * Double jump item (You can completely configure this item),
 * Possibility to customize messages (disable or type, e.g. ACTIONBAR or CHAT),
+* WorldGuard Support - Possibility to disable using double jump in selected regions
 * Possibility to disable using double jump in selected worlds,
+* Possibility to enable or disable double jump mode for selected player.
 * Possibility to enable double jump mode when joining the server (U can set only for administrators),
 * Ability to disable using double jump in selected game modes,
 * Ability to set double jump series to reset after dying or touching the ground.
-* Supports [Adventure](https://github.com/KyoriPowered/adventure) components.
-* Easy to use API
+* Adventure components support.
+* Easy to use API.
 
 # FAQ
 #### **Q: What are the notification types?**
