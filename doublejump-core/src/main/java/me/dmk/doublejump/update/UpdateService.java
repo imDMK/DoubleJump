@@ -42,7 +42,7 @@ public class UpdateService {
             }
         }
         catch (GitException gitException) {
-            this.logger.log(Level.SEVERE, "An error occurred while checking for update: " + gitException.getMessage() + AnsiColor.RESET);
+            this.logger.log(Level.SEVERE, AnsiColor.RED + "An error occurred while checking for update: " + gitException.getMessage() + AnsiColor.RESET);
         }
     }
 }
