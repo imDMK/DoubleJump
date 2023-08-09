@@ -34,6 +34,7 @@ public class JumpConfiguration extends OkaeriConfig {
 
     public Duration jumpDelay = Duration.ofSeconds(2);
 
+    @Comment("# Jump item settings")
     public JumpItemConfiguration jumpItemConfiguration = new JumpItemConfiguration();
 
     @Comment({

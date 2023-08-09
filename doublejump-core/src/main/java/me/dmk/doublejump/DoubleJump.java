@@ -79,13 +79,7 @@ public class DoubleJump implements DoubleJumpApi {
         this.server = plugin.getServer();
 
         /* Configuration */
-        this.pluginConfiguration = ConfigManager.create(PluginConfiguration.class, (it) -> {
-            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons(), new DoubleJumpPack());
-            it.withBindFile(new File(plugin.getDataFolder(), "configuration.yml"));
-            it.withRemoveOrphans(true);
-            it.saveDefaults();
-            it.load(true);
-        });
+        this.pluginConfiguration = this.createConfiguration(plugin.getDataFolder());
 
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
@@ -144,6 +138,16 @@ public class DoubleJump implements DoubleJumpApi {
         this.bukkitAudiences.close();
 
         this.metrics.shutdown();
+    }
+
+    private PluginConfiguration createConfiguration(File dataFolder) {
+        return ConfigManager.create(PluginConfiguration.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons(), new DoubleJumpPack());
+            it.withBindFile(new File(dataFolder, "configuration.yml"));
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
     }
 
     private LiteCommands<CommandSender> registerLiteCommands() {

@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 public class JumpItemConfiguration extends OkaeriConfig {
 
     @Comment({
-            "# Jump item settings",
             "# Required item to use double jump",
             "# Determines if the player can receive and use double jump boots"
     })

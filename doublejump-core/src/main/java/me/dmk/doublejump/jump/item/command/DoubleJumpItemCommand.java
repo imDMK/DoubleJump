@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-@Route(name = "double-jump")
+@Route(name = "doublejump")
 public class DoubleJumpItemCommand {
 
     private final JumpItemConfiguration jumpItemConfiguration;
@@ -28,7 +28,7 @@ public class DoubleJumpItemCommand {
     }
 
     @Async
-    @Execute(route = "give-item", required = 1)
+    @Execute(route = "item-give", required = 1)
     void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
         if (!this.jumpItemConfiguration.jumpItemEnabled) {
             this.notificationSender.sendMessage(sender, this.messageConfiguration.jumpItemDisabledNotification);
@@ -54,7 +54,7 @@ public class DoubleJumpItemCommand {
     }
 
     @Async
-    @Execute(route = "remove-item", required = 1)
+    @Execute(route = "item-remove", required = 1)
     void removeItem(CommandSender sender, @Arg @Name("target") Player target) {
         ItemStack jumpItem = this.jumpItemConfiguration.jumpItem;
 
