@@ -1,6 +1,5 @@
 package me.dmk.doublejump;
 
-import com.eternalcode.gitcheck.git.GitException;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
@@ -34,7 +33,7 @@ import me.dmk.doublejump.notification.NotificationSender;
 import me.dmk.doublejump.scheduler.TaskScheduler;
 import me.dmk.doublejump.scheduler.TaskSchedulerImpl;
 import me.dmk.doublejump.update.UpdateService;
-import me.dmk.doublejump.util.AnsiColor;
+import me.dmk.doublejump.util.DurationUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bstats.bukkit.Metrics;
@@ -123,12 +122,8 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Update check */
         if (this.pluginConfiguration.checkForUpdate) {
-            try {
-                new UpdateService(plugin.getDescription(), this.logger).check();
-            }
-            catch (GitException gitException) {
-                this.logger.info(AnsiColor.RED + "An error occurred while checking for update: " + gitException.getMessage() + AnsiColor.RESET);
-            }
+            UpdateService updateService = new UpdateService(plugin.getDescription(), this.logger);
+            this.taskScheduler.runLaterAsync(updateService::check, DurationUtil.toTicks(Duration.ofSeconds(3)));
         }
 
         /* Metrics */
