@@ -17,6 +17,7 @@ import me.dmk.doublejump.jump.JumpPlayerManager;
 import me.dmk.doublejump.jump.command.DoubleJumpCommand;
 import me.dmk.doublejump.jump.command.DoubleJumpCommandEditor;
 import me.dmk.doublejump.jump.item.command.DoubleJumpItemCommand;
+import me.dmk.doublejump.jump.item.command.DoubleJumpItemCommandEditor;
 import me.dmk.doublejump.jump.item.listener.JumpItemActionBlockListener;
 import me.dmk.doublejump.jump.item.listener.JumpItemDisableListener;
 import me.dmk.doublejump.jump.item.listener.JumpItemDropListener;
@@ -53,7 +54,6 @@ import java.util.stream.Stream;
 public class DoubleJump implements DoubleJumpApi {
 
     private final Server server;
-    private final Logger logger;
 
     private final PluginConfiguration pluginConfiguration;
 
@@ -74,8 +74,8 @@ public class DoubleJump implements DoubleJumpApi {
         DoubleJumpApiProvider.register(this);
 
         Instant start = Instant.now();
+        Logger logger = plugin.getLogger();
 
-        this.logger = plugin.getLogger();
         this.server = plugin.getServer();
 
         /* Configuration */
@@ -116,7 +116,7 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Update check */
         if (this.pluginConfiguration.checkForUpdate) {
-            UpdateService updateService = new UpdateService(plugin.getDescription(), this.logger);
+            UpdateService updateService = new UpdateService(plugin.getDescription(), logger);
             this.taskScheduler.runLaterAsync(updateService::check, DurationUtil.toTicks(Duration.ofSeconds(3)));
         }
 
@@ -124,7 +124,7 @@ public class DoubleJump implements DoubleJumpApi {
         this.metrics = new Metrics((JavaPlugin) plugin, 19387);
 
         Duration timeElapsed = Duration.between(start, Instant.now());
-        this.logger.info("Enabled plugin in " + timeElapsed.toMillis() + "ms.");
+        logger.info("Enabled plugin in " + timeElapsed.toMillis() + "ms.");
     }
 
     public void disable() {
@@ -165,9 +165,8 @@ public class DoubleJump implements DoubleJumpApi {
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender)
                 )
 
-                .commandEditor(
-                        "double-jump", new DoubleJumpCommandEditor(this.pluginConfiguration)
-                )
+                .commandEditor(DoubleJumpCommand.class, new DoubleJumpCommandEditor(this.pluginConfiguration))
+                .commandEditor(DoubleJumpItemCommand.class, new DoubleJumpItemCommandEditor(this.pluginConfiguration))
 
                 .register();
     }
