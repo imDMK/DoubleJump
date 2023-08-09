@@ -1,6 +1,6 @@
 package me.dmk.doublejump.util;
 
-import me.dmk.doublejump.configuration.JumpItemUsage;
+import me.dmk.doublejump.jump.item.JumpItemUsage;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;

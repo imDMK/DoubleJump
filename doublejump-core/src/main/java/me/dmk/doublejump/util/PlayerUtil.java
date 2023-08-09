@@ -1,6 +1,6 @@
 package me.dmk.doublejump.util;
 
-import me.dmk.doublejump.particle.JumpParticle;
+import me.dmk.doublejump.jump.particle.JumpParticle;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

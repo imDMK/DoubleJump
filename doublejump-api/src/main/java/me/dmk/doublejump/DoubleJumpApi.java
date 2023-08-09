@@ -1,6 +1,6 @@
 package me.dmk.doublejump;
 
-import me.dmk.doublejump.player.JumpPlayerManager;
+import me.dmk.doublejump.jump.JumpPlayerManager;
 
 import javax.annotation.Nonnull;
 

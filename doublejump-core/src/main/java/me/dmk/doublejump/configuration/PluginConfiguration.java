@@ -3,6 +3,7 @@ package me.dmk.doublejump.configuration;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
+import me.dmk.doublejump.jump.JumpConfiguration;
 
 @Header("#")
 @Header("# Configuration for double jump plugin")

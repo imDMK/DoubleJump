@@ -6,7 +6,7 @@ import me.dmk.doublejump.configuration.serializer.ComponentSerializer;
 import me.dmk.doublejump.configuration.serializer.EnchantmentSerializer;
 import me.dmk.doublejump.configuration.serializer.ItemMetaSerializer;
 import me.dmk.doublejump.configuration.serializer.ItemStackSerializer;
-import me.dmk.doublejump.configuration.serializer.NotificationSerializer;
+import me.dmk.doublejump.notification.NotificationSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class DoubleJumpPack implements OkaeriSerdesPack {

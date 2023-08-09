@@ -7,31 +7,32 @@ import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
-import me.dmk.doublejump.command.DoubleJumpCommand;
 import me.dmk.doublejump.command.argument.PlayerArgument;
-import me.dmk.doublejump.command.editor.CommandPermissionEditor;
 import me.dmk.doublejump.command.handler.MissingPermissionHandler;
 import me.dmk.doublejump.command.handler.NotificationHandler;
 import me.dmk.doublejump.command.handler.UsageHandler;
 import me.dmk.doublejump.configuration.PluginConfiguration;
 import me.dmk.doublejump.configuration.serializer.pack.DoubleJumpPack;
 import me.dmk.doublejump.hook.WorldGuardHook;
-import me.dmk.doublejump.listener.DoubleJumpListener;
-import me.dmk.doublejump.listener.JumpDisableListener;
-import me.dmk.doublejump.listener.JumpEnableListener;
-import me.dmk.doublejump.listener.JumpFallDamageListener;
-import me.dmk.doublejump.listener.JumpRefreshListener;
-import me.dmk.doublejump.listener.JumpStreakResetListener;
-import me.dmk.doublejump.listener.item.JumpItemActionBlockListener;
-import me.dmk.doublejump.listener.item.JumpItemDisableListener;
-import me.dmk.doublejump.listener.item.JumpItemDropListener;
-import me.dmk.doublejump.listener.item.JumpItemEnableListener;
-import me.dmk.doublejump.listener.item.JumpItemInteractListener;
+import me.dmk.doublejump.jump.JumpPlayerManager;
+import me.dmk.doublejump.jump.command.DoubleJumpCommand;
+import me.dmk.doublejump.jump.command.DoubleJumpCommandEditor;
+import me.dmk.doublejump.jump.item.command.DoubleJumpItemCommand;
+import me.dmk.doublejump.jump.item.listener.JumpItemActionBlockListener;
+import me.dmk.doublejump.jump.item.listener.JumpItemDisableListener;
+import me.dmk.doublejump.jump.item.listener.JumpItemDropListener;
+import me.dmk.doublejump.jump.item.listener.JumpItemEnableListener;
+import me.dmk.doublejump.jump.item.listener.JumpItemInteractListener;
+import me.dmk.doublejump.jump.listener.DoubleJumpListener;
+import me.dmk.doublejump.jump.listener.JumpDisableListener;
+import me.dmk.doublejump.jump.listener.JumpEnableListener;
+import me.dmk.doublejump.jump.listener.JumpFallDamageListener;
+import me.dmk.doublejump.jump.listener.JumpRefreshListener;
+import me.dmk.doublejump.jump.listener.JumpStreakResetListener;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
-import me.dmk.doublejump.player.JumpPlayerManager;
-import me.dmk.doublejump.task.scheduler.TaskScheduler;
-import me.dmk.doublejump.task.scheduler.TaskSchedulerImpl;
+import me.dmk.doublejump.scheduler.TaskScheduler;
+import me.dmk.doublejump.scheduler.TaskSchedulerImpl;
 import me.dmk.doublejump.update.UpdateService;
 import me.dmk.doublejump.util.AnsiColor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -102,11 +103,11 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Listeners */
         Stream.of(
-                new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration),
-                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
-                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
-                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
-                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.worldGuardHook),
+                new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration),
+                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.jumpPlayerManager),
+                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.jumpPlayerManager),
+                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.jumpPlayerManager),
+                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.worldGuardHook),
                 new DoubleJumpListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender),
                 new JumpDisableListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
                 new JumpEnableListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, this.taskScheduler, this.worldGuardHook),
@@ -161,11 +162,12 @@ public class DoubleJump implements DoubleJumpApi {
                 .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.messageConfiguration, this.notificationSender))
 
                 .commandInstance(
-                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.worldGuardHook)
+                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.worldGuardHook),
+                        new DoubleJumpItemCommand(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender)
                 )
 
                 .commandEditor(
-                        DoubleJumpCommand.class, new CommandPermissionEditor(this.pluginConfiguration)
+                        "double-jump", new DoubleJumpCommandEditor(this.pluginConfiguration)
                 )
 
                 .register();
