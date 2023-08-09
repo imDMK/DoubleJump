@@ -2,6 +2,7 @@ package me.dmk.doublejump.configuration.serializer.pack;
 
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.serdes.SerdesRegistry;
+import me.dmk.doublejump.configuration.serializer.ColorSerializer;
 import me.dmk.doublejump.configuration.serializer.ComponentSerializer;
 import me.dmk.doublejump.configuration.serializer.EnchantmentSerializer;
 import me.dmk.doublejump.configuration.serializer.ItemMetaSerializer;
@@ -14,6 +15,7 @@ public class DoubleJumpPack implements OkaeriSerdesPack {
 
     @Override
     public void register(@NonNull SerdesRegistry registry) {
+        registry.register(new ColorSerializer());
         registry.register(new ComponentSerializer());
         registry.register(new EnchantmentSerializer());
         registry.register(new ItemStackSerializer());

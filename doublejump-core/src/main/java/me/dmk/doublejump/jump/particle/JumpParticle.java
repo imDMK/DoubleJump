@@ -1,14 +1,15 @@
 package me.dmk.doublejump.jump.particle;
 
+import org.bukkit.Color;
 import org.bukkit.Particle;
 
 public class JumpParticle {
 
     private final Particle type;
-    private final String color;
+    private final Color color;
     private final int size;
 
-    public JumpParticle(Particle particle, String color, int size) {
+    public JumpParticle(Particle particle, Color color, int size) {
         this.type = particle;
         this.color = color;
         this.size = size;
@@ -18,7 +19,7 @@ public class JumpParticle {
         return this.type;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return this.color;
     }
 

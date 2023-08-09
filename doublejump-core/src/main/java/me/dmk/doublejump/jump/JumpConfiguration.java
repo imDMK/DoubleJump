@@ -4,6 +4,7 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import me.dmk.doublejump.jump.item.JumpItemConfiguration;
 import me.dmk.doublejump.jump.particle.JumpParticle;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -56,9 +57,10 @@ public class JumpConfiguration extends OkaeriConfig {
     public double jumpParticlesOffsetY = 0;
     public double jumpParticlesOffsetZ = 0;
 
+    @Comment("# Color list: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Color.html")
     public List<JumpParticle> jumpParticles = new ArrayList<>(List.of(
-            new JumpParticle(Particle.NOTE, "WHITE", 20),
-            new JumpParticle(Particle.REDSTONE, "WHITE", 40)
+            new JumpParticle(Particle.NOTE, Color.WHITE, 20),
+            new JumpParticle(Particle.REDSTONE, Color.WHITE, 40)
     ));
 
     @Comment("# Restrictions")
