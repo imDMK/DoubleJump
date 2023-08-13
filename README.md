@@ -118,3 +118,5 @@ Example usage:
         }
     }
 ```
+# Information
+If you have any suggestion or found a bug, please report it using [this](https://github.com/imDMK/DoubleJump/issues/new/choose) site.
