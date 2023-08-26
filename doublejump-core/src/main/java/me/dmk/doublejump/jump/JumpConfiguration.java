@@ -10,7 +10,6 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 public class JumpConfiguration extends OkaeriConfig {
@@ -58,20 +57,28 @@ public class JumpConfiguration extends OkaeriConfig {
     public double jumpParticlesOffsetZ = 0;
 
     @Comment("# Color list: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Color.html")
-    public List<JumpParticle> jumpParticles = new ArrayList<>(List.of(
+    public List<JumpParticle> jumpParticles = List.of(
             new JumpParticle(Particle.NOTE, Color.WHITE, 20),
             new JumpParticle(Particle.REDSTONE, Color.WHITE, 40)
-    ));
+    );
 
-    @Comment("# Restrictions")
-    public List<String> disabledRegions = new ArrayList<>(List.of(
+    @Comment({
+            "# Restrictions",
+            "# The name of disabled regions where player can't double jump",
+            "# NOTE: Required WorldGuard plugin to work"
+    })
+    public List<String> disabledRegions = List.of(
             "example-region"
-    ));
-    public List<String> disabledWorlds = new ArrayList<>(List.of(
+    );
+
+    @Comment("# The name of the disabled worlds where players can't double jump")
+    public List<String> disabledWorlds = List.of(
             "example-world"
-    ));
-    public List<GameMode> disabledGameModes = new ArrayList<>(List.of(
+    );
+
+    @Comment("# The name of the game modes where players can't double jump")
+    public List<GameMode> disabledGameModes = List.of(
             GameMode.SPECTATOR,
             GameMode.CREATIVE
-    ));
+    );
 }
