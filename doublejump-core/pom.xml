@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <parent>
-        <groupId>me.dmk</groupId>
+        <groupId>com.github.imdmk</groupId>
         <artifactId>doublejump</artifactId>
         <version>2.0.5</version>
     </parent>
@@ -46,7 +46,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>me.dmk</groupId>
+            <groupId>com.github.imdmk</groupId>
             <artifactId>doublejump-api</artifactId>
             <version>2.0.5</version>
             <scope>compile</scope>
