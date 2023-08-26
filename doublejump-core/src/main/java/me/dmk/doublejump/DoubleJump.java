@@ -73,7 +73,7 @@ public class DoubleJump implements DoubleJumpApi {
     public DoubleJump(Plugin plugin) {
         DoubleJumpApiProvider.register(this);
 
-        Instant start = Instant.now();
+        Stopwatch stopwatch = Stopwatch.createStarted();
         Logger logger = plugin.getLogger();
 
         this.server = plugin.getServer();
@@ -123,8 +123,7 @@ public class DoubleJump implements DoubleJumpApi {
         /* Metrics */
         this.metrics = new Metrics((JavaPlugin) plugin, 19387);
 
-        Duration timeElapsed = Duration.between(start, Instant.now());
-        logger.info("Enabled plugin in " + timeElapsed.toMillis() + "ms.");
+        logger.info("Enabled plugin in " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms.");
     }
 
     public void disable() {
@@ -142,7 +141,16 @@ public class DoubleJump implements DoubleJumpApi {
 
     private PluginConfiguration createConfiguration(File dataFolder) {
         return ConfigManager.create(PluginConfiguration.class, (it) -> {
-            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons(), new DoubleJumpPack());
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons());
+            it.withSerdesPack(registry -> {
+                registry.register(new ColorSerializer());
+                registry.register(new ComponentSerializer());
+                registry.register(new EnchantmentSerializer());
+                registry.register(new ItemStackSerializer());
+                registry.register(new ItemMetaSerializer());
+                registry.register(new NotificationSerializer());
+                registry.register(new JumpParticleSerializer());
+            });
             it.withBindFile(new File(dataFolder, "configuration.yml"));
             it.withRemoveOrphans(true);
             it.saveDefaults();
