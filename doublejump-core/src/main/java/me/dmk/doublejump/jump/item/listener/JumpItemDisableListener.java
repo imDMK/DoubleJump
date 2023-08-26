@@ -48,11 +48,7 @@ public class JumpItemDisableListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        ItemStack itemDrop = event.getItemDrop().getItemStack();
-        ItemStack jumpItem = this.jumpItemConfiguration.jumpItem;
-        boolean ignoreEnchants = !this.jumpItemConfiguration.jumpItemCancelEnchant;
-
-        if (!ItemUtil.compareItem(itemDrop, jumpItem, true, ignoreEnchants)) {
+        if (this.jumpItemConfiguration.jumpItemDropCancelJumpMode) {
             return;
         }
 
@@ -62,9 +58,14 @@ public class JumpItemDisableListener implements Listener {
             return;
         }
 
-        if (this.jumpItemConfiguration.jumpItemDropCancelJumpMode) {
-            this.jumpPlayerManager.disable(player);
+        ItemStack itemDrop = event.getItemDrop().getItemStack();
+        ItemStack jumpItem = this.jumpItemConfiguration.jumpItem;
+        boolean ignoreEnchants = !this.jumpItemConfiguration.jumpItemCancelEnchant;
+        if (!ItemUtil.compareItem(itemDrop, jumpItem, true, ignoreEnchants)) {
+            return;
         }
+
+        this.jumpPlayerManager.disable(player);
     }
 
     @EventHandler
