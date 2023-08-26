@@ -1,7 +1,6 @@
 package me.dmk.doublejump.jump.item.listener;
 
 import me.dmk.doublejump.configuration.MessageConfiguration;
-import me.dmk.doublejump.hook.WorldGuardHook;
 import me.dmk.doublejump.jump.JumpConfiguration;
 import me.dmk.doublejump.jump.JumpPlayer;
 import me.dmk.doublejump.jump.JumpPlayerManager;
@@ -10,6 +9,7 @@ import me.dmk.doublejump.jump.item.JumpItemConfiguration;
 import me.dmk.doublejump.jump.item.JumpItemUsage;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
+import me.dmk.doublejump.region.RegionProvider;
 import me.dmk.doublejump.util.DurationUtil;
 import me.dmk.doublejump.util.ItemUtil;
 import org.bukkit.GameMode;
@@ -31,16 +31,16 @@ public class JumpItemInteractListener implements Listener {
     private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
-    private final WorldGuardHook worldGuardHook;
+    private final RegionProvider regionProvider;
 
-    public JumpItemInteractListener(Server server, JumpConfiguration jumpConfiguration, JumpItemConfiguration jumpItemConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, WorldGuardHook worldGuardHook) {
+    public JumpItemInteractListener(Server server, JumpConfiguration jumpConfiguration, JumpItemConfiguration jumpItemConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, RegionProvider regionProvider) {
         this.server = server;
         this.jumpConfiguration = jumpConfiguration;
         this.jumpItemConfiguration = jumpItemConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
-        this.worldGuardHook = worldGuardHook;
+        this.regionProvider = regionProvider;
     }
 
     @EventHandler
@@ -65,7 +65,7 @@ public class JumpItemInteractListener implements Listener {
             return;
         }
 
-        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+        if (this.regionProvider.isInRegion(player)) {
             event.setCancelled(true);
 
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisableRegionNotification);

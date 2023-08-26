@@ -6,11 +6,11 @@ import dev.rollczi.litecommands.command.async.Async;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
 import me.dmk.doublejump.configuration.MessageConfiguration;
-import me.dmk.doublejump.hook.WorldGuardHook;
 import me.dmk.doublejump.jump.JumpConfiguration;
 import me.dmk.doublejump.jump.JumpPlayerManager;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
+import me.dmk.doublejump.region.RegionProvider;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -21,14 +21,14 @@ public class DoubleJumpCommand {
     private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
-    private final WorldGuardHook worldGuardHook;
+    private final RegionProvider regionProvider;
 
-    public DoubleJumpCommand(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, WorldGuardHook worldGuardHook) {
+    public DoubleJumpCommand(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, RegionProvider regionProvider) {
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
-        this.worldGuardHook = worldGuardHook;
+        this.regionProvider = regionProvider;
     }
 
     @Async
@@ -37,7 +37,7 @@ public class DoubleJumpCommand {
         GameMode playerGameMode = player.getGameMode();
         String playerWorldName = player.getWorld().getName();
 
-        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+        if (this.regionProvider.isInRegion(player)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.targetInDisabledRegionNotification);
             return;
         }
@@ -68,7 +68,7 @@ public class DoubleJumpCommand {
         GameMode targetGameMode = target.getGameMode();
         String targetWorldName = target.getWorld().getName();
 
-        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+        if (this.regionProvider.isInRegion(player)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.targetInDisabledRegionNotification);
             return;
         }

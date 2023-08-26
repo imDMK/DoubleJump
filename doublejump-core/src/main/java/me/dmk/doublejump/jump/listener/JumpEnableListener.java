@@ -1,13 +1,13 @@
 package me.dmk.doublejump.jump.listener;
 
 import me.dmk.doublejump.configuration.MessageConfiguration;
-import me.dmk.doublejump.hook.WorldGuardHook;
 import me.dmk.doublejump.jump.JumpConfiguration;
 import me.dmk.doublejump.jump.JumpPlayer;
 import me.dmk.doublejump.jump.JumpPlayerManager;
 import me.dmk.doublejump.jump.event.DoubleJumpEvent;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
+import me.dmk.doublejump.region.RegionProvider;
 import me.dmk.doublejump.scheduler.TaskScheduler;
 import me.dmk.doublejump.util.DurationUtil;
 import org.bukkit.GameMode;
@@ -30,16 +30,16 @@ public class JumpEnableListener implements Listener {
     private final JumpPlayerManager jumpPlayerManager;
     private final NotificationSender notificationSender;
     private final TaskScheduler taskScheduler;
-    private final WorldGuardHook worldGuardHook;
+    private final RegionProvider regionProvider;
 
-    public JumpEnableListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, NotificationSender notificationSender, TaskScheduler taskScheduler, WorldGuardHook worldGuardHook) {
+    public JumpEnableListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, NotificationSender notificationSender, TaskScheduler taskScheduler, RegionProvider regionProvider) {
         this.server = server;
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.jumpPlayerManager = jumpPlayerManager;
         this.notificationSender = notificationSender;
         this.taskScheduler = taskScheduler;
-        this.worldGuardHook = worldGuardHook;
+        this.regionProvider = regionProvider;
     }
 
     @EventHandler
@@ -71,7 +71,7 @@ public class JumpEnableListener implements Listener {
             return;
         }
 
-        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+        if (this.regionProvider.isInRegion(player)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisableRegionNotification);
             return;
         }
@@ -122,7 +122,7 @@ public class JumpEnableListener implements Listener {
         GameMode playerGameMode = player.getGameMode();
         String playerWorldName = player.getWorld().getName();
 
-        if (this.worldGuardHook.isHooked() && this.worldGuardHook.isInRegion(player)) {
+        if (this.regionProvider.isInRegion(player)) {
             return;
         }
 

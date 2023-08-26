@@ -1,5 +1,6 @@
 package me.dmk.doublejump;
 
+import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
@@ -11,8 +12,11 @@ import me.dmk.doublejump.command.handler.MissingPermissionHandler;
 import me.dmk.doublejump.command.handler.NotificationHandler;
 import me.dmk.doublejump.command.handler.UsageHandler;
 import me.dmk.doublejump.configuration.PluginConfiguration;
-import me.dmk.doublejump.configuration.serializer.pack.DoubleJumpPack;
-import me.dmk.doublejump.hook.WorldGuardHook;
+import me.dmk.doublejump.configuration.serializer.ColorSerializer;
+import me.dmk.doublejump.configuration.serializer.ComponentSerializer;
+import me.dmk.doublejump.configuration.serializer.EnchantmentSerializer;
+import me.dmk.doublejump.configuration.serializer.ItemMetaSerializer;
+import me.dmk.doublejump.configuration.serializer.ItemStackSerializer;
 import me.dmk.doublejump.jump.JumpPlayerManager;
 import me.dmk.doublejump.jump.command.DoubleJumpCommand;
 import me.dmk.doublejump.jump.command.DoubleJumpCommandEditor;
@@ -29,8 +33,13 @@ import me.dmk.doublejump.jump.listener.JumpEnableListener;
 import me.dmk.doublejump.jump.listener.JumpFallDamageListener;
 import me.dmk.doublejump.jump.listener.JumpRefreshListener;
 import me.dmk.doublejump.jump.listener.JumpStreakResetListener;
+import me.dmk.doublejump.jump.particle.JumpParticleSerializer;
 import me.dmk.doublejump.notification.Notification;
 import me.dmk.doublejump.notification.NotificationSender;
+import me.dmk.doublejump.notification.NotificationSerializer;
+import me.dmk.doublejump.region.RegionProvider;
+import me.dmk.doublejump.region.impl.EmptyRegionProvider;
+import me.dmk.doublejump.region.impl.WorldGuardRegionProvider;
 import me.dmk.doublejump.scheduler.TaskScheduler;
 import me.dmk.doublejump.scheduler.TaskSchedulerImpl;
 import me.dmk.doublejump.update.UpdateService;
@@ -47,7 +56,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.time.Duration;
-import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
@@ -60,7 +69,7 @@ public class DoubleJump implements DoubleJumpApi {
     private final BukkitAudiences bukkitAudiences;
     private final NotificationSender notificationSender;
 
-    private final WorldGuardHook worldGuardHook;
+    private final RegionProvider regionProvider;
 
     private final JumpPlayerManager jumpPlayerManager;
 
@@ -86,10 +95,10 @@ public class DoubleJump implements DoubleJumpApi {
         this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
 
         /* Hooks */
-        this.worldGuardHook = this.hookWorldGuard();
+        this.regionProvider = this.hookRegionProvider();
 
         /* Managers */
-        this.jumpPlayerManager = new JumpPlayerManager(this.worldGuardHook, this.pluginConfiguration.jumpConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
+        this.jumpPlayerManager = new JumpPlayerManager(this.regionProvider, this.pluginConfiguration.jumpConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission);
 
         /* Task Scheduler */
         this.taskScheduler = new TaskSchedulerImpl(plugin, this.server);
@@ -100,10 +109,10 @@ public class DoubleJump implements DoubleJumpApi {
                 new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.jumpPlayerManager),
                 new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.jumpPlayerManager),
                 new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.jumpPlayerManager),
-                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.worldGuardHook),
+                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.regionProvider),
                 new DoubleJumpListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender),
                 new JumpDisableListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
-                new JumpEnableListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, this.taskScheduler, this.worldGuardHook),
+                new JumpEnableListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, this.taskScheduler, this.regionProvider),
                 new JumpFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
                 new JumpRefreshListener(this.jumpPlayerManager, this.taskScheduler),
                 new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager)
@@ -169,7 +178,7 @@ public class DoubleJump implements DoubleJumpApi {
                 .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.messageConfiguration, this.notificationSender))
 
                 .commandInstance(
-                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.worldGuardHook),
+                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.regionProvider),
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpConfiguration.jumpItemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender)
                 )
 
@@ -191,12 +200,12 @@ public class DoubleJump implements DoubleJumpApi {
         }
     }
 
-    private WorldGuardHook hookWorldGuard() {
+    private RegionProvider hookRegionProvider() {
         if (this.server.getPluginManager().getPlugin("WorldGuard") != null) {
-            return new WorldGuardHook(this.pluginConfiguration.jumpConfiguration.disabledRegions);
+            return new WorldGuardRegionProvider(this.pluginConfiguration.jumpConfiguration.disabledRegions);
         }
 
-        return new WorldGuardHook();
+        return new EmptyRegionProvider();
     }
 
     @Nonnull
