@@ -46,7 +46,7 @@ public class DoubleJumpListener implements Listener {
 
         player.setVelocity(vector);
 
-        if (this.jumpConfiguration.jumpDelay.isPositive()) {
+        if (!this.jumpConfiguration.jumpDelay.isNegative()) {
             jumpPlayer.addDelay(this.jumpConfiguration.jumpDelay);
         }
 
