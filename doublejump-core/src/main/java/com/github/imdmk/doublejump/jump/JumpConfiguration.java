@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 public class JumpConfiguration extends OkaeriConfig {
 
@@ -29,10 +30,39 @@ public class JumpConfiguration extends OkaeriConfig {
     public double jumpMultiple = 0.3;
     public double jumpUp = 0.6;
 
-    @Comment("# Jump delay settings")
-    public boolean jumpDelayEnabled = false;
-
+    @Comment({
+            "# Jump delay",
+            "# Set to 0 to disable"
+    })
     public Duration jumpDelay = Duration.ofSeconds(2);
+
+    @Comment("# Jumps limit settings")
+    public boolean jumpsLimitEnabled = true;
+
+    @Comment({
+            "# After how long should one jump be renewed?",
+            "# Set to 0 to disable"
+    })
+    public Duration jumpsRegenerationDelay = Duration.ofSeconds(3);
+
+    @Comment({
+            "# Default jump value",
+            "# If the player does not have permissions in the listed jumpsLimitsByPermission will be assigned this value"
+    })
+    public int jumpsLimit = 1;
+
+    @Comment({
+        "# This shows a table with permissions and the jumps counts assigned to them",
+        "# If the player has permission X, he will get the number of jumps Y",
+        "# Example:",
+        "# <PERMISSION: doublejump> <JUMPS: 2>",
+        "# If the player has the doublejump permission, he will be assigned the number of jumps 2"
+    })
+    public Map<String, Integer> jumpsLimitByPermissions = Map.of(
+            "doublejump", 2,
+            "triplejump", 3,
+            "fivejump", 5
+    );
 
     @Comment("# Jump item settings")
     public JumpItemConfiguration jumpItemConfiguration = new JumpItemConfiguration();

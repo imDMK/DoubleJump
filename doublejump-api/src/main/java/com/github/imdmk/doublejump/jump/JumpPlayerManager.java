@@ -5,6 +5,7 @@ import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,17 +19,41 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JumpPlayerManager {
 
     private final RegionProvider regionProvider;
+
     private final List<String> disabledWorlds;
     private final List<GameMode> disabledGameModes;
     private final String doubleJumpUsePermission;
 
+    private final boolean jumpsLimitEnabled;
+    private final int jumpsLimit;
+    private final Map<String, Integer> jumpsLimitByPermissions;
+
     private final Map<UUID, JumpPlayer> jumpPlayers = new ConcurrentHashMap<>();
 
-    public JumpPlayerManager(RegionProvider regionProvider, List<String> disabledWorlds, List<GameMode> disabledGameModes, String doubleJumpUsePermission) {
+    public JumpPlayerManager(RegionProvider regionProvider, List<String> disabledWorlds, List<GameMode> disabledGameModes, String doubleJumpUsePermission, boolean jumpsLimitEnabled, int jumpsLimit, Map<String, Integer> jumpsLimitByPermissions) {
         this.regionProvider = regionProvider;
         this.disabledWorlds = disabledWorlds;
         this.disabledGameModes = disabledGameModes;
         this.doubleJumpUsePermission = doubleJumpUsePermission;
+        this.jumpsLimitEnabled = jumpsLimitEnabled;
+        this.jumpsLimit = jumpsLimit;
+        this.jumpsLimitByPermissions = jumpsLimitByPermissions;
+    }
+
+    /**
+     * Creates a jump player with a preset number of player jumps
+     *
+     * @param player For whom to create
+     * @return The jump player that has been created
+     */
+    public JumpPlayer create(Player player) {
+        if (!this.jumpsLimitEnabled) {
+            return new JumpPlayer();
+        }
+
+        int availableJumps = this.getJumpsByPermission(player);
+
+        return new JumpPlayer(Instant.MIN, 0, availableJumps, availableJumps, Instant.MIN);
     }
 
     /**
@@ -65,7 +90,7 @@ public class JumpPlayerManager {
             return false;
         }
 
-        this.add(player.getUniqueId(), new JumpPlayer());
+        this.add(player.getUniqueId(), this.create(player));
 
         player.setFlying(false);
         player.setAllowFlight(true);
@@ -170,12 +195,40 @@ public class JumpPlayerManager {
         return this.doubleJumpUsePermission;
     }
 
+    public boolean isJumpsLimitEnabled() {
+        return this.jumpsLimitEnabled;
+    }
+
+    public int getJumpsLimit() {
+        return this.jumpsLimit;
+    }
+
+    public Map<String, Integer> getJumpsLimitByPermissions() {
+        return this.jumpsLimitByPermissions;
+    }
+
+    public Integer getJumpsByPermission(Player player) {
+        return this.jumpsLimitByPermissions.entrySet().stream()
+                .filter(entry -> player.hasPermission(entry.getKey()))
+                .map(Map.Entry::getValue)
+                .findFirst().orElse(this.jumpsLimit);
+    }
+
     /**
      * @param uuid The uuid of player
      * @return Optional {@link JumpPlayer}
      */
     public Optional<JumpPlayer> getJumpPlayer(UUID uuid) {
         return Optional.ofNullable(this.jumpPlayers.get(uuid));
+    }
+
+    /**
+     *
+     * @param player The player
+     * @return The {@link JumpPlayer}
+     */
+    public JumpPlayer getOrCreateJumpPlayer(Player player) {
+        return this.getJumpPlayer(player.getUniqueId()).orElseGet(() -> this.create(player));
     }
 
     /**

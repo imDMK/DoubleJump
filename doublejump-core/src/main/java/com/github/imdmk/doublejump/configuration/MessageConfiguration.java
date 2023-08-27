@@ -8,11 +8,18 @@ import eu.okaeri.configs.annotation.Comment;
 public class MessageConfiguration extends OkaeriConfig {
 
     @Comment("# {TIME} - Remaining time")
-    public Notification jumpDelayNotification = new Notification(NotificationType.ACTIONBAR, "<red>You must wait {TIME} before next double jump<dark_gray>.");
+    public Notification jumpDelayNotification = new Notification(NotificationType.CHAT, "<red>You must wait {TIME} before next double jump<dark_gray>.");
+
+    @Comment("# {TIME} - Remaining time to receive the jump")
+    public Notification jumpLimitDelayNotification = new Notification(NotificationType.CHAT, "<red>You must wait {TIME} to get next jump<dark_gray>.");
+
+    public Notification jumpLimitNotification = new Notification(NotificationType.CHAT, "<red>You You have no more jumps<dark_gray>.");
+
+    public Notification jumpLimitRegenerationNotification = new Notification(NotificationType.CHAT, "<green>You received one jump<dark_gray>.");
 
     @Comment("# {STREAK} - Shows current jump streak")
     public Notification jumpStreakIncreaseNotification = new Notification(NotificationType.ACTIONBAR, "<green>Ye! Current streak: <dark_green>{STREAK}");
-    public Notification jumpStreakResetNotification = new Notification(NotificationType.ACTIONBAR, "<red>Ops! Your jump streak has been reset.");
+    public Notification jumpStreakResetNotification = new Notification(NotificationType.CHAT, "<red>Ops! Your jump streak has been reset.");
 
     public Notification jumpModeEnabledNotification = new Notification(NotificationType.CHAT, "<green>Enabled double jump mode!");
     public Notification jumpModeDisabledNotification = new Notification(NotificationType.CHAT, "<red>Disabled double jump mode!");
