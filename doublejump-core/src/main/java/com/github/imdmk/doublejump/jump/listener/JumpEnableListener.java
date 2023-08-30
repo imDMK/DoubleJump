@@ -19,11 +19,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
 public class JumpEnableListener implements Listener {
 
+    private final Plugin plugin;
     private final Server server;
     private final JumpConfiguration jumpConfiguration;
     private final MessageConfiguration messageConfiguration;
@@ -32,7 +35,8 @@ public class JumpEnableListener implements Listener {
     private final TaskScheduler taskScheduler;
     private final RegionProvider regionProvider;
 
-    public JumpEnableListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, NotificationSender notificationSender, TaskScheduler taskScheduler, RegionProvider regionProvider) {
+    public JumpEnableListener(Plugin plugin, Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, NotificationSender notificationSender, TaskScheduler taskScheduler, RegionProvider regionProvider) {
+        this.plugin = plugin;
         this.server = server;
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
@@ -61,13 +65,28 @@ public class JumpEnableListener implements Listener {
         player.setFlying(false);
         player.setAllowFlight(false);
 
-        if (!jumpPlayer.canUseJump()) {
-            Notification notification = Notification.builder()
+        if (jumpPlayer.isDelay()) {
+            Notification jumpDelayNotification = Notification.builder()
                     .fromNotification(this.messageConfiguration.jumpDelayNotification)
                     .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
                     .build();
 
-            this.notificationSender.sendMessage(player, notification);
+            this.notificationSender.sendMessage(player, jumpDelayNotification);
+            return;
+        }
+
+        if (!jumpPlayer.hasJumps()) {
+            if (this.jumpConfiguration.jumpsRegenerationDelay.isZero()) {
+                this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
+                return;
+            }
+
+            Notification jumpLimitDelayNotification = Notification.builder()
+                    .fromNotification(this.messageConfiguration.jumpLimitDelayNotification)
+                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
+                    .build();
+
+            this.notificationSender.sendMessage(player, jumpLimitDelayNotification);
             return;
         }
 
@@ -106,9 +125,45 @@ public class JumpEnableListener implements Listener {
 
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
-        if (!jumpPlayer.canUseJump()) {
+        if (jumpPlayer.isDelay()) {
+            if (player.hasMetadata("jumpDelayNotificationSent")) {
+                return;
+            }
+
+            player.setMetadata("jumpDelayNotificationSent", new FixedMetadataValue(this.plugin, true));
+
+            Notification jumpDelayNotification = Notification.builder()
+                    .fromNotification(this.messageConfiguration.jumpDelayNotification)
+                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
+                    .build();
+
+            this.notificationSender.sendMessage(player, jumpDelayNotification);
             return;
         }
+
+        if (!jumpPlayer.hasJumps()) {
+            if (player.hasMetadata("jumpLimitNotificationSent")) {
+                return;
+            }
+
+            player.setMetadata("jumpLimitNotificationSent", new FixedMetadataValue(this.plugin, true));
+
+            if (this.jumpConfiguration.jumpsRegenerationDelay.isZero()) {
+                this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
+                return;
+            }
+
+            Notification jumpLimitDelayNotification = Notification.builder()
+                    .fromNotification(this.messageConfiguration.jumpLimitDelayNotification)
+                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
+                    .build();
+
+            this.notificationSender.sendMessage(player, jumpLimitDelayNotification);
+            return;
+        }
+
+        player.removeMetadata("jumpDelayNotificationSent", this.plugin);
+        player.removeMetadata("jumpLimitNotificationSent", this.plugin);
 
         if (!player.getAllowFlight()) {
             player.setAllowFlight(true);

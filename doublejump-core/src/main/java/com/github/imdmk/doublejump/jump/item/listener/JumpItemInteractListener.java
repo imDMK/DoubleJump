@@ -89,10 +89,9 @@ public class JumpItemInteractListener implements Listener {
         }
 
         if (this.jumpItemConfiguration.jumpItemUseDoubleJump) {
-            JumpPlayer jumpPlayer = this.jumpPlayerManager.getJumpPlayer(player.getUniqueId())
-                    .orElseGet(() -> this.jumpPlayerManager.add(player.getUniqueId(), new JumpPlayer()));
+            JumpPlayer jumpPlayer = this.jumpPlayerManager.getOrCreateJumpPlayer(player);
 
-            if (!jumpPlayer.canUseJump()) {
+            if (jumpPlayer.isDelay()) {
                 event.setCancelled(true);
 
                 Notification notification = Notification.builder()
@@ -101,6 +100,21 @@ public class JumpItemInteractListener implements Listener {
                         .build();
 
                 this.notificationSender.sendMessage(player, notification);
+                return;
+            }
+
+            if (!jumpPlayer.hasJumps()) {
+                if (this.jumpConfiguration.jumpsRegenerationDelay.isZero()) {
+                    this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
+                    return;
+                }
+
+                Notification jumpLimitDelayNotification = Notification.builder()
+                        .fromNotification(this.messageConfiguration.jumpLimitDelayNotification)
+                        .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
+                        .build();
+
+                this.notificationSender.sendMessage(player, jumpLimitDelayNotification);
                 return;
             }
 

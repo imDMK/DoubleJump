@@ -46,7 +46,7 @@ public class DoubleJumpListener implements Listener {
 
         player.setVelocity(vector);
 
-        if (this.jumpConfiguration.jumpDelayEnabled) {
+        if (!this.jumpConfiguration.jumpDelay.isNegative()) {
             jumpPlayer.addDelay(this.jumpConfiguration.jumpDelay);
         }
 
@@ -59,7 +59,7 @@ public class DoubleJumpListener implements Listener {
         }
 
         if (this.jumpConfiguration.jumpStreaksEnabled) {
-            jumpPlayer.increaseStreak();
+            jumpPlayer.addStreak(1);
 
             Notification notification = Notification.builder()
                     .fromNotification(this.messageConfiguration.jumpStreakIncreaseNotification)
@@ -67,6 +67,11 @@ public class DoubleJumpListener implements Listener {
                     .build();
 
             this.notificationSender.sendMessage(player, notification);
+        }
+
+        if (this.jumpConfiguration.jumpsLimitEnabled) {
+            jumpPlayer.removeJumps(1);
+            jumpPlayer.addJumpRegenerationDelay(this.jumpConfiguration.jumpsRegenerationDelay);
         }
     }
 }
