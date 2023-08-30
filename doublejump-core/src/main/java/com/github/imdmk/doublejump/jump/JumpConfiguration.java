@@ -37,7 +37,7 @@ public class JumpConfiguration extends OkaeriConfig {
     public Duration jumpDelay = Duration.ofSeconds(2);
 
     @Comment("# Jumps limit settings")
-    public boolean jumpsLimitEnabled = true;
+    public boolean jumpsLimitEnabled = false;
 
     @Comment({
             "# After how long should one jump be renewed?",
