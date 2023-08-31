@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.util.color;
 
-public class AnsiColor {
+public final class AnsiColor {
 
     public static final String RESET = "\u001B[0m";
 

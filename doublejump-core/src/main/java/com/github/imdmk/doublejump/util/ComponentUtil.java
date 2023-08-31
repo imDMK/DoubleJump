@@ -6,7 +6,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.List;
 
-public class ComponentUtil {
+public final class ComponentUtil {
 
     public static final CharSequence LEGACY_CHAR = "§";
 

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ColorUtil {
+public final class ColorUtil {
 
     private static final Map<String, Color> colors = new ConcurrentHashMap<>();
 

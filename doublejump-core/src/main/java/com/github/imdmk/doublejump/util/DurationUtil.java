@@ -2,7 +2,7 @@ package com.github.imdmk.doublejump.util;
 
 import java.time.Duration;
 
-public class DurationUtil {
+public final class DurationUtil {
 
     private DurationUtil() {
         throw new UnsupportedOperationException("This is utility class.");
