@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.configuration.serializer;
 
-import com.github.imdmk.doublejump.util.ColorUtil;
+import com.github.imdmk.doublejump.util.color.ColorUtil;
 import eu.okaeri.configs.schema.GenericsPair;
 import eu.okaeri.configs.serdes.BidirectionalTransformer;
 import eu.okaeri.configs.serdes.SerdesContext;
@@ -20,15 +20,13 @@ public class ColorSerializer extends BidirectionalTransformer<Color, String> {
     public String leftToRight(@NonNull Color color, @NonNull SerdesContext serdesContext) {
         Optional<String> colorNameOptional = ColorUtil.getColorName(color);
 
-        return colorNameOptional
-                .orElseThrow(() -> new IllegalStateException("Unknown color: " + color));
+        return colorNameOptional.orElseThrow(() -> new IllegalStateException("Unknown color: " + color));
     }
 
     @Override
     public Color rightToLeft(@NonNull String colorName, @NonNull SerdesContext serdesContext) {
         Optional<Color> colorOptional = ColorUtil.getColor(colorName);
 
-        return colorOptional
-                .orElseThrow(() -> new IllegalStateException("Unknown color name: " + colorName));
+        return colorOptional.orElseThrow(() -> new IllegalStateException("Unknown color name: " + colorName));
     }
 }

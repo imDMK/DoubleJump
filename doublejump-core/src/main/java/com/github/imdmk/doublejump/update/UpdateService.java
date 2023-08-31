@@ -6,7 +6,7 @@ import com.eternalcode.gitcheck.git.GitException;
 import com.eternalcode.gitcheck.git.GitRelease;
 import com.eternalcode.gitcheck.git.GitRepository;
 import com.eternalcode.gitcheck.git.GitTag;
-import com.github.imdmk.doublejump.util.AnsiColor;
+import com.github.imdmk.doublejump.util.color.AnsiColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import java.util.logging.Level;
