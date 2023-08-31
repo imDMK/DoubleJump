@@ -42,12 +42,12 @@ public class DoubleJumpCommand {
             return;
         }
 
-        if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
             return;
         }
 
-        if (this.jumpConfiguration.disabledWorlds.contains(playerWorldName)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
             return;
         }
@@ -73,12 +73,12 @@ public class DoubleJumpCommand {
             return;
         }
 
-        if (this.jumpConfiguration.disabledGameModes.contains(targetGameMode)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(targetGameMode)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.targetHasDisabledGameModeNotification);
             return;
         }
 
-        if (this.jumpConfiguration.disabledWorlds.contains(targetWorldName)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(targetWorldName)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.targetInDisabledWorldNotification);
             return;
         }

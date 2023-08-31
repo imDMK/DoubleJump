@@ -30,12 +30,12 @@ public class DoubleJumpItemCommand {
     @Async
     @Execute(route = "item-give", required = 1)
     void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
-        if (!this.jumpItemConfiguration.jumpItemEnabled) {
+        if (!this.jumpItemConfiguration.enabled) {
             this.notificationSender.sendMessage(sender, this.messageConfiguration.jumpItemDisabledNotification);
             return;
         }
 
-        ItemStack jumpItem = this.jumpItemConfiguration.jumpItem;
+        ItemStack jumpItem = this.jumpItemConfiguration.item;
         Inventory targetInventory = target.getInventory();
 
         if (targetInventory.firstEmpty() == -1) {
@@ -56,7 +56,7 @@ public class DoubleJumpItemCommand {
     @Async
     @Execute(route = "item-remove", required = 1)
     void removeItem(CommandSender sender, @Arg @Name("target") Player target) {
-        ItemStack jumpItem = this.jumpItemConfiguration.jumpItem;
+        ItemStack jumpItem = this.jumpItemConfiguration.item;
 
         Inventory targetInventory = target.getInventory();
         Inventory targetEnderChest = target.getEnderChest();

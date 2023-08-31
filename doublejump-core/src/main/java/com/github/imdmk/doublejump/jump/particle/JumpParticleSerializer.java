@@ -17,17 +17,29 @@ public class JumpParticleSerializer implements ObjectSerializer<JumpParticle> {
 
     @Override
     public void serialize(@NonNull JumpParticle jumpParticle, @NonNull SerializationData data, @NonNull GenericsDeclaration generics) {
-        data.add("type", jumpParticle.getType(), Particle.class);
-        data.add("color", jumpParticle.getColor(), Color.class);
-        data.add("size", jumpParticle.getSize(), Integer.class);
+        data.add("particle", jumpParticle.particle(), Particle.class);
+        data.add("color", jumpParticle.color(), Color.class);
+
+        data.add("size", jumpParticle.size(), Integer.class);
+        data.add("count", jumpParticle.count(), Integer.class);
+        data.add("offsetX", jumpParticle.offsetX(), Double.class);
+        data.add("offsetY", jumpParticle.offsetY(), Double.class);
+        data.add("offsetZ", jumpParticle.offsetZ(), Double.class);
+        data.add("extra", jumpParticle.extra(), Double.class);
     }
 
     @Override
     public JumpParticle deserialize(@NonNull DeserializationData data, @NonNull GenericsDeclaration generics) {
-        Particle type = data.get("type", Particle.class);
+        Particle particle = data.get("particle", Particle.class);
         Color color = data.get("color", Color.class);
-        int size = data.get("size", Integer.class);
 
-        return new JumpParticle(type, color, size);
+        int size = data.get("size", Integer.class);
+        int count = data.get("count", Integer.class);
+        double offsetX = data.get("offsetX", Double.class);
+        double offsetY = data.get("offsetY", Double.class);
+        double offsetZ = data.get("offsetZ", Double.class);
+        double extra = data.get("extra", Double.class);
+
+        return new JumpParticle(particle, color, size, count, offsetX, offsetY, offsetZ, extra);
     }
 }

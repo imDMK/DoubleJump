@@ -22,7 +22,7 @@ public class JumpItemEnableListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!this.jumpItemConfiguration.jumpItemEnabled) {
+        if (!this.jumpItemConfiguration.enabled) {
             return;
         }
 
@@ -36,8 +36,8 @@ public class JumpItemEnableListener implements Listener {
             return;
         }
 
-        ItemStack jumpItem = this.jumpItemConfiguration.jumpItem;
-        JumpItemUsage jumpItemUsage = this.jumpItemConfiguration.jumpItemUsage;
+        ItemStack jumpItem = this.jumpItemConfiguration.item;
+        JumpItemUsage jumpItemUsage = this.jumpItemConfiguration.usageConfiguration.usage;
 
         if (ItemUtil.isCorrectlyUsed(player, jumpItem, jumpItemUsage)) {
             this.jumpPlayerManager.enable(player, false);

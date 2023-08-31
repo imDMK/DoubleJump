@@ -1,13 +1,11 @@
 package com.github.imdmk.doublejump.jump;
 
 import com.github.imdmk.doublejump.jump.item.JumpItemConfiguration;
-import com.github.imdmk.doublejump.jump.particle.JumpParticle;
+import com.github.imdmk.doublejump.jump.particle.JumpParticleConfiguration;
+import com.github.imdmk.doublejump.jump.sound.JumpSoundConfiguration;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
-import org.bukkit.Color;
 import org.bukkit.GameMode;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
 
 import java.time.Duration;
 import java.util.List;
@@ -15,100 +13,151 @@ import java.util.Map;
 
 public class JumpConfiguration extends OkaeriConfig {
 
-    @Comment("# To auto enable jump mode player must have double jump use permission")
+    @Comment({
+            "# Specifies whether to enable double jump mode for the player when he joins the server",
+            "# NOTE: The player must have double jump permission"
+    })
     public boolean enableJumpModeOnJoinForPlayers = true;
+
+    @Comment({
+            "# Specifies whether to enable double jump mode for the administrator when he joins the server",
+            "# NOTE: The player must have double jump permission and OP"
+    })
     public boolean enableJumpModeOnJoinForAdmins = true;
 
+    @Comment("# Whether double jump fall damage is enabled or not")
     public boolean jumpFallDamageEnabled = true;
 
-    @Comment("# Jump streak settings")
-    public boolean jumpStreaksEnabled = true;
-    public boolean jumpStreakResetOnGround = false;
-    public boolean jumpStreakResetOnDeath = true;
-
-    @Comment("# Jump settings")
+    @Comment("# Jump multiplier")
     public double jumpMultiple = 0.3;
+
+    @Comment("# The value of how much up the jump is to be made")
     public double jumpUp = 0.6;
 
     @Comment({
-            "# Jump delay",
-            "# Set to 0 to disable"
+            "# ",
+            "# Jump streak configuration",
+            "# "
     })
-    public Duration jumpDelay = Duration.ofSeconds(2);
+    public StreakConfiguration streakConfiguration = new StreakConfiguration();
 
-    @Comment("# Jumps limit settings")
-    public boolean jumpsLimitEnabled = false;
+    public static class StreakConfiguration extends OkaeriConfig {
+
+        @Comment("# Specifies whether to enable double jump series reset")
+        public boolean enabled = true;
+
+        @Comment("# Specifies whether the jump streak will be reset when the player touches the ground")
+        public boolean resetOnGround = false;
+
+        @Comment("# Specifies whether the jump streak will be reset when the player dies")
+        public boolean resetOnDeath = true;
+
+    }
 
     @Comment({
-            "# After how long should one jump be renewed?",
-            "# Set to 0 to disable"
+            "# ",
+            "# Jump delay configuration",
+            "# "
     })
-    public Duration jumpsRegenerationDelay = Duration.ofSeconds(3);
+    public DelayConfiguration delayConfiguration = new DelayConfiguration();
+
+    public static class DelayConfiguration extends OkaeriConfig {
+
+        @Comment("# Specifies whether double jump delay should be enabled")
+        public boolean enabled = true;
+
+        @Comment({
+                "# Specifies the double jump delay",
+                "# Example value: 1s, 5s, 1m"
+        })
+        public Duration delay = Duration.ofSeconds(2);
+
+    }
 
     @Comment({
-            "# Default jump value",
-            "# If the player does not have permissions in the listed jumpsLimitsByPermission will be assigned this value"
+            "# ",
+            "# Jump limit configuration",
+            "# "
     })
-    public int jumpsLimit = 1;
+    public LimitConfiguration limitConfiguration = new LimitConfiguration();
+
+    public static class LimitConfiguration extends OkaeriConfig {
+
+        @Comment("# Specifies whether the jump limit should be enabled")
+        public boolean enabled = true;
+
+        @Comment("# The default value of the jump limit is if the player does not have permissions listed in limitsByPermission")
+        public int limit = 1;
+
+        @Comment({
+                "# Jump limits by permissions",
+                "# Example:",
+                "# <PERMISSION: double-jump>: <LIMIT: 2>",
+                "# If a player has the \"double-jump\" permission, he will be assigned a jump limit of 2",
+                "# If not, he will be assigned a default jump limit value"
+        })
+        public Map<String, Integer> limitsByPermissions = Map.of(
+                "double-jump", 2,
+                "triple-jump", 3,
+                "five-jump", 5
+        );
+
+        @Comment({
+                "# Specifies the delay after which one jump is to be renewed for the player",
+                "# If you want to disable jump regeneration, set the value to 0s"
+        })
+        public Duration regenerationDelay = Duration.ofSeconds(3);
+
+    }
 
     @Comment({
-        "# This shows a table with permissions and the jumps counts assigned to them",
-        "# If the player has permission X, he will get the number of jumps Y",
-        "# Example:",
-        "# <PERMISSION: doublejump> <JUMPS: 2>",
-        "# If the player has the doublejump permission, he will be assigned the number of jumps 2"
+            "# ",
+            "# Jump sound configuration",
+            "# "
     })
-    public Map<String, Integer> jumpsLimitByPermissions = Map.of(
-            "doublejump", 2,
-            "triplejump", 3,
-            "fivejump", 5
-    );
-
-    @Comment("# Jump item settings")
-    public JumpItemConfiguration jumpItemConfiguration = new JumpItemConfiguration();
+    public JumpSoundConfiguration soundConfiguration = new JumpSoundConfiguration();
 
     @Comment({
-            "# Jump sound settings",
-            "# Sound types: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html"
+            "# ",
+            "# Jump particle configuration",
+            "# "
     })
-    public boolean jumpSoundsEnabled = true;
-
-    public Sound jumpSound = Sound.ENTITY_EXPERIENCE_BOTTLE_THROW;
-    public float jumpSoundVolume = 0.20F;
-    public float jumpSoundPitch = 1;
-
-    @Comment("# Jump particles settings")
-    public boolean jumpParticlesEnabled = true;
-
-    public int jumpParticlesCount = 3;
-    public int jumpParticlesExtra = 2;
-    public double jumpParticlesOffsetX = 0;
-    public double jumpParticlesOffsetY = 0;
-    public double jumpParticlesOffsetZ = 0;
-
-    @Comment("# Color list: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Color.html")
-    public List<JumpParticle> jumpParticles = List.of(
-            new JumpParticle(Particle.NOTE, Color.WHITE, 20),
-            new JumpParticle(Particle.REDSTONE, Color.WHITE, 40)
-    );
+    public JumpParticleConfiguration particleConfiguration = new JumpParticleConfiguration();
 
     @Comment({
-            "# Restrictions",
-            "# The name of disabled regions where player can't double jump",
-            "# NOTE: Required WorldGuard plugin to work"
+            "# ",
+            "# Jump restrictions configuration",
+            "# "
     })
-    public List<String> disabledRegions = List.of(
-            "example-region"
-    );
+    public RestrictionsConfiguration restrictionsConfiguration = new RestrictionsConfiguration();
 
-    @Comment("# The name of the disabled worlds where players can't double jump")
-    public List<String> disabledWorlds = List.of(
-            "example-world"
-    );
+    public static class RestrictionsConfiguration extends OkaeriConfig {
 
-    @Comment("# The name of the game modes where players can't double jump")
-    public List<GameMode> disabledGameModes = List.of(
-            GameMode.SPECTATOR,
-            GameMode.CREATIVE
-    );
+        @Comment({
+                "# Names of regions where the player will not be able to double-jump",
+                "# The WorldGuard plugin is required for this feature to work"
+        })
+        public List<String> disabledRegions = List.of(
+                "example-region"
+        );
+
+        @Comment("# Names of worlds where the player will not be able to double-jump")
+        public List<String> disabledWorlds = List.of(
+                "example-world"
+        );
+
+        @Comment("# The names of the game modes during which the player will not be able to double-jump")
+        public List<GameMode> disabledGameModes = List.of(
+                GameMode.SPECTATOR,
+                GameMode.CREATIVE
+        );
+
+    }
+
+    @Comment({
+            "# ",
+            "# Jump item configuration",
+            "# "
+    })
+    public JumpItemConfiguration itemConfiguration = new JumpItemConfiguration();
 }

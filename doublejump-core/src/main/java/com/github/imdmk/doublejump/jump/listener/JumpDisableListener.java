@@ -38,8 +38,9 @@ public class JumpDisableListener implements Listener {
         Player player = event.getPlayer();
         GameMode newGameMode = event.getNewGameMode();
 
-        if (this.jumpConfiguration.disabledGameModes.contains(newGameMode)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(newGameMode)) {
             this.jumpPlayerManager.disable(player);
+
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
         }
     }
@@ -49,8 +50,9 @@ public class JumpDisableListener implements Listener {
         Player player = event.getPlayer();
         String playerWorldName = player.getWorld().getName();
 
-        if (this.jumpConfiguration.disabledWorlds.contains(playerWorldName)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
             this.jumpPlayerManager.disable(player);
+
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
         }
     }

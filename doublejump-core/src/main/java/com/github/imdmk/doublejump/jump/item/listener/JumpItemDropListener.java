@@ -24,23 +24,23 @@ public class JumpItemDropListener implements Listener {
         Player player = event.getPlayer();
 
         ItemStack itemDrop = event.getItemDrop().getItemStack();
-        ItemStack jumpItem = this.jumpItemConfiguration.jumpItem;
-        boolean ignoreEnchants = !this.jumpItemConfiguration.jumpItemCancelEnchant;
+        ItemStack jumpItem = this.jumpItemConfiguration.item;
+        boolean ignoreEnchants = !this.jumpItemConfiguration.cancelEnchant;
 
         if (!ItemUtil.compareItem(itemDrop, jumpItem, true, ignoreEnchants)) {
             return;
         }
 
-        if (this.jumpItemConfiguration.jumpItemDropDelete) {
+        if (this.jumpItemConfiguration.dropConfiguration.delete) {
             event.setCancelled(true);
             player.getInventory().removeItem(itemDrop);
         }
 
-        if (this.jumpItemConfiguration.jumpItemDropCancelJumpMode) {
+        if (this.jumpItemConfiguration.dropConfiguration.disableDoubleJumpMode) {
             this.jumpPlayerManager.disable(player);
         }
 
-        if (this.jumpItemConfiguration.jumpItemDropCancel) {
+        if (this.jumpItemConfiguration.dropConfiguration.cancel) {
             event.setCancelled(true);
         }
     }

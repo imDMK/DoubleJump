@@ -29,7 +29,7 @@ public class JumpRegenerationListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (this.jumpConfiguration.jumpsRegenerationDelay.isZero()) {
+        if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
             return;
         }
 
@@ -51,7 +51,7 @@ public class JumpRegenerationListener implements Listener {
         }
 
         jumpPlayer.addJumps(1);
-        jumpPlayer.addJumpRegenerationDelay(this.jumpConfiguration.jumpsRegenerationDelay);
+        jumpPlayer.addJumpRegenerationDelay(this.jumpConfiguration.limitConfiguration.regenerationDelay);
 
         this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitRegenerationNotification);
     }

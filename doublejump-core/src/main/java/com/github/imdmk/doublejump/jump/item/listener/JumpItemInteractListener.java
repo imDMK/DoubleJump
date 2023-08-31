@@ -47,11 +47,11 @@ public class JumpItemInteractListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (!this.jumpItemConfiguration.jumpItemEnabled) {
+        if (!this.jumpItemConfiguration.enabled) {
             return;
         }
 
-        if (this.jumpItemConfiguration.jumpItemUsage != JumpItemUsage.CLICK_ITEM) {
+        if (this.jumpItemConfiguration.usageConfiguration.usage != JumpItemUsage.CLICK_ITEM) {
             return;
         }
 
@@ -61,7 +61,7 @@ public class JumpItemInteractListener implements Listener {
         }
 
         ItemStack item = event.getItem();
-        if (item == null || !ItemUtil.compareItem(item, this.jumpItemConfiguration.jumpItem, true, !this.jumpItemConfiguration.jumpItemCancelEnchant)) {
+        if (item == null || !ItemUtil.compareItem(item, this.jumpItemConfiguration.item, true, !this.jumpItemConfiguration.cancelEnchant)) {
             return;
         }
 
@@ -73,7 +73,7 @@ public class JumpItemInteractListener implements Listener {
         }
 
         GameMode playerGameMode = player.getGameMode();
-        if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
             event.setCancelled(true);
 
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
@@ -81,14 +81,14 @@ public class JumpItemInteractListener implements Listener {
         }
 
         World playerWorld = player.getWorld();
-        if (this.jumpConfiguration.disabledWorlds.contains(playerWorld.getName())) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorld.getName())) {
             event.setCancelled(true);
 
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
             return;
         }
 
-        if (this.jumpItemConfiguration.jumpItemUseDoubleJump) {
+        if (this.jumpItemConfiguration.usageConfiguration.doubleJump) {
             JumpPlayer jumpPlayer = this.jumpPlayerManager.getOrCreateJumpPlayer(player);
 
             if (jumpPlayer.isDelay()) {
@@ -104,7 +104,7 @@ public class JumpItemInteractListener implements Listener {
             }
 
             if (!jumpPlayer.hasJumps()) {
-                if (this.jumpConfiguration.jumpsRegenerationDelay.isZero()) {
+                if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
                     this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
                     return;
                 }
@@ -123,7 +123,7 @@ public class JumpItemInteractListener implements Listener {
             this.server.getPluginManager().callEvent(doubleJumpEvent);
         }
 
-        if (this.jumpItemConfiguration.jumpItemUseSwitchDoubleJump) {
+        if (this.jumpItemConfiguration.usageConfiguration.switchDoubleJumpMode) {
             if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
                 this.jumpPlayerManager.disable(player);
                 this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledNotification);
@@ -134,7 +134,7 @@ public class JumpItemInteractListener implements Listener {
             }
         }
 
-        int reduceJumpItemDurability = this.jumpItemConfiguration.reduceJumpItemDurability;
+        int reduceJumpItemDurability = this.jumpItemConfiguration.usageConfiguration.reduceDurability;
         if (reduceJumpItemDurability > 0) {
             if (item.getItemMeta() instanceof Damageable itemDamageable) {
                 itemDamageable.setDamage(-(reduceJumpItemDurability - item.getType().getMaxDurability()));
@@ -142,15 +142,15 @@ public class JumpItemInteractListener implements Listener {
             }
         }
 
-        if (this.jumpItemConfiguration.removeJumpItemAfterUse) {
+        if (this.jumpItemConfiguration.usageConfiguration.delete) {
             player.getInventory().removeItem(item);
         }
 
-        if (this.jumpItemConfiguration.disableJumpModeAfterUse) {
+        if (this.jumpItemConfiguration.usageConfiguration.disableDoubleJumpMode) {
             this.jumpPlayerManager.remove(player.getUniqueId());
         }
 
-        if (this.jumpItemConfiguration.cancelJumpItemUse) {
+        if (this.jumpItemConfiguration.usageConfiguration.cancel) {
             event.setCancelled(true);
         }
     }

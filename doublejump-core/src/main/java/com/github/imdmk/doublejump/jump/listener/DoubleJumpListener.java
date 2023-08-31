@@ -6,7 +6,6 @@ import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.util.PlayerUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,19 +45,19 @@ public class DoubleJumpListener implements Listener {
 
         player.setVelocity(vector);
 
-        if (!this.jumpConfiguration.jumpDelay.isNegative()) {
-            jumpPlayer.addDelay(this.jumpConfiguration.jumpDelay);
+        if (!this.jumpConfiguration.delayConfiguration.enabled) {
+            jumpPlayer.addDelay(this.jumpConfiguration.delayConfiguration.delay);
         }
 
-        if (this.jumpConfiguration.jumpSoundsEnabled) {
-            PlayerUtil.playSound(player, this.jumpConfiguration.jumpSound, this.jumpConfiguration.jumpSoundVolume, this.jumpConfiguration.jumpSoundPitch);
+        if (this.jumpConfiguration.soundConfiguration.enabled) {
+            this.jumpConfiguration.soundConfiguration.sounds.forEach(sound -> sound.play(player));
         }
 
-        if (this.jumpConfiguration.jumpParticlesEnabled) {
-            PlayerUtil.spawnParticles(player, this.jumpConfiguration.jumpParticles, this.jumpConfiguration.jumpParticlesCount, this.jumpConfiguration.jumpParticlesOffsetX, this.jumpConfiguration.jumpParticlesOffsetY, this.jumpConfiguration.jumpParticlesOffsetZ, this.jumpConfiguration.jumpParticlesExtra);
+        if (this.jumpConfiguration.particleConfiguration.enabled) {
+            this.jumpConfiguration.particleConfiguration.particles.forEach(jumpParticle -> jumpParticle.spawn(player));
         }
 
-        if (this.jumpConfiguration.jumpStreaksEnabled) {
+        if (this.jumpConfiguration.streakConfiguration.enabled) {
             jumpPlayer.addStreak(1);
 
             Notification notification = Notification.builder()
@@ -69,9 +68,12 @@ public class DoubleJumpListener implements Listener {
             this.notificationSender.sendMessage(player, notification);
         }
 
-        if (this.jumpConfiguration.jumpsLimitEnabled) {
+        if (this.jumpConfiguration.limitConfiguration.enabled) {
             jumpPlayer.removeJumps(1);
-            jumpPlayer.addJumpRegenerationDelay(this.jumpConfiguration.jumpsRegenerationDelay);
+
+            if (!this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
+                jumpPlayer.addJumpRegenerationDelay(this.jumpConfiguration.limitConfiguration.regenerationDelay);
+            }
         }
     }
 }

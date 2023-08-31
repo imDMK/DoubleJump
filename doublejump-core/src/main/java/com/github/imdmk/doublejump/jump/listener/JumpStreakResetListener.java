@@ -36,7 +36,7 @@ public class JumpStreakResetListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (!this.jumpConfiguration.jumpStreakResetOnDeath) {
+        if (!this.jumpConfiguration.streakConfiguration.resetOnDeath) {
             return;
         }
 
@@ -51,24 +51,14 @@ public class JumpStreakResetListener implements Listener {
             return;
         }
 
-        JumpStreakResetEvent jumpStreakResetEvent = new JumpStreakResetEvent(player, jumpPlayer, JumpStreakResetReason.PLAYER_DEATH);
-
-        this.server.getPluginManager().callEvent(jumpStreakResetEvent);
-
-        if (jumpStreakResetEvent.isCancelled()) {
-            return;
-        }
-
-        jumpPlayer.setStreak(0);
-
-        this.notificationSender.sendMessage(player, this.messageConfiguration.jumpStreakResetNotification);
+        this.resetStreak(player, jumpPlayer, JumpStreakResetReason.PLAYER_DEATH);
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (!this.jumpConfiguration.jumpStreakResetOnGround) {
+        if (!this.jumpConfiguration.streakConfiguration.resetOnGround) {
             return;
         }
 
@@ -87,11 +77,15 @@ public class JumpStreakResetListener implements Listener {
             return;
         }
 
-        JumpStreakResetEvent jumpStreakResetEvent = new JumpStreakResetEvent(player, jumpPlayer, JumpStreakResetReason.PLAYER_ON_GROUND);
+        this.resetStreak(player, jumpPlayer, JumpStreakResetReason.PLAYER_ON_GROUND);
+    }
 
-        this.server.getPluginManager().callEvent(jumpStreakResetEvent);
+    private void resetStreak(Player player, JumpPlayer jumpPlayer, JumpStreakResetReason streakResetReason) {
+        JumpStreakResetEvent streakResetEvent = new JumpStreakResetEvent(player, jumpPlayer, streakResetReason);
 
-        if (jumpStreakResetEvent.isCancelled()) {
+        this.server.getPluginManager().callEvent(streakResetEvent);
+
+        if (streakResetEvent.isCancelled()) {
             return;
         }
 

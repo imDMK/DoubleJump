@@ -76,7 +76,7 @@ public class JumpEnableListener implements Listener {
         }
 
         if (!jumpPlayer.hasJumps()) {
-            if (this.jumpConfiguration.jumpsRegenerationDelay.isZero()) {
+            if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
                 this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
                 return;
             }
@@ -95,12 +95,12 @@ public class JumpEnableListener implements Listener {
             return;
         }
 
-        if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
             return;
         }
 
-        if (this.jumpConfiguration.disabledWorlds.contains(playerWorld.getName())) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorld.getName())) {
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
             return;
         }
@@ -148,7 +148,7 @@ public class JumpEnableListener implements Listener {
 
             player.setMetadata("jumpLimitNotificationSent", new FixedMetadataValue(this.plugin, true));
 
-            if (this.jumpConfiguration.jumpsRegenerationDelay.isZero()) {
+            if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
                 this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
                 return;
             }
@@ -181,11 +181,11 @@ public class JumpEnableListener implements Listener {
             return;
         }
 
-        if (this.jumpConfiguration.disabledGameModes.contains(playerGameMode)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
             return;
         }
 
-        if (this.jumpConfiguration.disabledWorlds.contains(playerWorldName)) {
+        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
             return;
         }
 

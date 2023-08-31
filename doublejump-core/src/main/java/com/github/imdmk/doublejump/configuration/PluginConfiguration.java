@@ -5,17 +5,25 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 
-@Header("#")
-@Header("# Configuration for double jump plugin")
-@Header("#")
+@Header({
+        "#",
+        "# Configuration file for the DoubleJump plugin.",
+        "#",
+        "# If you have a problem with plugin configuration, please create an issue on the project's github.",
+        "# ",
+        "# Support site: https://github.com/imDMK/DoubleJump/issues/new/choose",
+        "# Source code: https://github.com/imDMK/DoubleJump",
+        "#",
+})
 public class PluginConfiguration extends OkaeriConfig {
 
     @Comment({
-            "# Booleans",
-            "# Check if you are using the latest version when enabling the plugin?"
+            "# Specifies whether to check for a new plug-in version when enabling it",
+            "# I highly recommend enabling this option"
     })
     public boolean checkForUpdate = true;
 
+    @Comment("# Specifies whether \"/doublejump\" should be enabled")
     public boolean doubleJumpCommandEnabled = true;
 
     @Comment("# Permissions")
@@ -24,12 +32,17 @@ public class PluginConfiguration extends OkaeriConfig {
     public String doubleJumpEnableForPermission = "command.doublejump.enablefor";
     public String doubleJumpGiveItemPermission = "command.doublejump.giveitem";
 
-    @Comment("Jump configuration")
+    @Comment({
+            "# ",
+            "# Jump configuration",
+            "# "
+    })
     public JumpConfiguration jumpConfiguration = new JumpConfiguration();
 
     @Comment({
+            "# ",
             "# Message configuration",
-            "# Notification types: CHAT, ACTIONBAR, TITLE, SUBTITLE, DISABLED",
+            "# "
     })
     public MessageConfiguration messageConfiguration = new MessageConfiguration();
 }

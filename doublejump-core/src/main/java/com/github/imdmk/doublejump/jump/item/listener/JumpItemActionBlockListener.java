@@ -22,12 +22,12 @@ public class JumpItemActionBlockListener implements Listener {
 
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
-        if (!this.jumpItemConfiguration.jumpItemCancelEnchant) {
+        if (!this.jumpItemConfiguration.cancelEnchant) {
             return;
         }
 
         ItemStack item = event.getItem();
-        if (!item.equals(this.jumpItemConfiguration.jumpItem)) {
+        if (!item.equals(this.jumpItemConfiguration.item)) {
             return;
         }
 
@@ -51,13 +51,13 @@ public class JumpItemActionBlockListener implements Listener {
             return;
         }
 
-        ItemStack jumpItem = this.jumpItemConfiguration.jumpItem;
-        boolean ignoreEnchants = !this.jumpItemConfiguration.jumpItemCancelEnchant;
+        ItemStack jumpItem = this.jumpItemConfiguration.item;
+        boolean ignoreEnchants = !this.jumpItemConfiguration.cancelEnchant;
         if (!ItemUtil.compareItem(itemToRepair, jumpItem, true, ignoreEnchants)) {
             return;
         }
 
-        if (this.jumpItemConfiguration.jumpItemCancelRepair) {
+        if (this.jumpItemConfiguration.cancelRepair) {
             event.setCancelled(true);
             event.setResult(Event.Result.DENY);
             return;
