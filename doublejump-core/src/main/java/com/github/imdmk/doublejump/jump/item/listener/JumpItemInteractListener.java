@@ -71,6 +71,8 @@ public class JumpItemInteractListener implements Listener {
         }
 
         if (this.regionProvider.isInRegion(player)) {
+            event.setCancelled(true);
+
             this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisableRegionNotification);
             return;
         }
