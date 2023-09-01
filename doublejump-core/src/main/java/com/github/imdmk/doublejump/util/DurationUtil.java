@@ -9,7 +9,13 @@ public final class DurationUtil {
     }
 
     public static String toHumanReadable(Duration duration) {
-        return Duration.ofSeconds(duration.toSeconds()) //We want to remove millis seconds
+        Duration ofSeconds = Duration.ofSeconds(duration.toSeconds()); //We want to remove milliseconds
+
+        if (ofSeconds.isNegative() || duration.isZero()) {
+            return "<1s";
+        }
+
+        return ofSeconds
                 .toString()
                 .substring(2)
                 .replaceAll("(\\d[HMS])(?!$)", "$1 ")
