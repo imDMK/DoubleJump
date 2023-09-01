@@ -11,6 +11,10 @@ public class DurationUtilTest {
 
     @Test
     void testHumanReadable() {
+        Duration zero = Duration.ZERO;
+        String zeroExcepted = "<1s";
+        String zeroResult = DurationUtil.toHumanReadable(zero);
+
         Duration ofSeconds = Duration.ofSeconds(5);
         String secondsExcepted = "5s";
         String secondsResult = DurationUtil.toHumanReadable(ofSeconds);
@@ -23,6 +27,7 @@ public class DurationUtilTest {
         String hoursExcepted = "10h";
         String hoursResult = DurationUtil.toHumanReadable(ofHours);
 
+        assertEquals(zeroExcepted, zeroResult);
         assertEquals(secondsExcepted, secondsResult);
         assertEquals(minutesExcepted, minutesResult);
         assertEquals(hoursExcepted, hoursResult);
