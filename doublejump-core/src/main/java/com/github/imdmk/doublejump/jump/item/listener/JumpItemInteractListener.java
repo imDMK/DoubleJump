@@ -99,18 +99,44 @@ public class JumpItemInteractListener implements Listener {
             event.setCancelled(true);
         }
 
-        int reduceDurability = this.jumpItemConfiguration.usageConfiguration.reduceDurability;
-        if (reduceDurability > 0) {
-            this.reduceDurability(clickedItem, reduceDurability);
-        }
-
         if (this.jumpItemConfiguration.usageConfiguration.switchDoubleJumpMode) {
             this.switchDoubleJump(player);
         }
 
         if (this.jumpItemConfiguration.usageConfiguration.doubleJump) {
-            this.useDoubleJump(player);
+            JumpPlayer jumpPlayer = this.jumpPlayerManager.getOrCreateJumpPlayer(player);
+
+            if (jumpPlayer.isDelay()) {
+                Notification notification = Notification.builder()
+                        .fromNotification(this.messageConfiguration.jumpDelayNotification)
+                        .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
+                        .build();
+
+                this.notificationSender.sendMessage(player, notification);
+                return;
+            }
+
+            if (!jumpPlayer.hasJumps()) {
+                if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
+                    this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
+                    return;
+                }
+
+                Notification jumpLimitDelayNotification = Notification.builder()
+                        .fromNotification(this.messageConfiguration.jumpLimitDelayNotification)
+                        .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
+                        .build();
+
+                this.notificationSender.sendMessage(player, jumpLimitDelayNotification);
+                return;
+            }
+
+            DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
+
+            this.server.getPluginManager().callEvent(doubleJumpEvent);
         }
+
+        this.reduceDurability(clickedItem, this.jumpItemConfiguration.usageConfiguration.reduceDurability);
 
         if (this.jumpItemConfiguration.usageConfiguration.disableDoubleJumpMode) {
             this.jumpPlayerManager.disable(player);
@@ -118,45 +144,26 @@ public class JumpItemInteractListener implements Listener {
     }
 
     private void reduceDurability(ItemStack item, int reduceBy) {
+        if (reduceBy < 0) {
+            return;
+        }
+
         if (!(item.getItemMeta() instanceof Damageable itemDamageable)) {
             return;
         }
 
-        itemDamageable.setDamage(-(reduceBy - item.getType().getMaxDurability()));
+        int itemDamage = itemDamageable.getDamage();
+        int itemMaxDurability = item.getType().getMaxDurability();
+
+        boolean shouldDestroyItem = (itemDamage + reduceBy) == itemMaxDurability;
+
+        if (shouldDestroyItem) {
+            item.setAmount(0);
+            return;
+        }
+
+        itemDamageable.setDamage(-(reduceBy - itemMaxDurability));
         item.setItemMeta(itemDamageable);
-    }
-
-    private void useDoubleJump(Player player) {
-        JumpPlayer jumpPlayer = this.jumpPlayerManager.getOrCreateJumpPlayer(player);
-
-        if (jumpPlayer.isDelay()) {
-            Notification notification = Notification.builder()
-                    .fromNotification(this.messageConfiguration.jumpDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
-                    .build();
-
-            this.notificationSender.sendMessage(player, notification);
-            return;
-        }
-
-        if (!jumpPlayer.hasJumps()) {
-            if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
-                this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
-                return;
-            }
-
-            Notification jumpLimitDelayNotification = Notification.builder()
-                    .fromNotification(this.messageConfiguration.jumpLimitDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
-                    .build();
-
-            this.notificationSender.sendMessage(player, jumpLimitDelayNotification);
-            return;
-        }
-
-        DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
-
-        this.server.getPluginManager().callEvent(doubleJumpEvent);
     }
 
     private void switchDoubleJump(Player player) {
