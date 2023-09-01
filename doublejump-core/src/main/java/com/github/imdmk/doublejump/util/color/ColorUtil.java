@@ -3,13 +3,13 @@ package com.github.imdmk.doublejump.util.color;
 import org.bukkit.Color;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 public final class ColorUtil {
 
-    private static final Map<String, Color> colors = new ConcurrentHashMap<>();
+    private static final Map<String, Color> colors = new HashMap<>();
 
     private ColorUtil() {
         throw new UnsupportedOperationException("This is utility class.");
@@ -22,7 +22,10 @@ public final class ColorUtil {
             }
 
             try {
-                colors.put(field.getName(), (Color) field.get(Color.class));
+                String colorName = field.getName();
+                Color color = (Color) field.get(Color.class);
+
+                colors.put(colorName, color);
             }
             catch (IllegalAccessException exception) {
                 throw new RuntimeException(exception);
@@ -35,8 +38,7 @@ public final class ColorUtil {
     }
 
     public static Optional<String> getColorName(Color color) {
-        return colors.entrySet()
-                .stream()
+        return colors.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(color))
                 .map(Map.Entry::getKey)
                 .findFirst();
