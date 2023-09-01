@@ -5,13 +5,13 @@ import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A class used to change the player's double jump mode or check if the player has permission to use double jump.
@@ -47,13 +47,17 @@ public class JumpPlayerManager {
      * @return The jump player that has been created
      */
     public JumpPlayer create(Player player) {
-        if (!this.jumpsLimitEnabled) {
-            return new JumpPlayer();
+        AtomicReference<JumpPlayer> jumpPlayer = new AtomicReference<>(new JumpPlayer());
+
+        if (this.jumpsLimitEnabled) {
+            int availableJumps = this.getJumpsByPermission(player);
+
+            jumpPlayer.set(new JumpPlayer(availableJumps, availableJumps));
         }
 
-        int availableJumps = this.getJumpsByPermission(player);
+        this.add(player.getUniqueId(), jumpPlayer.get());
 
-        return new JumpPlayer(Instant.MIN, 0, availableJumps, availableJumps, Instant.MIN);
+        return jumpPlayer.get();
     }
 
     /**

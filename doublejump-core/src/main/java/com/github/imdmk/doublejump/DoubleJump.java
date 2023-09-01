@@ -13,6 +13,7 @@ import com.github.imdmk.doublejump.configuration.serializer.ItemStackSerializer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommand;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommandEditor;
+import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.command.DoubleJumpItemCommand;
 import com.github.imdmk.doublejump.jump.item.command.DoubleJumpItemCommandEditor;
 import com.github.imdmk.doublejump.jump.item.listener.JumpItemActionBlockListener;
@@ -73,6 +74,8 @@ public class DoubleJump implements DoubleJumpApi {
 
     private final RegionProvider regionProvider;
 
+    private final JumpItemService jumpItemService;
+
     private final JumpPlayerManager jumpPlayerManager;
 
     private final TaskScheduler taskScheduler;
@@ -99,6 +102,9 @@ public class DoubleJump implements DoubleJumpApi {
         /* Hooks */
         this.regionProvider = this.hookRegionProvider();
 
+        /* Services */
+        this.jumpItemService = new JumpItemService(this.pluginConfiguration.jumpConfiguration.itemConfiguration);
+
         /* Managers */
         this.jumpPlayerManager = new JumpPlayerManager(this.regionProvider, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpConfiguration.limitConfiguration.enabled, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limit, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limitsByPermissions);
 
@@ -107,11 +113,11 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Listeners */
         Stream.of(
-                new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration),
-                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpPlayerManager),
-                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpPlayerManager),
-                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpPlayerManager),
-                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.regionProvider),
+                new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpItemService),
+                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpItemService, this.jumpPlayerManager),
+                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpItemService, this.jumpPlayerManager),
+                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpItemService, this.jumpPlayerManager),
+                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpItemService, this.jumpPlayerManager, this.regionProvider),
                 new DoubleJumpListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender),
                 new JumpDisableListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
                 new JumpEnableListener(plugin, this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, this.taskScheduler, this.regionProvider),

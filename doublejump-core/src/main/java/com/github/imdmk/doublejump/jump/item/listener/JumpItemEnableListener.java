@@ -1,22 +1,22 @@
 package com.github.imdmk.doublejump.jump.item.listener;
 
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
-import com.github.imdmk.doublejump.jump.item.JumpItemConfiguration;
-import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
-import com.github.imdmk.doublejump.util.ItemUtil;
+import com.github.imdmk.doublejump.jump.item.JumpItemService;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class JumpItemEnableListener implements Listener {
 
     private final JumpItemConfiguration jumpItemConfiguration;
+    private final JumpItemService jumpItemService;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public JumpItemEnableListener(JumpItemConfiguration jumpItemConfiguration, JumpPlayerManager jumpPlayerManager) {
+    public JumpItemEnableListener(JumpItemConfiguration jumpItemConfiguration, JumpItemService jumpItemService, JumpPlayerManager jumpPlayerManager) {
         this.jumpItemConfiguration = jumpItemConfiguration;
+        this.jumpItemService = jumpItemService;
         this.jumpPlayerManager = jumpPlayerManager;
     }
 
@@ -36,11 +36,8 @@ public class JumpItemEnableListener implements Listener {
             return;
         }
 
-        ItemStack jumpItem = this.jumpItemConfiguration.item;
-        JumpItemUsage jumpItemUsage = this.jumpItemConfiguration.usageConfiguration.usage;
-
-        if (ItemUtil.isCorrectlyUsed(player, jumpItem, jumpItemUsage)) {
-            this.jumpPlayerManager.enable(player, false);
+        if (this.jumpItemService.isCorrectlyUsed(player)) {
+            this.jumpPlayerManager.enable(player, true);
         }
     }
 }

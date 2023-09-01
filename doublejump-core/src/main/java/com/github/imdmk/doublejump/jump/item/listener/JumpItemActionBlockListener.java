@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump.jump.item.listener;
 
-import com.github.imdmk.doublejump.jump.item.JumpItemConfiguration;
-import com.github.imdmk.doublejump.util.ItemUtil;
+import com.github.imdmk.doublejump.jump.item.JumpItemService;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,9 +15,11 @@ import org.bukkit.inventory.meta.Damageable;
 public class JumpItemActionBlockListener implements Listener {
 
     private final JumpItemConfiguration jumpItemConfiguration;
+    private final JumpItemService jumpItemService;
 
-    public JumpItemActionBlockListener(JumpItemConfiguration jumpItemConfiguration) {
+    public JumpItemActionBlockListener(JumpItemConfiguration jumpItemConfiguration, JumpItemService jumpItemService) {
         this.jumpItemConfiguration = jumpItemConfiguration;
+        this.jumpItemService = jumpItemService;
     }
 
     @EventHandler
@@ -27,7 +29,8 @@ public class JumpItemActionBlockListener implements Listener {
         }
 
         ItemStack item = event.getItem();
-        if (!item.equals(this.jumpItemConfiguration.item)) {
+
+        if (!this.jumpItemService.compare(item)) {
             return;
         }
 
@@ -51,9 +54,7 @@ public class JumpItemActionBlockListener implements Listener {
             return;
         }
 
-        ItemStack jumpItem = this.jumpItemConfiguration.item;
-        boolean ignoreEnchants = !this.jumpItemConfiguration.cancelEnchant;
-        if (!ItemUtil.compareItem(itemToRepair, jumpItem, true, ignoreEnchants)) {
+        if (!this.jumpItemService.compare(itemToRepair)) {
             return;
         }
 
@@ -74,7 +75,7 @@ public class JumpItemActionBlockListener implements Listener {
             return;
         }
 
-        ItemStack jumpItemClone = new ItemStack(jumpItem.clone());
+        ItemStack jumpItemClone = new ItemStack(this.jumpItemConfiguration.item);
 
         if (!(jumpItemClone.getItemMeta() instanceof Damageable jumpItemDamageable)) {
             event.setCancelled(true);

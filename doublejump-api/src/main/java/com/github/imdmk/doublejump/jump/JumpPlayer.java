@@ -24,12 +24,12 @@ public class JumpPlayer {
         this.endOfJumpsRegenerationDelay = Instant.MIN;
     }
 
-    public JumpPlayer(Instant endOfDelay, int streak, int jumps, int jumpsLimit, Instant endOfJumpsRegenerationDelay) {
-        this.endOfDelay = endOfDelay;
-        this.streak = streak;
+    public JumpPlayer(int jumps, int jumpsLimit) {
+        this.endOfDelay = Instant.MIN;
+        this.streak = 0;
         this.jumps = jumps;
         this.jumpsLimit = jumpsLimit;
-        this.endOfJumpsRegenerationDelay = endOfJumpsRegenerationDelay;
+        this.endOfJumpsRegenerationDelay = Instant.MIN;
     }
 
     /**

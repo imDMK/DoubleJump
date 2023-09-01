@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump;
 
-import com.github.imdmk.doublejump.jump.item.JumpItemConfiguration;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
 import com.github.imdmk.doublejump.jump.particle.JumpParticleConfiguration;
 import com.github.imdmk.doublejump.jump.sound.JumpSoundConfiguration;
 import eu.okaeri.configs.OkaeriConfig;

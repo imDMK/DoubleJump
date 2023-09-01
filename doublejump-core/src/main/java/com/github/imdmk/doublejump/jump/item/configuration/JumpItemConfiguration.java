@@ -1,5 +1,6 @@
-package com.github.imdmk.doublejump.jump.item;
+package com.github.imdmk.doublejump.jump.item.configuration;
 
+import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;

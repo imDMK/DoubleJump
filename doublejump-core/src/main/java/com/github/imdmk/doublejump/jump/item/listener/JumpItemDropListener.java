@@ -1,8 +1,8 @@
 package com.github.imdmk.doublejump.jump.item.listener;
 
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
-import com.github.imdmk.doublejump.jump.item.JumpItemConfiguration;
-import com.github.imdmk.doublejump.util.ItemUtil;
+import com.github.imdmk.doublejump.jump.item.JumpItemService;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,10 +12,12 @@ import org.bukkit.inventory.ItemStack;
 public class JumpItemDropListener implements Listener {
 
     private final JumpItemConfiguration jumpItemConfiguration;
+    private final JumpItemService jumpItemService;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public JumpItemDropListener(JumpItemConfiguration jumpItemConfiguration, JumpPlayerManager jumpPlayerManager) {
+    public JumpItemDropListener(JumpItemConfiguration jumpItemConfiguration, JumpItemService jumpItemService, JumpPlayerManager jumpPlayerManager) {
         this.jumpItemConfiguration = jumpItemConfiguration;
+        this.jumpItemService = jumpItemService;
         this.jumpPlayerManager = jumpPlayerManager;
     }
 
@@ -24,10 +26,8 @@ public class JumpItemDropListener implements Listener {
         Player player = event.getPlayer();
 
         ItemStack itemDrop = event.getItemDrop().getItemStack();
-        ItemStack jumpItem = this.jumpItemConfiguration.item;
-        boolean ignoreEnchants = !this.jumpItemConfiguration.cancelEnchant;
 
-        if (!ItemUtil.compareItem(itemDrop, jumpItem, true, ignoreEnchants)) {
+        if (!this.jumpItemService.compare(itemDrop)) {
             return;
         }
 

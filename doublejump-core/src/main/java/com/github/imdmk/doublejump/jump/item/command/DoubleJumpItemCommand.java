@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump.jump.item.command;
 
 import com.github.imdmk.doublejump.configuration.MessageConfiguration;
-import com.github.imdmk.doublejump.jump.item.JumpItemConfiguration;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import dev.rollczi.litecommands.argument.Arg;
