@@ -23,7 +23,7 @@ public class PluginConfiguration extends OkaeriConfig {
     })
     public boolean checkForUpdate = true;
 
-    @Comment("# Specifies whether \"/doublejump\" should be enabled")
+    @Comment("# Specifies whether \"/doublejump\" command should be enabled")
     public boolean doubleJumpCommandEnabled = true;
 
     @Comment("# Permissions")
