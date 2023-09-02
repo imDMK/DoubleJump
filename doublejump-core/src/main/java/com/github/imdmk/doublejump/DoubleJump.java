@@ -55,6 +55,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -216,6 +217,12 @@ public class DoubleJump implements DoubleJumpApi {
         }
 
         return new EmptyRegionProvider();
+    }
+
+    @NotNull
+    @Override
+    public RegionProvider getRegionProvider() {
+        return this.regionProvider;
     }
 
     @Nonnull
