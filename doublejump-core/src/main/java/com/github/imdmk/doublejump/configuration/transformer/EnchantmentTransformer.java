@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.configuration.serializer;
+package com.github.imdmk.doublejump.configuration.transformer;
 
 import eu.okaeri.configs.schema.GenericsPair;
 import eu.okaeri.configs.serdes.BidirectionalTransformer;
@@ -7,7 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class EnchantmentSerializer extends BidirectionalTransformer<String, Enchantment> {
+public class EnchantmentTransformer extends BidirectionalTransformer<String, Enchantment> {
 
     @Override
     public GenericsPair<String, Enchantment> getPair() {

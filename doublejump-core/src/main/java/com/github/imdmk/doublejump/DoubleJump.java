@@ -5,9 +5,9 @@ import com.github.imdmk.doublejump.command.handler.MissingPermissionHandler;
 import com.github.imdmk.doublejump.command.handler.NotificationHandler;
 import com.github.imdmk.doublejump.command.handler.UsageHandler;
 import com.github.imdmk.doublejump.configuration.PluginConfiguration;
-import com.github.imdmk.doublejump.configuration.serializer.ColorSerializer;
-import com.github.imdmk.doublejump.configuration.serializer.ComponentSerializer;
-import com.github.imdmk.doublejump.configuration.serializer.EnchantmentSerializer;
+import com.github.imdmk.doublejump.configuration.transformer.ColorTransformer;
+import com.github.imdmk.doublejump.configuration.transformer.ComponentTransformer;
+import com.github.imdmk.doublejump.configuration.transformer.EnchantmentTransformer;
 import com.github.imdmk.doublejump.configuration.serializer.ItemMetaSerializer;
 import com.github.imdmk.doublejump.configuration.serializer.ItemStackSerializer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
@@ -161,9 +161,9 @@ public class DoubleJump implements DoubleJumpApi {
         return ConfigManager.create(PluginConfiguration.class, (it) -> {
             it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons());
             it.withSerdesPack(registry -> {
-                registry.register(new ColorSerializer());
-                registry.register(new ComponentSerializer());
-                registry.register(new EnchantmentSerializer());
+                registry.register(new ColorTransformer());
+                registry.register(new ComponentTransformer());
+                registry.register(new EnchantmentTransformer());
                 registry.register(new ItemStackSerializer());
                 registry.register(new ItemMetaSerializer());
                 registry.register(new NotificationSerializer());

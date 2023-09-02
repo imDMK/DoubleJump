@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.configuration.serializer;
+package com.github.imdmk.doublejump.configuration.transformer;
 
 import com.github.imdmk.doublejump.util.color.ColorUtil;
 import eu.okaeri.configs.schema.GenericsPair;
@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Optional;
 
-public class ColorSerializer extends BidirectionalTransformer<Color, String> {
+public class ColorTransformer extends BidirectionalTransformer<Color, String> {
 
     @Override
     public GenericsPair<Color, String> getPair() {

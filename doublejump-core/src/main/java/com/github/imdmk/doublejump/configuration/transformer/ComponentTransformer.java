@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.configuration.serializer;
+package com.github.imdmk.doublejump.configuration.transformer;
 
 import com.github.imdmk.doublejump.util.ComponentUtil;
 import eu.okaeri.configs.schema.GenericsPair;
@@ -7,7 +7,7 @@ import eu.okaeri.configs.serdes.SerdesContext;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class ComponentSerializer extends BidirectionalTransformer<Component, String> {
+public class ComponentTransformer extends BidirectionalTransformer<Component, String> {
 
     @Override
     public GenericsPair<Component, String> getPair() {
