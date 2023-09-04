@@ -45,7 +45,7 @@ public class DoubleJumpListener implements Listener {
 
         player.setVelocity(vector);
 
-        if (!this.jumpConfiguration.delayConfiguration.enabled) {
+        if (this.jumpConfiguration.delayConfiguration.enabled) {
             jumpPlayer.addDelay(this.jumpConfiguration.delayConfiguration.delay);
         }
 
