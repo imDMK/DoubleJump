@@ -84,7 +84,7 @@ public class JumpConfiguration extends OkaeriConfig {
     public static class LimitConfiguration extends OkaeriConfig {
 
         @Comment("# Specifies whether the jump limit should be enabled")
-        public boolean enabled = true;
+        public boolean enabled = false;
 
         @Comment("# The default value of the jump limit is if the player does not have permissions listed in limitsByPermission")
         public int limit = 1;
