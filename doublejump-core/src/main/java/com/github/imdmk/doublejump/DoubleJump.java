@@ -29,10 +29,18 @@ import com.github.imdmk.doublejump.jump.listener.JumpRefreshListener;
 import com.github.imdmk.doublejump.jump.listener.JumpRegenerationListener;
 import com.github.imdmk.doublejump.jump.listener.JumpStreakResetListener;
 import com.github.imdmk.doublejump.jump.particle.JumpParticleSerializer;
+import com.github.imdmk.doublejump.jump.placeholder.JumpPlayerStreakPlaceholder;
+import com.github.imdmk.doublejump.jump.placeholder.delay.JumpPlayerDelayPlaceholder;
+import com.github.imdmk.doublejump.jump.placeholder.delay.JumpPlayerIsDelayPlaceholder;
+import com.github.imdmk.doublejump.jump.placeholder.delay.JumpPlayerRegenerationDelayPlaceholder;
+import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerHasJumpsPlaceholder;
+import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerJumpsLimitPlaceholder;
+import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerJumpsPlaceholder;
 import com.github.imdmk.doublejump.jump.sound.JumpSoundSerializer;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSerializer;
+import com.github.imdmk.doublejump.placeholder.PlaceholderRegistry;
 import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.region.impl.EmptyRegionProvider;
 import com.github.imdmk.doublejump.region.impl.WorldGuardRegionProvider;
@@ -53,6 +61,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,6 +91,8 @@ public class DoubleJump implements DoubleJumpApi {
 
     private LiteCommands<CommandSender> liteCommands;
 
+    private PlaceholderRegistry placeholderRegistry;
+
     private final Metrics metrics;
 
     public DoubleJump(Plugin plugin) {
@@ -89,6 +100,7 @@ public class DoubleJump implements DoubleJumpApi {
 
         Stopwatch stopwatch = Stopwatch.createStarted();
         Logger logger = plugin.getLogger();
+        PluginDescriptionFile pluginDescriptionFile = plugin.getDescription();
 
         this.server = plugin.getServer();
 
@@ -132,9 +144,24 @@ public class DoubleJump implements DoubleJumpApi {
             this.liteCommands = this.registerLiteCommands();
         }
 
+        /* Placeholder API */
+        if (this.server.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            this.placeholderRegistry = new PlaceholderRegistry();
+
+            Stream.of(
+                    new JumpPlayerDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerIsDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerRegenerationDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerHasJumpsPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerJumpsLimitPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerJumpsPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerStreakPlaceholder(pluginDescriptionFile, this.jumpPlayerManager)
+            ).forEach(this.placeholderRegistry::register);
+        }
+
         /* Update check */
         if (this.pluginConfiguration.checkForUpdate) {
-            UpdateService updateService = new UpdateService(plugin.getDescription(), logger);
+            UpdateService updateService = new UpdateService(pluginDescriptionFile, logger);
             this.taskScheduler.runLaterAsync(updateService::check, DurationUtil.toTicks(Duration.ofSeconds(3)));
         }
 
@@ -151,7 +178,10 @@ public class DoubleJump implements DoubleJumpApi {
             this.liteCommands.getPlatform().unregisterAll();
         }
 
+        this.placeholderRegistry.unregisterAll();
+
         this.disableAllowFlightForOnlinePlayers();
+
         this.bukkitAudiences.close();
 
         this.metrics.shutdown();

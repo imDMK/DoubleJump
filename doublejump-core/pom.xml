@@ -42,6 +42,12 @@
             <id>eternalcode-releases</id>
             <url>https://repo.eternalcode.pl/releases</url>
         </repository>
+
+        <!-- Placeholder API -->
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -121,6 +127,14 @@
             <groupId>com.eternalcode</groupId>
             <artifactId>gitcheck</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!-- Placeholder API -->
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.3</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Test -->
