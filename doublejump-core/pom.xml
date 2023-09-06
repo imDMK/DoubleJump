@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.github.imdmk</groupId>
         <artifactId>doublejump</artifactId>
-        <version>2.0.6</version>
+        <version>2.0.7</version>
     </parent>
 
     <artifactId>doublejump-core</artifactId>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.github.imdmk</groupId>
             <artifactId>doublejump-api</artifactId>
-            <version>2.0.6</version>
+            <version>2.0.7</version>
             <scope>compile</scope>
         </dependency>
 
