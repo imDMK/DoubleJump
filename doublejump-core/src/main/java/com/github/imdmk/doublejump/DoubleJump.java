@@ -5,11 +5,11 @@ import com.github.imdmk.doublejump.command.handler.MissingPermissionHandler;
 import com.github.imdmk.doublejump.command.handler.NotificationHandler;
 import com.github.imdmk.doublejump.command.handler.UsageHandler;
 import com.github.imdmk.doublejump.configuration.PluginConfiguration;
+import com.github.imdmk.doublejump.configuration.serializer.ItemMetaSerializer;
+import com.github.imdmk.doublejump.configuration.serializer.ItemStackSerializer;
 import com.github.imdmk.doublejump.configuration.transformer.ColorTransformer;
 import com.github.imdmk.doublejump.configuration.transformer.ComponentTransformer;
 import com.github.imdmk.doublejump.configuration.transformer.EnchantmentTransformer;
-import com.github.imdmk.doublejump.configuration.serializer.ItemMetaSerializer;
-import com.github.imdmk.doublejump.configuration.serializer.ItemStackSerializer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommand;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommandEditor;
@@ -48,7 +48,6 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -98,7 +97,7 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
-        this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
+        this.notificationSender = new NotificationSender(this.bukkitAudiences);
 
         /* Hooks */
         this.regionProvider = this.hookRegionProvider();
