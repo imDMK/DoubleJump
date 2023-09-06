@@ -1,6 +1,6 @@
 # DoubleJump
 
-[![Release](https://jitpack.io/v/imDMK/DoubleJump.svg)](https://jitpack.io/#imDMK/DoubleJump)
+[![Release](https://jitpack.io/v/imDMK/DoubleJump.svg)]the (https://jitpack.io/#imDMK/DoubleJump)
 [![Build Status](https://github.com/imDMK/DoubleJump/actions/workflows/maven.yml/badge.svg)](https://github.com/imDMK/DoubleJump/actions/workflows/maven.yml)
 ![JDK](https://img.shields.io/badge/JDK-1.17-blue.svg)
 ![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.20.1-green.svg)
@@ -11,21 +11,34 @@
 Simple and efficient double jump plugin with many features and configuration possibilities.
 
 # Features
-* Spawn particles when player use double jump,
-* Playing sound when player use double jump,
+* Spawn particles when a player uses double jump,
+* Playing sound when a player uses double jump,
 * Double jump streaks,
 * Double jump item (You can completely configure this item),
 * Possibility to customize messages (disable or type, e.g. ACTIONBAR or CHAT),
 * WorldGuard Support - Possibility to disable using double jump in selected regions
 * Possibility to disable using double jump in selected worlds,
-* Possibility to enable or disable double jump mode for selected player.
-* Possibility to enable double jump mode when joining the server (U can set only for administrators),
+* Possibility to enable or disable double jump mode for the selected player.
+* Possibility to enable double jump mode when joining the server (U can set it only for administrators),
 * Ability to disable using double jump in selected game modes,
 * Ability to set double jump series to reset after dying or touching the ground.
 * [Adventure](https://github.com/KyoriPowered/adventure) components support.
+* [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support.
 * Easy to use API.
 
 # FAQ
+#### **Q: What are the available placeholders?**
+**A:** Available placeholders:
+* `jump-player-delay` - Displays the remaining delay time until the next double jump can be used.
+* `jump-player-is-delay` - Returns "yes" or "no" depending on whether the player has a jump delay.
+* `jump-player-regeneration-delay` - Shows the remaining time to regenerate one jump in human-readable.
+* `jump-player-has-jumps` - Returns "yes" or "no" depending on whether the player has an unused double jump available.
+* `jump-player-jumps-limit` - Returns the jump limit value for the player.
+* `jump-player-jumps` - Returns the total value of all double jumps performed.
+* `jump-player-streak` - Returns the player's current double jump streak.
+
+**ATTENTION:** All placeholders will return null if the player does not have an active double jump (placeholder will not be applied).
+  
 #### **Q: What are the notification types?**
 **A:** CHAT, ACTIONBAR, TITLE, SUBTITLE, DISABLED
 
