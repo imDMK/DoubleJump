@@ -8,7 +8,6 @@ import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.region.RegionProvider;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
-import dev.rollczi.litecommands.command.async.Async;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.GameMode;
@@ -31,7 +30,6 @@ public class DoubleJumpCommand {
         this.regionProvider = regionProvider;
     }
 
-    @Async
     @Execute(required = 0)
     void execute(Player player) {
         GameMode playerGameMode = player.getGameMode();
@@ -62,7 +60,6 @@ public class DoubleJumpCommand {
         }
     }
 
-    @Async
     @Execute(route = "enable-for", required = 1)
     void enableFor(Player player, @Arg @Name("target") Player target) {
         GameMode targetGameMode = target.getGameMode();
@@ -93,7 +90,6 @@ public class DoubleJumpCommand {
         this.notificationSender.sendMessage(player, notification);
     }
 
-    @Async
     @Execute(route = "disable-for", required = 1)
     void disableFor(Player player, @Arg @Name("target") Player target) {
         this.jumpPlayerManager.disable(target);

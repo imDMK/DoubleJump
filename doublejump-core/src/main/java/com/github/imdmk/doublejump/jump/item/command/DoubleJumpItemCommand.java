@@ -6,7 +6,6 @@ import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
-import dev.rollczi.litecommands.command.async.Async;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
@@ -27,7 +26,6 @@ public class DoubleJumpItemCommand {
         this.notificationSender = notificationSender;
     }
 
-    @Async
     @Execute(route = "item-give", required = 1)
     void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
         if (!this.jumpItemConfiguration.enabled) {
@@ -53,7 +51,6 @@ public class DoubleJumpItemCommand {
         this.notificationSender.sendMessage(sender, notification);
     }
 
-    @Async
     @Execute(route = "item-remove", required = 1)
     void removeItem(CommandSender sender, @Arg @Name("target") Player target) {
         ItemStack jumpItem = this.jumpItemConfiguration.item;
