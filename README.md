@@ -9,7 +9,7 @@
 [![PaperMC](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/DoubleJump)
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
 
-Simple and efficient double jump plugin with many features and configuration possibilities.
+Efficient double jump plugin with many features and configuration possibilities.
 
 # Features
 * Spawn particles when a player uses double jump,
