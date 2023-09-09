@@ -6,6 +6,7 @@
 ![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.20.1-green.svg)
 [![SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/doublejump-1-17-1-20-1.110632/)
 [![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://dev.bukkit.org/projects/d-doublejump)
+[![PaperMC](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/DoubleJump)
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
 
 Simple and efficient double jump plugin with many features and configuration possibilities.
@@ -16,12 +17,12 @@ Simple and efficient double jump plugin with many features and configuration pos
 * Double jump streaks,
 * Double jump item (You can completely configure this item),
 * Possibility to customize messages (disable or type, e.g. ACTIONBAR or CHAT),
-* WorldGuard Support - Possibility to disable using double jump in selected regions
 * Possibility to disable using double jump in selected worlds,
 * Possibility to enable or disable double jump mode for the selected player.
 * Possibility to enable double jump mode when joining the server (U can set it only for administrators),
 * Ability to disable using double jump in selected game modes,
 * Ability to set double jump series to reset after dying or touching the ground.
+* [WorldGuard](https://github.com/EngineHub/WorldGuard) support - Possibility to disable using double jump in selected regions
 * [Adventure](https://github.com/KyoriPowered/adventure) components support.
 * [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support.
 * Easy to use API.
@@ -48,7 +49,7 @@ Currently, the plugin supports particle types that contain **no data** or only *
 [Here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html) you have a list of all (The description indicates the data).
 
 # API
-To start using API you have to include doublejump-api jar to your libraries or use:
+To start using API you have to include a double-jump-API jar to your libraries or use:
 ### Maven
 ```xml
   <repositories>
@@ -105,7 +106,7 @@ Example:
     }
 ```
 ### Events
-You can listen events which are called before action.
+You can listen to events that are called before action.
 Example usage:
 ```java
     @EventHandler
@@ -132,4 +133,4 @@ Example usage:
     }
 ```
 # Information
-If you have any suggestion or found a bug, please report it using [this](https://github.com/imDMK/DoubleJump/issues/new/choose) site.
+If you have any suggestions or found a bug, please report it using [this](https://github.com/imDMK/DoubleJump/issues/new/choose) site.
