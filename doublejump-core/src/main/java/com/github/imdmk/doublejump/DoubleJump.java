@@ -82,12 +82,7 @@ public class DoubleJump implements DoubleJumpApi {
 
     private final RegionProvider regionProvider;
 
-    private final JumpItemService jumpItemService;
-    private final UpdateService updateService;
-
     private final JumpPlayerManager jumpPlayerManager;
-
-    private final TaskScheduler taskScheduler;
 
     private LiteCommands<CommandSender> liteCommands;
 
@@ -115,30 +110,30 @@ public class DoubleJump implements DoubleJumpApi {
         this.regionProvider = this.hookRegionProvider();
 
         /* Services */
-        this.jumpItemService = new JumpItemService(this.pluginConfiguration.jumpConfiguration.itemConfiguration);
-        this.updateService = new UpdateService(pluginDescriptionFile);
+        JumpItemService jumpItemService = new JumpItemService(this.pluginConfiguration.jumpConfiguration.itemConfiguration);
+        UpdateService updateService = new UpdateService(pluginDescriptionFile);
 
         /* Managers */
         this.jumpPlayerManager = new JumpPlayerManager(this.regionProvider, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpConfiguration.limitConfiguration.enabled, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limit, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limitsByPermissions);
 
         /* Task Scheduler */
-        this.taskScheduler = new TaskSchedulerImpl(plugin, this.server);
+        TaskScheduler taskScheduler = new TaskSchedulerImpl(plugin, this.server);
 
         /* Listeners */
         Stream.of(
-                new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpItemService),
-                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpItemService, this.jumpPlayerManager),
-                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpItemService, this.jumpPlayerManager),
-                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.jumpItemService, this.jumpPlayerManager),
-                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpItemService, this.jumpPlayerManager, this.regionProvider),
+                new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService),
+                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager),
+                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager),
+                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager),
+                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, jumpItemService, this.jumpPlayerManager, this.regionProvider),
                 new DoubleJumpListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender),
                 new JumpDisableListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
-                new JumpEnableListener(plugin, this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, this.taskScheduler, this.regionProvider),
+                new JumpEnableListener(plugin, this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, taskScheduler, this.regionProvider),
                 new JumpFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
-                new JumpRefreshListener(this.jumpPlayerManager, this.taskScheduler),
+                new JumpRefreshListener(this.jumpPlayerManager, taskScheduler),
                 new JumpRegenerationListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
                 new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
-                new UpdateListener(this.pluginConfiguration, this.notificationSender, this.updateService, this.taskScheduler)
+                new UpdateListener(this.pluginConfiguration, this.notificationSender, updateService, taskScheduler)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
