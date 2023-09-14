@@ -16,6 +16,6 @@ public class NotificationHandler implements Handler<CommandSender, Notification>
 
     @Override
     public void handle(CommandSender sender, LiteInvocation invocation, Notification notification) {
-        this.notificationSender.sendMessage(sender, notification);
+        this.notificationSender.send(sender, notification);
     }
 }

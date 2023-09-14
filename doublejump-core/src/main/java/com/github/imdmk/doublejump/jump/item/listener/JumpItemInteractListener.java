@@ -73,7 +73,7 @@ public class JumpItemInteractListener implements Listener {
         if (this.regionProvider.isInRegion(player)) {
             event.setCancelled(true);
 
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisableRegionNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisableRegionNotification);
             return;
         }
 
@@ -81,7 +81,7 @@ public class JumpItemInteractListener implements Listener {
         if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
             event.setCancelled(true);
 
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
             return;
         }
 
@@ -89,7 +89,7 @@ public class JumpItemInteractListener implements Listener {
         if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
             event.setCancelled(true);
 
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
             return;
         }
 
@@ -114,13 +114,13 @@ public class JumpItemInteractListener implements Listener {
                         .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
                         .build();
 
-                this.notificationSender.sendMessage(player, notification);
+                this.notificationSender.send(player, notification);
                 return;
             }
 
             if (!jumpPlayer.hasJumps()) {
                 if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
-                    this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitNotification);
+                    this.notificationSender.send(player, this.messageConfiguration.jumpLimitNotification);
                     return;
                 }
 
@@ -129,7 +129,7 @@ public class JumpItemInteractListener implements Listener {
                         .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
                         .build();
 
-                this.notificationSender.sendMessage(player, jumpLimitDelayNotification);
+                this.notificationSender.send(player, jumpLimitDelayNotification);
                 return;
             }
 
@@ -172,12 +172,12 @@ public class JumpItemInteractListener implements Listener {
         if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
             this.jumpPlayerManager.disable(player);
 
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledNotification);
         }
         else {
             this.jumpPlayerManager.enable(player, false);
 
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeEnabledNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeEnabledNotification);
         }
     }
 }

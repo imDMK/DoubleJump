@@ -29,7 +29,7 @@ public class DoubleJumpItemCommand {
     @Execute(route = "item-give", required = 1)
     void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
         if (!this.jumpItemConfiguration.enabled) {
-            this.notificationSender.sendMessage(sender, this.messageConfiguration.jumpItemDisabledNotification);
+            this.notificationSender.send(sender, this.messageConfiguration.jumpItemDisabledNotification);
             return;
         }
 
@@ -37,7 +37,7 @@ public class DoubleJumpItemCommand {
         Inventory targetInventory = target.getInventory();
 
         if (targetInventory.firstEmpty() == -1) {
-            this.notificationSender.sendMessage(sender, this.messageConfiguration.targetFullInventoryNotification);
+            this.notificationSender.send(sender, this.messageConfiguration.targetFullInventoryNotification);
             return;
         }
 
@@ -48,7 +48,7 @@ public class DoubleJumpItemCommand {
                 .placeholder("{PLAYER}", target.getName())
                 .build();
 
-        this.notificationSender.sendMessage(sender, notification);
+        this.notificationSender.send(sender, notification);
     }
 
     @Execute(route = "item-remove", required = 1)
@@ -59,7 +59,7 @@ public class DoubleJumpItemCommand {
         Inventory targetEnderChest = target.getEnderChest();
 
         if (!targetInventory.contains(jumpItem) && !targetEnderChest.contains(jumpItem)) {
-            this.notificationSender.sendMessage(sender, this.messageConfiguration.targetHasNoJumpItemNotification);
+            this.notificationSender.send(sender, this.messageConfiguration.targetHasNoJumpItemNotification);
             return;
         }
 
@@ -71,6 +71,6 @@ public class DoubleJumpItemCommand {
                 .placeholder("{PLAYER}", target.getName())
                 .build();
 
-        this.notificationSender.sendMessage(sender, notification);
+        this.notificationSender.send(sender, notification);
     }
 }

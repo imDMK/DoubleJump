@@ -46,8 +46,8 @@ import com.github.imdmk.doublejump.region.impl.EmptyRegionProvider;
 import com.github.imdmk.doublejump.region.impl.WorldGuardRegionProvider;
 import com.github.imdmk.doublejump.scheduler.TaskScheduler;
 import com.github.imdmk.doublejump.scheduler.TaskSchedulerImpl;
+import com.github.imdmk.doublejump.update.UpdateListener;
 import com.github.imdmk.doublejump.update.UpdateService;
-import com.github.imdmk.doublejump.util.DurationUtil;
 import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
@@ -67,7 +67,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.File;
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -84,6 +83,7 @@ public class DoubleJump implements DoubleJumpApi {
     private final RegionProvider regionProvider;
 
     private final JumpItemService jumpItemService;
+    private final UpdateService updateService;
 
     private final JumpPlayerManager jumpPlayerManager;
 
@@ -116,6 +116,7 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Services */
         this.jumpItemService = new JumpItemService(this.pluginConfiguration.jumpConfiguration.itemConfiguration);
+        this.updateService = new UpdateService(pluginDescriptionFile);
 
         /* Managers */
         this.jumpPlayerManager = new JumpPlayerManager(this.regionProvider, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpConfiguration.limitConfiguration.enabled, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limit, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limitsByPermissions);
@@ -136,7 +137,8 @@ public class DoubleJump implements DoubleJumpApi {
                 new JumpFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
                 new JumpRefreshListener(this.jumpPlayerManager, this.taskScheduler),
                 new JumpRegenerationListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
-                new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager)
+                new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
+                new UpdateListener(this.pluginConfiguration, this.notificationSender, this.updateService, this.taskScheduler)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
@@ -157,12 +159,6 @@ public class DoubleJump implements DoubleJumpApi {
                     new JumpPlayerJumpsPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
                     new JumpPlayerStreakPlaceholder(pluginDescriptionFile, this.jumpPlayerManager)
             ).forEach(this.placeholderRegistry::register);
-        }
-
-        /* Update check */
-        if (this.pluginConfiguration.checkForUpdate) {
-            UpdateService updateService = new UpdateService(pluginDescriptionFile, logger);
-            this.taskScheduler.runLaterAsync(updateService::check, DurationUtil.toTicks(Duration.ofSeconds(3)));
         }
 
         /* Metrics */

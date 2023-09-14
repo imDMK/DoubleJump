@@ -41,7 +41,7 @@ public class JumpDisableListener implements Listener {
         if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(newGameMode)) {
             this.jumpPlayerManager.disable(player);
 
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
         }
     }
 
@@ -53,7 +53,7 @@ public class JumpDisableListener implements Listener {
         if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
             this.jumpPlayerManager.disable(player);
 
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
         }
     }
 }

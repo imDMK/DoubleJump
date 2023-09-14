@@ -65,7 +65,7 @@ public class DoubleJumpListener implements Listener {
                     .placeholder("{STREAK}", jumpPlayer.getStreak())
                     .build();
 
-            this.notificationSender.sendMessage(player, notification);
+            this.notificationSender.send(player, notification);
         }
 
         if (this.jumpConfiguration.limitConfiguration.enabled) {

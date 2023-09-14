@@ -36,27 +36,27 @@ public class DoubleJumpCommand {
         String playerWorldName = player.getWorld().getName();
 
         if (this.regionProvider.isInRegion(player)) {
-            this.notificationSender.sendMessage(player, this.messageConfiguration.targetInDisabledRegionNotification);
+            this.notificationSender.send(player, this.messageConfiguration.targetInDisabledRegionNotification);
             return;
         }
 
         if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
             return;
         }
 
         if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
             return;
         }
 
         if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
             this.jumpPlayerManager.disable(player);
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeDisabledNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledNotification);
         }
         else {
             this.jumpPlayerManager.enable(player, true);
-            this.notificationSender.sendMessage(player, this.messageConfiguration.jumpModeEnabledNotification);
+            this.notificationSender.send(player, this.messageConfiguration.jumpModeEnabledNotification);
         }
     }
 
@@ -66,17 +66,17 @@ public class DoubleJumpCommand {
         String targetWorldName = target.getWorld().getName();
 
         if (this.regionProvider.isInRegion(player)) {
-            this.notificationSender.sendMessage(player, this.messageConfiguration.targetInDisabledRegionNotification);
+            this.notificationSender.send(player, this.messageConfiguration.targetInDisabledRegionNotification);
             return;
         }
 
         if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(targetGameMode)) {
-            this.notificationSender.sendMessage(player, this.messageConfiguration.targetHasDisabledGameModeNotification);
+            this.notificationSender.send(player, this.messageConfiguration.targetHasDisabledGameModeNotification);
             return;
         }
 
         if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(targetWorldName)) {
-            this.notificationSender.sendMessage(player, this.messageConfiguration.targetInDisabledWorldNotification);
+            this.notificationSender.send(player, this.messageConfiguration.targetInDisabledWorldNotification);
             return;
         }
 
@@ -87,7 +87,7 @@ public class DoubleJumpCommand {
                 .placeholder("{PLAYER}", target.getName())
                 .build();
 
-        this.notificationSender.sendMessage(player, notification);
+        this.notificationSender.send(player, notification);
     }
 
     @Execute(route = "disable-for", required = 1)
@@ -99,6 +99,6 @@ public class DoubleJumpCommand {
                 .placeholder("{PLAYER}", target.getName())
                 .build();
 
-        this.notificationSender.sendMessage(player, notification);
+        this.notificationSender.send(player, notification);
     }
 }

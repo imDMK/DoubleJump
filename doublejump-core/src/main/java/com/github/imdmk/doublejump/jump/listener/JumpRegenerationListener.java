@@ -53,6 +53,6 @@ public class JumpRegenerationListener implements Listener {
         jumpPlayer.addJumps(1);
         jumpPlayer.addJumpRegenerationDelay(this.jumpConfiguration.limitConfiguration.regenerationDelay);
 
-        this.notificationSender.sendMessage(player, this.messageConfiguration.jumpLimitRegenerationNotification);
+        this.notificationSender.send(player, this.messageConfiguration.jumpLimitRegenerationNotification);
     }
 }
