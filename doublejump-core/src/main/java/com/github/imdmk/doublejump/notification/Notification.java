@@ -57,7 +57,7 @@ public record Notification(NotificationType type, String message) {
 
         private void replacePlaceholders() {
             for (Map.Entry<String, String> entry : this.placeholders.entrySet()) {
-                this.message = message.replace(entry.getKey(), entry.getValue());
+                this.message = this.message.replace(entry.getKey(), entry.getValue());
             }
         }
 
