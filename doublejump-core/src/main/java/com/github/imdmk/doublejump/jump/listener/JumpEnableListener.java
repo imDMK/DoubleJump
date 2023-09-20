@@ -4,6 +4,7 @@ import com.github.imdmk.doublejump.configuration.MessageConfiguration;
 import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
@@ -31,16 +32,18 @@ public class JumpEnableListener implements Listener {
     private final JumpConfiguration jumpConfiguration;
     private final MessageConfiguration messageConfiguration;
     private final JumpPlayerManager jumpPlayerManager;
+    private final JumpPlayerService jumpPlayerService;
     private final NotificationSender notificationSender;
     private final TaskScheduler taskScheduler;
     private final RegionProvider regionProvider;
 
-    public JumpEnableListener(Plugin plugin, Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, NotificationSender notificationSender, TaskScheduler taskScheduler, RegionProvider regionProvider) {
+    public JumpEnableListener(Plugin plugin, Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, NotificationSender notificationSender, TaskScheduler taskScheduler, RegionProvider regionProvider) {
         this.plugin = plugin;
         this.server = server;
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.jumpPlayerManager = jumpPlayerManager;
+        this.jumpPlayerService = jumpPlayerService;
         this.notificationSender = notificationSender;
         this.taskScheduler = taskScheduler;
         this.regionProvider = regionProvider;
@@ -190,7 +193,7 @@ public class JumpEnableListener implements Listener {
         }
 
         if (this.jumpConfiguration.enableJumpModeOnJoinForPlayers || this.jumpConfiguration.enableJumpModeOnJoinForAdmins && player.isOp()) {
-            this.taskScheduler.runLaterAsync(() -> this.jumpPlayerManager.enable(player, true), 40L);
+            this.taskScheduler.runLaterAsync(() -> this.jumpPlayerService.enable(player, true), 40L);
         }
     }
 }

@@ -11,23 +11,14 @@ import com.github.imdmk.doublejump.configuration.transformer.ColorTransformer;
 import com.github.imdmk.doublejump.configuration.transformer.ComponentTransformer;
 import com.github.imdmk.doublejump.configuration.transformer.EnchantmentTransformer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommand;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommandEditor;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.command.DoubleJumpItemCommand;
 import com.github.imdmk.doublejump.jump.item.command.DoubleJumpItemCommandEditor;
-import com.github.imdmk.doublejump.jump.item.listener.JumpItemActionBlockListener;
-import com.github.imdmk.doublejump.jump.item.listener.JumpItemDisableListener;
-import com.github.imdmk.doublejump.jump.item.listener.JumpItemDropListener;
-import com.github.imdmk.doublejump.jump.item.listener.JumpItemEnableListener;
-import com.github.imdmk.doublejump.jump.item.listener.JumpItemInteractListener;
-import com.github.imdmk.doublejump.jump.listener.DoubleJumpListener;
-import com.github.imdmk.doublejump.jump.listener.JumpDisableListener;
-import com.github.imdmk.doublejump.jump.listener.JumpEnableListener;
-import com.github.imdmk.doublejump.jump.listener.JumpFallDamageListener;
-import com.github.imdmk.doublejump.jump.listener.JumpRefreshListener;
-import com.github.imdmk.doublejump.jump.listener.JumpRegenerationListener;
-import com.github.imdmk.doublejump.jump.listener.JumpStreakResetListener;
+import com.github.imdmk.doublejump.jump.item.listener.*;
+import com.github.imdmk.doublejump.jump.listener.*;
 import com.github.imdmk.doublejump.jump.particle.JumpParticleSerializer;
 import com.github.imdmk.doublejump.jump.placeholder.JumpPlayerStreakPlaceholder;
 import com.github.imdmk.doublejump.jump.placeholder.delay.JumpPlayerDelayPlaceholder;
@@ -83,6 +74,7 @@ public class DoubleJump implements DoubleJumpApi {
     private final RegionProvider regionProvider;
 
     private final JumpPlayerManager jumpPlayerManager;
+    private final JumpPlayerService jumpPlayerService;
 
     private LiteCommands<CommandSender> liteCommands;
 
@@ -109,12 +101,14 @@ public class DoubleJump implements DoubleJumpApi {
         /* Hooks */
         this.regionProvider = this.hookRegionProvider();
 
+        /* Managers */
+        this.jumpPlayerManager = new JumpPlayerManager();
+
         /* Services */
+        this.jumpPlayerService = new JumpPlayerService(this.regionProvider, this.jumpPlayerManager, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpConfiguration.limitConfiguration.enabled, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limit, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limitsByPermissions);
+
         JumpItemService jumpItemService = new JumpItemService(this.pluginConfiguration.jumpConfiguration.itemConfiguration);
         UpdateService updateService = new UpdateService(pluginDescriptionFile);
-
-        /* Managers */
-        this.jumpPlayerManager = new JumpPlayerManager(this.regionProvider, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpConfiguration.limitConfiguration.enabled, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limit, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limitsByPermissions);
 
         /* Task Scheduler */
         TaskScheduler taskScheduler = new TaskSchedulerImpl(plugin, this.server);
@@ -122,15 +116,15 @@ public class DoubleJump implements DoubleJumpApi {
         /* Listeners */
         Stream.of(
                 new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService),
-                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager),
-                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager),
-                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager),
-                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, jumpItemService, this.jumpPlayerManager, this.regionProvider),
+                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager, this.jumpPlayerService),
+                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerService),
+                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager, this.jumpPlayerService),
+                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, jumpItemService, this.jumpPlayerService, this.regionProvider),
                 new DoubleJumpListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender),
-                new JumpDisableListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
-                new JumpEnableListener(plugin, this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.notificationSender, taskScheduler, this.regionProvider),
+                new JumpDisableListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerService),
+                new JumpEnableListener(plugin, this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.jumpPlayerService, this.notificationSender, taskScheduler, this.regionProvider),
                 new JumpFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
-                new JumpRefreshListener(this.jumpPlayerManager, taskScheduler),
+                new JumpRefreshListener(this.jumpPlayerService, taskScheduler),
                 new JumpRegenerationListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
                 new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
                 new UpdateListener(this.pluginConfiguration, this.notificationSender, updateService, taskScheduler)
@@ -209,7 +203,7 @@ public class DoubleJump implements DoubleJumpApi {
                 .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.messageConfiguration, this.notificationSender))
 
                 .commandInstance(
-                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.regionProvider),
+                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.jumpPlayerService, this.regionProvider),
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender)
                 )
 
@@ -249,5 +243,11 @@ public class DoubleJump implements DoubleJumpApi {
     @Override
     public JumpPlayerManager getJumpPlayerManager() {
         return this.jumpPlayerManager;
+    }
+
+    @NotNull
+    @Override
+    public JumpPlayerService getJumpPlayerService() {
+        return this.jumpPlayerService;
     }
 }

@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump.item.listener;
 
-import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
 import org.bukkit.entity.Player;
@@ -13,12 +13,12 @@ public class JumpItemDropListener implements Listener {
 
     private final JumpItemConfiguration jumpItemConfiguration;
     private final JumpItemService jumpItemService;
-    private final JumpPlayerManager jumpPlayerManager;
+    private final JumpPlayerService jumpPlayerService;
 
-    public JumpItemDropListener(JumpItemConfiguration jumpItemConfiguration, JumpItemService jumpItemService, JumpPlayerManager jumpPlayerManager) {
+    public JumpItemDropListener(JumpItemConfiguration jumpItemConfiguration, JumpItemService jumpItemService, JumpPlayerService jumpPlayerService) {
         this.jumpItemConfiguration = jumpItemConfiguration;
         this.jumpItemService = jumpItemService;
-        this.jumpPlayerManager = jumpPlayerManager;
+        this.jumpPlayerService = jumpPlayerService;
     }
 
     @EventHandler
@@ -37,7 +37,7 @@ public class JumpItemDropListener implements Listener {
         }
 
         if (this.jumpItemConfiguration.dropConfiguration.disableDoubleJumpMode) {
-            this.jumpPlayerManager.disable(player);
+            this.jumpPlayerService.disable(player);
         }
 
         if (this.jumpItemConfiguration.dropConfiguration.cancel) {

@@ -1,6 +1,7 @@
 package com.github.imdmk.doublejump;
 
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.region.RegionProvider;
 
 import javax.annotation.Nonnull;
@@ -17,9 +18,17 @@ public interface DoubleJumpApi {
 
     /**
      * <p>Gets the {@link JumpPlayerManager}</p>
-     * A class used to change the player's double jump mode or check if the player has permission to use double jump.
+     * A class used to add or player as a jump player.
      *
      * @return The jump player manager
      */
     @Nonnull JumpPlayerManager getJumpPlayerManager();
+
+    /**
+     * <p>Gets the {@link JumpPlayerService}</p>
+     * A class used to change the player's double jump mode or check if the player has permission to use double jump.
+     *
+     * @return The jump player service
+     */
+    @Nonnull JumpPlayerService getJumpPlayerService();
 }

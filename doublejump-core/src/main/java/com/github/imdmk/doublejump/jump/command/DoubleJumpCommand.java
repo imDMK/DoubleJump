@@ -3,6 +3,7 @@ package com.github.imdmk.doublejump.jump.command;
 import com.github.imdmk.doublejump.configuration.MessageConfiguration;
 import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.region.RegionProvider;
@@ -20,13 +21,15 @@ public class DoubleJumpCommand {
     private final MessageConfiguration messageConfiguration;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
+    private final JumpPlayerService jumpPlayerService;
     private final RegionProvider regionProvider;
 
-    public DoubleJumpCommand(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, RegionProvider regionProvider) {
+    public DoubleJumpCommand(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, RegionProvider regionProvider) {
         this.jumpConfiguration = jumpConfiguration;
         this.messageConfiguration = messageConfiguration;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
+        this.jumpPlayerService = jumpPlayerService;
         this.regionProvider = regionProvider;
     }
 
@@ -51,11 +54,11 @@ public class DoubleJumpCommand {
         }
 
         if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
-            this.jumpPlayerManager.disable(player);
+            this.jumpPlayerService.disable(player);
             this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledNotification);
         }
         else {
-            this.jumpPlayerManager.enable(player, true);
+            this.jumpPlayerService.enable(player, true);
             this.notificationSender.send(player, this.messageConfiguration.jumpModeEnabledNotification);
         }
     }
@@ -80,7 +83,7 @@ public class DoubleJumpCommand {
             return;
         }
 
-        this.jumpPlayerManager.enable(player, true);
+        this.jumpPlayerService.enable(player, true);
 
         Notification notification = Notification.builder()
                 .fromNotification(this.messageConfiguration.jumpModeEnabledForNotification)
@@ -92,7 +95,7 @@ public class DoubleJumpCommand {
 
     @Execute(route = "disable-for", required = 1)
     void disableFor(Player player, @Arg @Name("target") Player target) {
-        this.jumpPlayerManager.disable(target);
+        this.jumpPlayerService.disable(target);
 
         Notification notification = Notification.builder()
                 .fromNotification(this.messageConfiguration.jumpModeDisabledForNotification)
