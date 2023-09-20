@@ -23,26 +23,15 @@ public class PluginConfiguration extends OkaeriConfig {
     })
     public boolean checkForUpdate = true;
 
-    @Comment("# Specifies whether \"/doublejump\" command should be enabled")
-    public boolean doubleJumpCommandEnabled = true;
-
-    @Comment("# Permissions")
+    @Comment("# Global double jump use permission")
     public String doubleJumpUsePermission = "doublejump.use";
-    public String doubleJumpCommandPermission = "command.doublejump";
-    public String doubleJumpEnableForPermission = "command.doublejump.enablefor";
-    public String doubleJumpGiveItemPermission = "command.doublejump.giveitem";
 
-    @Comment({
-            "# ",
-            "# Jump configuration",
-            "# "
-    })
+    @Comment({"# ", "# Command configuration", "# "})
+    public CommandConfiguration commandConfiguration = new CommandConfiguration();
+
+    @Comment({"# ", "# Jump configuration", "# "})
     public JumpConfiguration jumpConfiguration = new JumpConfiguration();
 
-    @Comment({
-            "# ",
-            "# Message configuration",
-            "# "
-    })
+    @Comment({"# ", "# Message configuration", "# "})
     public MessageConfiguration messageConfiguration = new MessageConfiguration();
 }

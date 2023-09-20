@@ -141,7 +141,7 @@ public class DoubleJump implements DoubleJumpApi {
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
-        if (this.pluginConfiguration.doubleJumpCommandEnabled) {
+        if (this.pluginConfiguration.commandConfiguration.doubleJumpEnabled) {
             this.liteCommands = this.registerLiteCommands();
         }
 
@@ -217,8 +217,8 @@ public class DoubleJump implements DoubleJumpApi {
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender)
                 )
 
-                .commandEditor(DoubleJumpCommand.class, new DoubleJumpCommandEditor(this.pluginConfiguration))
-                .commandEditor(DoubleJumpItemCommand.class, new DoubleJumpItemCommandEditor(this.pluginConfiguration))
+                .commandEditor(DoubleJumpCommand.class, new DoubleJumpCommandEditor(this.pluginConfiguration.commandConfiguration))
+                .commandEditor(DoubleJumpItemCommand.class, new DoubleJumpItemCommandEditor(this.pluginConfiguration.commandConfiguration))
 
                 .register();
     }
