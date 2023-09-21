@@ -18,7 +18,7 @@ import eu.okaeri.configs.annotation.Header;
 public class PluginConfiguration extends OkaeriConfig {
 
     @Comment({
-            "# Specifies whether to check for a new plug-in version when enabling it",
+            "# Specifies whether to check for a new plug-in version when the administrator joins the server",
             "# I highly recommend enabling this option"
     })
     public boolean checkForUpdate = true;
