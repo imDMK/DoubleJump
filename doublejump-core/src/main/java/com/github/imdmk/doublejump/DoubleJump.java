@@ -167,7 +167,10 @@ public class DoubleJump implements DoubleJumpApi {
             this.liteCommands.getPlatform().unregisterAll();
         }
 
-        this.placeholderRegistry.unregisterAll();
+        if (this.placeholderRegistry != null) {
+            this.placeholderRegistry.unregisterAll();
+        }
+
         this.bukkitAudiences.close();
         this.metrics.shutdown();
 
