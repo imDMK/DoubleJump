@@ -14,14 +14,14 @@ import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
-public class ConfigurationService {
+public class ConfigurationFactory {
 
-    private final Set<OkaeriConfig> okaeriConfigs = new HashSet<>();
+    private ConfigurationFactory() {
+        throw new UnsupportedOperationException("Unsupported operation.");
+    }
 
-    public <T extends OkaeriConfig> T create(Class<T> config, File dataFolder) {
+    public static <T extends OkaeriConfig> T create(Class<T> config, File dataFolder) {
         T configFile = ConfigManager.create(config);
 
         configFile.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons());
@@ -41,14 +41,6 @@ public class ConfigurationService {
         configFile.saveDefaults();
         configFile.load(true);
 
-        this.okaeriConfigs.add(configFile);
-
         return configFile;
-    }
-
-    public void reload() {
-        for (OkaeriConfig config : this.okaeriConfigs) {
-            config.load();
-        }
     }
 }
