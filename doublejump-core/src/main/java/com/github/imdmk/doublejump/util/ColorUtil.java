@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.util.color;
+package com.github.imdmk.doublejump.util;
 
 import org.bukkit.Color;
 

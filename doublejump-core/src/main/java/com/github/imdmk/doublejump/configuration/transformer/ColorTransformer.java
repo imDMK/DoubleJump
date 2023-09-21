@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.configuration.transformer;
 
-import com.github.imdmk.doublejump.util.color.ColorUtil;
+import com.github.imdmk.doublejump.util.ColorUtil;
 import eu.okaeri.configs.schema.GenericsPair;
 import eu.okaeri.configs.serdes.BidirectionalTransformer;
 import eu.okaeri.configs.serdes.SerdesContext;
