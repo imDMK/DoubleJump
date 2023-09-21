@@ -16,6 +16,9 @@ public class JumpPlayer {
 
     private Instant endOfJumpsRegenerationDelay;
 
+    private boolean delayNotificationReceived;
+    private boolean jumpsNotificationReceived;
+
     public JumpPlayer() {
         this.endOfDelay = Instant.MIN;
         this.streak = 0;
@@ -144,5 +147,21 @@ public class JumpPlayer {
 
     public void setEndOfJumpsRegenerationDelay(Instant endOfJumpsRegenerationDelay) {
         this.endOfJumpsRegenerationDelay = endOfJumpsRegenerationDelay;
+    }
+
+    public boolean isDelayNotificationReceived() {
+        return this.delayNotificationReceived;
+    }
+
+    public void setDelayNotificationReceived(boolean delayNotificationReceived) {
+        this.delayNotificationReceived = delayNotificationReceived;
+    }
+
+    public boolean isJumpsNotificationReceived() {
+        return this.jumpsNotificationReceived;
+    }
+
+    public void setJumpsNotificationReceived(boolean jumpsNotificationReceived) {
+        this.jumpsNotificationReceived = jumpsNotificationReceived;
     }
 }

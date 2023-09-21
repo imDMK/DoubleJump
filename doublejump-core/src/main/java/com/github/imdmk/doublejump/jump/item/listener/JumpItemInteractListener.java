@@ -6,14 +6,13 @@ import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
-import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
+import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
+import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
-import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.util.DurationUtil;
-import org.bukkit.GameMode;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,20 +30,20 @@ public class JumpItemInteractListener implements Listener {
     private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
-    private final JumpItemService jumpItemService;
     private final JumpPlayerService jumpPlayerService;
-    private final RegionProvider regionProvider;
+    private final JumpItemService jumpItemService;
+    private final JumpRestrictionService jumpRestrictionService;
 
-    public JumpItemInteractListener(Server server, JumpSettings jumpSettings, JumpItemSettings jumpItemSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpItemService jumpItemService, JumpPlayerService jumpPlayerService, RegionProvider regionProvider) {
+    public JumpItemInteractListener(Server server, JumpSettings jumpSettings, JumpItemSettings jumpItemSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpItemService jumpItemService, JumpRestrictionService jumpRestrictionService) {
         this.server = server;
         this.jumpSettings = jumpSettings;
         this.jumpItemSettings = jumpItemSettings;
         this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
-        this.jumpItemService = jumpItemService;
         this.jumpPlayerService = jumpPlayerService;
-        this.regionProvider = regionProvider;
+        this.jumpItemService = jumpItemService;
+        this.jumpRestrictionService = jumpRestrictionService;
     }
 
     @EventHandler
@@ -73,26 +72,8 @@ public class JumpItemInteractListener implements Listener {
             return;
         }
 
-        if (this.regionProvider.isInRegion(player)) {
+        if (this.jumpRestrictionService.isPassedRestrictions(player, true)) {
             event.setCancelled(true);
-
-            this.notificationSender.send(player, this.notificationSettings.jumpModeDisableRegionNotification);
-            return;
-        }
-
-        GameMode playerGameMode = player.getGameMode();
-        if (this.jumpSettings.restrictionsSettings.disabledGameModes.contains(playerGameMode)) {
-            event.setCancelled(true);
-
-            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledGameModeNotification);
-            return;
-        }
-
-        String playerWorldName = player.getWorld().getName();
-        if (this.jumpSettings.restrictionsSettings.disabledWorlds.contains(playerWorldName)) {
-            event.setCancelled(true);
-
-            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledWorldNotification);
             return;
         }
 
@@ -111,34 +92,7 @@ public class JumpItemInteractListener implements Listener {
         if (this.jumpItemSettings.usageConfiguration.doubleJump) {
             JumpPlayer jumpPlayer = this.jumpPlayerService.getOrCreateJumpPlayer(player);
 
-            if (jumpPlayer.isDelay()) {
-                Notification notification = Notification.builder()
-                        .fromNotification(this.notificationSettings.jumpDelayNotification)
-                        .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
-                        .build();
-
-                this.notificationSender.send(player, notification);
-                return;
-            }
-
-            if (!jumpPlayer.hasJumps()) {
-                if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
-                    this.notificationSender.send(player, this.notificationSettings.jumpLimitNotification);
-                    return;
-                }
-
-                Notification jumpLimitDelayNotification = Notification.builder()
-                        .fromNotification(this.notificationSettings.jumpLimitDelayNotification)
-                        .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
-                        .build();
-
-                this.notificationSender.send(player, jumpLimitDelayNotification);
-                return;
-            }
-
-            DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
-
-            this.server.getPluginManager().callEvent(doubleJumpEvent);
+            this.useDoubleJump(player, jumpPlayer);
         }
 
         this.reduceDurability(clickedItem, this.jumpItemSettings.usageConfiguration.reduceDurability);
@@ -146,6 +100,37 @@ public class JumpItemInteractListener implements Listener {
         if (this.jumpItemSettings.usageConfiguration.disableDoubleJumpMode) {
             this.jumpPlayerService.disable(player);
         }
+    }
+
+    private void useDoubleJump(Player player, JumpPlayer jumpPlayer) {
+        if (jumpPlayer.isDelay()) {
+            Notification notification = Notification.builder()
+                    .fromNotification(this.notificationSettings.jumpDelayNotification)
+                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
+                    .build();
+
+            this.notificationSender.send(player, notification);
+            return;
+        }
+
+        if (!jumpPlayer.hasJumps()) {
+            if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
+                this.notificationSender.send(player, this.notificationSettings.jumpLimitNotification);
+                return;
+            }
+
+            Notification jumpLimitDelayNotification = Notification.builder()
+                    .fromNotification(this.notificationSettings.jumpLimitDelayNotification)
+                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
+                    .build();
+
+            this.notificationSender.send(player, jumpLimitDelayNotification);
+            return;
+        }
+
+        DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
+
+        this.server.getPluginManager().callEvent(doubleJumpEvent);
     }
 
     private void reduceDurability(ItemStack item, int reduceBy) {

@@ -2,13 +2,12 @@ package com.github.imdmk.doublejump.jump;
 
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
 import com.github.imdmk.doublejump.jump.particle.JumpParticleSettings;
+import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionSettings;
 import com.github.imdmk.doublejump.jump.sound.JumpSoundSettings;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
-import org.bukkit.GameMode;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 
 public class JumpSettings extends OkaeriConfig {
@@ -129,30 +128,7 @@ public class JumpSettings extends OkaeriConfig {
             "# Jump restrictions configuration",
             "# "
     })
-    public RestrictionsSettings restrictionsSettings = new RestrictionsSettings();
-
-    public static class RestrictionsSettings extends OkaeriConfig {
-
-        @Comment({
-                "# Names of regions where the player will not be able to double-jump",
-                "# The WorldGuard plugin is required for this feature to work"
-        })
-        public List<String> disabledRegions = List.of(
-                "example-region"
-        );
-
-        @Comment("# Names of worlds where the player will not be able to double-jump")
-        public List<String> disabledWorlds = List.of(
-                "example-world"
-        );
-
-        @Comment("# The names of the game modes during which the player will not be able to double-jump")
-        public List<GameMode> disabledGameModes = List.of(
-                GameMode.SPECTATOR,
-                GameMode.CREATIVE
-        );
-
-    }
+    public JumpRestrictionSettings restrictionSettings = new JumpRestrictionSettings();
 
     @Comment({
             "# ",

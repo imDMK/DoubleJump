@@ -118,17 +118,16 @@ public class JumpPlayerService {
      * @return Whether the player can use double jump.
      */
     public boolean canUseDoubleJump(Player player) {
-        GameMode playerGameMode = player.getGameMode();
-        World playerWorld = player.getWorld();
-
         if (this.regionProvider.isInRegion(player)) {
             return false;
         }
 
+        GameMode playerGameMode = player.getGameMode();
         if (this.disabledGameModes.contains(playerGameMode)) {
             return false;
         }
 
+        World playerWorld = player.getWorld();
         if (this.disabledWorlds.contains(playerWorld.getName())) {
             return false;
         }

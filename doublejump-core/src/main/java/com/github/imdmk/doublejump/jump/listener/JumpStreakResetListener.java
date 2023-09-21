@@ -7,7 +7,10 @@ import com.github.imdmk.doublejump.jump.event.reset.JumpStreakResetEvent;
 import com.github.imdmk.doublejump.jump.event.reset.JumpStreakResetReason;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -62,7 +65,7 @@ public class JumpStreakResetListener implements Listener {
             return;
         }
 
-        if (!player.isOnGround()) {
+        if (!this.isOnGround(player)) {
             return;
         }
 
@@ -78,6 +81,12 @@ public class JumpStreakResetListener implements Listener {
         }
 
         this.resetStreak(player, jumpPlayer, JumpStreakResetReason.PLAYER_ON_GROUND);
+    }
+
+    private boolean isOnGround(Player player) {
+        Location playerLocation = player.getLocation();
+
+        return playerLocation.getBlock().getRelative(BlockFace.SOUTH).getType() != Material.AIR;
     }
 
     private void resetStreak(Player player, JumpPlayer jumpPlayer, JumpStreakResetReason streakResetReason) {

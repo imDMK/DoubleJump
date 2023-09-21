@@ -24,23 +24,6 @@ public class JumpFallDamageListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        if (!this.jumpSettings.jumpFallDamageEnabled) {
-            return;
-        }
-
-        Player player = event.getPlayer();
-
-        if (player.isFlying()) {
-            return;
-        }
-
-        if (this.shouldTakeFallDamage(player)) {
-            player.setAllowFlight(false);
-        }
-    }
-
-    @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (this.jumpSettings.jumpFallDamageEnabled) {
             return;
@@ -61,17 +44,30 @@ public class JumpFallDamageListener implements Listener {
         event.setCancelled(true);
     }
 
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (!this.jumpSettings.jumpFallDamageEnabled) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+
+        if (player.isFlying()) {
+            return;
+        }
+
+        if (this.shouldTakeFallDamage(player)) {
+            player.setAllowFlight(false);
+        }
+    }
+
     private boolean shouldTakeFallDamage(Player player) {
-        if (player.getFallDistance() < 4) {
+        if (player.getFallDistance() < 4.0F) {
             return false;
         }
 
         Location playerLocation = player.getLocation();
-        World playerWorld = playerLocation.getWorld();
-
-        if (playerWorld == null) {
-            return false;
-        }
+        World playerWorld = player.getWorld();
 
         if (playerLocation.subtract(0, 1, 0).getBlock().getType() == Material.AIR) {
             return false;

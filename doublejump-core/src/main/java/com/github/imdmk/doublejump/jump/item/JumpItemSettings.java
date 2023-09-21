@@ -1,6 +1,5 @@
 package com.github.imdmk.doublejump.jump.item;
 
-import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
@@ -35,11 +34,7 @@ public class JumpItemSettings extends OkaeriConfig {
             .enchant(Enchantment.DURABILITY, 10)
             .build();
 
-    @Comment({
-            "# ",
-            "# Jump item usage configuration",
-            "# "
-    })
+    @Comment({"# ", "# Jump item usage configuration", "# "})
     public UsageConfiguration usageConfiguration = new UsageConfiguration();
 
     public static class UsageConfiguration extends OkaeriConfig {
@@ -80,11 +75,7 @@ public class JumpItemSettings extends OkaeriConfig {
 
     }
 
-    @Comment({
-            "# ",
-            "# Jump item drop configuration",
-            "# "
-    })
+    @Comment({"# ", "# Jump item drop configuration", "# "})
     public DropConfiguration dropConfiguration = new DropConfiguration();
 
     public static class DropConfiguration extends OkaeriConfig {

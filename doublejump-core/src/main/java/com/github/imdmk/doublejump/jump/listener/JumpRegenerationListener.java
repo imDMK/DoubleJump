@@ -46,7 +46,10 @@ public class JumpRegenerationListener implements Listener {
             return;
         }
 
-        if (Instant.now().isBefore(jumpPlayer.getEndOfJumpsRegenerationDelay())) {
+        Instant now = Instant.now();
+        Instant endOfJumpsRegenerationDelay = jumpPlayer.getEndOfJumpsRegenerationDelay();
+
+        if (now.isBefore(endOfJumpsRegenerationDelay)) {
             return;
         }
 

@@ -19,6 +19,11 @@ public final class TaskSchedulerImpl implements TaskScheduler {
     }
 
     @Override
+    public void runLater(Runnable runnable, long delay) {
+        this.server.getScheduler().runTaskLater(this.plugin, runnable, delay);
+    }
+
+    @Override
     public void runLaterAsync(Runnable runnable, long delay) {
         this.server.getScheduler().runTaskLaterAsynchronously(this.plugin, runnable, delay);
     }

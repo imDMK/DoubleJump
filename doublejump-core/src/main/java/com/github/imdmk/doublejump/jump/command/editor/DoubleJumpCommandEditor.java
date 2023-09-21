@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.jump.command;
+package com.github.imdmk.doublejump.jump.command.editor;
 
 import com.github.imdmk.doublejump.command.CommandSettings;
 import dev.rollczi.litecommands.factory.CommandEditor;

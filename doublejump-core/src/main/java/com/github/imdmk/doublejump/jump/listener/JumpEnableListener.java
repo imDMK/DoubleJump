@@ -5,56 +5,45 @@ import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
-import com.github.imdmk.doublejump.notification.Notification;
+import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
-import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.scheduler.TaskScheduler;
-import com.github.imdmk.doublejump.util.DurationUtil;
-import org.bukkit.GameMode;
 import org.bukkit.Server;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
 public class JumpEnableListener implements Listener {
 
-    private final Plugin plugin;
     private final Server server;
     private final JumpSettings jumpSettings;
     private final NotificationSettings notificationSettings;
+    private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
     private final JumpPlayerService jumpPlayerService;
-    private final NotificationSender notificationSender;
+    private final JumpRestrictionService jumpRestrictionService;
     private final TaskScheduler taskScheduler;
-    private final RegionProvider regionProvider;
 
-    public JumpEnableListener(Plugin plugin, Server server, JumpSettings jumpSettings, NotificationSettings notificationSettings, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, NotificationSender notificationSender, TaskScheduler taskScheduler, RegionProvider regionProvider) {
-        this.plugin = plugin;
+    public JumpEnableListener(Server server, JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpRestrictionService jumpRestrictionService, TaskScheduler taskScheduler) {
         this.server = server;
         this.jumpSettings = jumpSettings;
         this.notificationSettings = notificationSettings;
+        this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
         this.jumpPlayerService = jumpPlayerService;
-        this.notificationSender = notificationSender;
+        this.jumpRestrictionService = jumpRestrictionService;
         this.taskScheduler = taskScheduler;
-        this.regionProvider = regionProvider;
     }
 
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
-
-        GameMode playerGameMode = player.getGameMode();
-        World playerWorld = player.getWorld();
 
         Optional<JumpPlayer> jumpPlayerOptional = this.jumpPlayerManager.getJumpPlayer(player.getUniqueId());
         if (jumpPlayerOptional.isEmpty()) {
@@ -68,43 +57,11 @@ public class JumpEnableListener implements Listener {
         player.setFlying(false);
         player.setAllowFlight(false);
 
-        if (jumpPlayer.isDelay()) {
-            Notification jumpDelayNotification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
-                    .build();
-
-            this.notificationSender.send(player, jumpDelayNotification);
+        if (this.jumpRestrictionService.isPassedRestrictions(player, true)) {
             return;
         }
 
-        if (!jumpPlayer.hasJumps()) {
-            if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
-                this.notificationSender.send(player, this.notificationSettings.jumpLimitNotification);
-                return;
-            }
-
-            Notification jumpLimitDelayNotification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpLimitDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
-                    .build();
-
-            this.notificationSender.send(player, jumpLimitDelayNotification);
-            return;
-        }
-
-        if (this.regionProvider.isInRegion(player)) {
-            this.notificationSender.send(player, this.notificationSettings.jumpModeDisableRegionNotification);
-            return;
-        }
-
-        if (this.jumpSettings.restrictionsSettings.disabledGameModes.contains(playerGameMode)) {
-            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledGameModeNotification);
-            return;
-        }
-
-        if (this.jumpSettings.restrictionsSettings.disabledWorlds.contains(playerWorld.getName())) {
-            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledWorldNotification);
+        if (this.jumpRestrictionService.isPassedRestrictions(player, jumpPlayer, true)) {
             return;
         }
 
@@ -121,6 +78,10 @@ public class JumpEnableListener implements Listener {
             return;
         }
 
+        if (player.getAllowFlight()) {
+            return;
+        }
+
         Optional<JumpPlayer> jumpPlayerOptional = this.jumpPlayerManager.getJumpPlayer(player.getUniqueId());
         if (jumpPlayerOptional.isEmpty()) {
             return;
@@ -128,67 +89,18 @@ public class JumpEnableListener implements Listener {
 
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
-        if (jumpPlayer.isDelay()) {
-            if (player.hasMetadata("jumpDelayNotificationSent")) {
-                return;
-            }
-
-            player.setMetadata("jumpDelayNotificationSent", new FixedMetadataValue(this.plugin, true));
-
-            Notification jumpDelayNotification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
-                    .build();
-
-            this.notificationSender.send(player, jumpDelayNotification);
+        if (this.jumpRestrictionService.isPassedRestrictions(player, jumpPlayer, true)) {
             return;
         }
 
-        if (!jumpPlayer.hasJumps()) {
-            if (player.hasMetadata("jumpLimitNotificationSent")) {
-                return;
-            }
-
-            player.setMetadata("jumpLimitNotificationSent", new FixedMetadataValue(this.plugin, true));
-
-            if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
-                this.notificationSender.send(player, this.notificationSettings.jumpLimitNotification);
-                return;
-            }
-
-            Notification jumpLimitDelayNotification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpLimitDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
-                    .build();
-
-            this.notificationSender.send(player, jumpLimitDelayNotification);
-            return;
-        }
-
-        player.removeMetadata("jumpDelayNotificationSent", this.plugin);
-        player.removeMetadata("jumpLimitNotificationSent", this.plugin);
-
-        if (!player.getAllowFlight()) {
-            player.setAllowFlight(true);
-        }
+        player.setAllowFlight(true);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        GameMode playerGameMode = player.getGameMode();
-        String playerWorldName = player.getWorld().getName();
-
-        if (this.regionProvider.isInRegion(player)) {
-            return;
-        }
-
-        if (this.jumpSettings.restrictionsSettings.disabledGameModes.contains(playerGameMode)) {
-            return;
-        }
-
-        if (this.jumpSettings.restrictionsSettings.disabledWorlds.contains(playerWorldName)) {
+        if (this.jumpRestrictionService.isPassedRestrictions(player, false)) {
             return;
         }
 
