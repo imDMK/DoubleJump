@@ -1,6 +1,5 @@
 package com.github.imdmk.doublejump.jump.item;
 
-import com.github.imdmk.doublejump.jump.item.configuration.JumpItemSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;

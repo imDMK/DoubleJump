@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.jump.item.configuration;
+package com.github.imdmk.doublejump.jump.item;
 
 import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
 import dev.triumphteam.gui.builder.item.ItemBuilder;

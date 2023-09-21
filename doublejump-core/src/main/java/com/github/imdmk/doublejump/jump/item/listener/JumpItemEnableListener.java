@@ -3,7 +3,7 @@ package com.github.imdmk.doublejump.jump.item.listener;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
-import com.github.imdmk.doublejump.jump.item.configuration.JumpItemSettings;
+import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

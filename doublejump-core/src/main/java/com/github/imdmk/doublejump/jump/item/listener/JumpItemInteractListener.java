@@ -7,7 +7,7 @@ import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
-import com.github.imdmk.doublejump.jump.item.configuration.JumpItemSettings;
+import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
