@@ -4,7 +4,7 @@ import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
-import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,13 +16,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class JumpItemDisableListener implements Listener {
 
-    private final JumpItemConfiguration jumpItemConfiguration;
+    private final JumpItemSettings jumpItemSettings;
     private final JumpItemService jumpItemService;
     private final JumpPlayerManager jumpPlayerManager;
     private final JumpPlayerService jumpPlayerService;
 
-    public JumpItemDisableListener(JumpItemConfiguration jumpItemConfiguration, JumpItemService jumpItemService, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService) {
-        this.jumpItemConfiguration = jumpItemConfiguration;
+    public JumpItemDisableListener(JumpItemSettings jumpItemSettings, JumpItemService jumpItemService, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService) {
+        this.jumpItemSettings = jumpItemSettings;
         this.jumpItemService = jumpItemService;
         this.jumpPlayerManager = jumpPlayerManager;
         this.jumpPlayerService = jumpPlayerService;
@@ -34,11 +34,11 @@ public class JumpItemDisableListener implements Listener {
             return;
         }
 
-        if (!this.jumpItemConfiguration.enabled) {
+        if (!this.jumpItemSettings.enabled) {
             return;
         }
 
-        if (this.jumpItemConfiguration.usageConfiguration.usage != JumpItemUsage.WEAR_ITEM) {
+        if (this.jumpItemSettings.usageConfiguration.usage != JumpItemUsage.WEAR_ITEM) {
             return;
         }
 
@@ -55,7 +55,7 @@ public class JumpItemDisableListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (this.jumpItemConfiguration.dropConfiguration.disableDoubleJumpMode) {
+        if (this.jumpItemSettings.dropConfiguration.disableDoubleJumpMode) {
             return;
         }
 
@@ -78,7 +78,7 @@ public class JumpItemDisableListener implements Listener {
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
 
-        if (this.jumpItemConfiguration.usageConfiguration.usage != JumpItemUsage.HOLD_ITEM) {
+        if (this.jumpItemSettings.usageConfiguration.usage != JumpItemUsage.HOLD_ITEM) {
             return;
         }
 

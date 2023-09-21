@@ -1,9 +1,9 @@
 package com.github.imdmk.doublejump.jump.listener;
 
-import com.github.imdmk.doublejump.configuration.MessageConfiguration;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
+import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.notification.NotificationSender;
+import com.github.imdmk.doublejump.notification.NotificationSettings;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,14 +14,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class JumpDisableListener implements Listener {
 
-    private final JumpConfiguration jumpConfiguration;
-    private final MessageConfiguration messageConfiguration;
+    private final JumpSettings jumpSettings;
+    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
     private final JumpPlayerService jumpPlayerService;
 
-    public JumpDisableListener(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerService jumpPlayerService) {
-        this.jumpConfiguration = jumpConfiguration;
-        this.messageConfiguration = messageConfiguration;
+    public JumpDisableListener(JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerService jumpPlayerService) {
+        this.jumpSettings = jumpSettings;
+        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
         this.jumpPlayerService = jumpPlayerService;
     }
@@ -38,10 +38,10 @@ public class JumpDisableListener implements Listener {
         Player player = event.getPlayer();
         GameMode newGameMode = event.getNewGameMode();
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(newGameMode)) {
+        if (this.jumpSettings.restrictionsSettings.disabledGameModes.contains(newGameMode)) {
             this.jumpPlayerService.disable(player);
 
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
+            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledGameModeNotification);
         }
     }
 
@@ -50,10 +50,10 @@ public class JumpDisableListener implements Listener {
         Player player = event.getPlayer();
         String playerWorldName = player.getWorld().getName();
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
+        if (this.jumpSettings.restrictionsSettings.disabledWorlds.contains(playerWorldName)) {
             this.jumpPlayerService.disable(player);
 
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
+            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledWorldNotification);
         }
     }
 }

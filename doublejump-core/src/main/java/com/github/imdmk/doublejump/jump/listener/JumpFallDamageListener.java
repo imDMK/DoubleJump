@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump.jump.listener;
 
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.jump.JumpSettings;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -15,17 +15,17 @@ import org.bukkit.util.Vector;
 
 public class JumpFallDamageListener implements Listener {
 
-    private final JumpConfiguration jumpConfiguration;
+    private final JumpSettings jumpSettings;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public JumpFallDamageListener(JumpConfiguration jumpConfiguration, JumpPlayerManager jumpPlayerManager) {
-        this.jumpConfiguration = jumpConfiguration;
+    public JumpFallDamageListener(JumpSettings jumpSettings, JumpPlayerManager jumpPlayerManager) {
+        this.jumpSettings = jumpSettings;
         this.jumpPlayerManager = jumpPlayerManager;
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!this.jumpConfiguration.jumpFallDamageEnabled) {
+        if (!this.jumpSettings.jumpFallDamageEnabled) {
             return;
         }
 
@@ -42,7 +42,7 @@ public class JumpFallDamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (this.jumpConfiguration.jumpFallDamageEnabled) {
+        if (this.jumpSettings.jumpFallDamageEnabled) {
             return;
         }
 

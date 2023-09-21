@@ -1,22 +1,22 @@
 package com.github.imdmk.doublejump.jump.item.command;
 
-import com.github.imdmk.doublejump.configuration.CommandConfiguration;
+import com.github.imdmk.doublejump.command.CommandSettings;
 import dev.rollczi.litecommands.factory.CommandEditor;
 
 import java.util.List;
 
 public class DoubleJumpItemCommandEditor implements CommandEditor {
 
-    private final CommandConfiguration commandConfiguration;
+    private final CommandSettings commandSettings;
 
-    public DoubleJumpItemCommandEditor(CommandConfiguration commandConfiguration) {
-        this.commandConfiguration = commandConfiguration;
+    public DoubleJumpItemCommandEditor(CommandSettings commandSettings) {
+        this.commandSettings = commandSettings;
     }
 
     @Override
     public State edit(State state) {
-        state.editChild("give-item", s -> s.permission(List.of(this.commandConfiguration.doubleJumpGiveItemPermission)));
-        state.editChild("remove-item", s -> s.permission(List.of(this.commandConfiguration.doubleJumpGiveItemPermission)));
+        state.editChild("give-item", s -> s.permission(List.of(this.commandSettings.doubleJumpGiveItemPermission)));
+        state.editChild("remove-item", s -> s.permission(List.of(this.commandSettings.doubleJumpGiveItemPermission)));
 
         return state;
     }

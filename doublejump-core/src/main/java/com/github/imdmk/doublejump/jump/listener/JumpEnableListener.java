@@ -1,13 +1,13 @@
 package com.github.imdmk.doublejump.jump.listener;
 
-import com.github.imdmk.doublejump.configuration.MessageConfiguration;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
+import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
+import com.github.imdmk.doublejump.notification.NotificationSettings;
 import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.scheduler.TaskScheduler;
 import com.github.imdmk.doublejump.util.DurationUtil;
@@ -29,19 +29,19 @@ public class JumpEnableListener implements Listener {
 
     private final Plugin plugin;
     private final Server server;
-    private final JumpConfiguration jumpConfiguration;
-    private final MessageConfiguration messageConfiguration;
+    private final JumpSettings jumpSettings;
+    private final NotificationSettings notificationSettings;
     private final JumpPlayerManager jumpPlayerManager;
     private final JumpPlayerService jumpPlayerService;
     private final NotificationSender notificationSender;
     private final TaskScheduler taskScheduler;
     private final RegionProvider regionProvider;
 
-    public JumpEnableListener(Plugin plugin, Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, NotificationSender notificationSender, TaskScheduler taskScheduler, RegionProvider regionProvider) {
+    public JumpEnableListener(Plugin plugin, Server server, JumpSettings jumpSettings, NotificationSettings notificationSettings, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, NotificationSender notificationSender, TaskScheduler taskScheduler, RegionProvider regionProvider) {
         this.plugin = plugin;
         this.server = server;
-        this.jumpConfiguration = jumpConfiguration;
-        this.messageConfiguration = messageConfiguration;
+        this.jumpSettings = jumpSettings;
+        this.notificationSettings = notificationSettings;
         this.jumpPlayerManager = jumpPlayerManager;
         this.jumpPlayerService = jumpPlayerService;
         this.notificationSender = notificationSender;
@@ -70,7 +70,7 @@ public class JumpEnableListener implements Listener {
 
         if (jumpPlayer.isDelay()) {
             Notification jumpDelayNotification = Notification.builder()
-                    .fromNotification(this.messageConfiguration.jumpDelayNotification)
+                    .fromNotification(this.notificationSettings.jumpDelayNotification)
                     .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
                     .build();
 
@@ -79,13 +79,13 @@ public class JumpEnableListener implements Listener {
         }
 
         if (!jumpPlayer.hasJumps()) {
-            if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
-                this.notificationSender.send(player, this.messageConfiguration.jumpLimitNotification);
+            if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
+                this.notificationSender.send(player, this.notificationSettings.jumpLimitNotification);
                 return;
             }
 
             Notification jumpLimitDelayNotification = Notification.builder()
-                    .fromNotification(this.messageConfiguration.jumpLimitDelayNotification)
+                    .fromNotification(this.notificationSettings.jumpLimitDelayNotification)
                     .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
                     .build();
 
@@ -94,17 +94,17 @@ public class JumpEnableListener implements Listener {
         }
 
         if (this.regionProvider.isInRegion(player)) {
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisableRegionNotification);
+            this.notificationSender.send(player, this.notificationSettings.jumpModeDisableRegionNotification);
             return;
         }
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
+        if (this.jumpSettings.restrictionsSettings.disabledGameModes.contains(playerGameMode)) {
+            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledGameModeNotification);
             return;
         }
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorld.getName())) {
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
+        if (this.jumpSettings.restrictionsSettings.disabledWorlds.contains(playerWorld.getName())) {
+            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledWorldNotification);
             return;
         }
 
@@ -136,7 +136,7 @@ public class JumpEnableListener implements Listener {
             player.setMetadata("jumpDelayNotificationSent", new FixedMetadataValue(this.plugin, true));
 
             Notification jumpDelayNotification = Notification.builder()
-                    .fromNotification(this.messageConfiguration.jumpDelayNotification)
+                    .fromNotification(this.notificationSettings.jumpDelayNotification)
                     .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
                     .build();
 
@@ -151,13 +151,13 @@ public class JumpEnableListener implements Listener {
 
             player.setMetadata("jumpLimitNotificationSent", new FixedMetadataValue(this.plugin, true));
 
-            if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
-                this.notificationSender.send(player, this.messageConfiguration.jumpLimitNotification);
+            if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
+                this.notificationSender.send(player, this.notificationSettings.jumpLimitNotification);
                 return;
             }
 
             Notification jumpLimitDelayNotification = Notification.builder()
-                    .fromNotification(this.messageConfiguration.jumpLimitDelayNotification)
+                    .fromNotification(this.notificationSettings.jumpLimitDelayNotification)
                     .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
                     .build();
 
@@ -184,15 +184,15 @@ public class JumpEnableListener implements Listener {
             return;
         }
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
+        if (this.jumpSettings.restrictionsSettings.disabledGameModes.contains(playerGameMode)) {
             return;
         }
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
+        if (this.jumpSettings.restrictionsSettings.disabledWorlds.contains(playerWorldName)) {
             return;
         }
 
-        if (this.jumpConfiguration.enableJumpModeOnJoinForPlayers || this.jumpConfiguration.enableJumpModeOnJoinForAdmins && player.isOp()) {
+        if (this.jumpSettings.enableJumpModeOnJoinForPlayers || this.jumpSettings.enableJumpModeOnJoinForAdmins && player.isOp()) {
             this.taskScheduler.runLaterAsync(() -> this.jumpPlayerService.enable(player, true), 40L);
         }
     }

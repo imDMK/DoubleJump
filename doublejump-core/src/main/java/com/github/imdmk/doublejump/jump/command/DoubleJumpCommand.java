@@ -1,11 +1,11 @@
 package com.github.imdmk.doublejump.jump.command;
 
-import com.github.imdmk.doublejump.configuration.MessageConfiguration;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
+import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
+import com.github.imdmk.doublejump.notification.NotificationSettings;
 import com.github.imdmk.doublejump.region.RegionProvider;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
@@ -17,16 +17,16 @@ import org.bukkit.entity.Player;
 @Route(name = "doublejump")
 public class DoubleJumpCommand {
 
-    private final JumpConfiguration jumpConfiguration;
-    private final MessageConfiguration messageConfiguration;
+    private final JumpSettings jumpSettings;
+    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
     private final JumpPlayerService jumpPlayerService;
     private final RegionProvider regionProvider;
 
-    public DoubleJumpCommand(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, RegionProvider regionProvider) {
-        this.jumpConfiguration = jumpConfiguration;
-        this.messageConfiguration = messageConfiguration;
+    public DoubleJumpCommand(JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, RegionProvider regionProvider) {
+        this.jumpSettings = jumpSettings;
+        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
         this.jumpPlayerService = jumpPlayerService;
@@ -39,27 +39,27 @@ public class DoubleJumpCommand {
         String playerWorldName = player.getWorld().getName();
 
         if (this.regionProvider.isInRegion(player)) {
-            this.notificationSender.send(player, this.messageConfiguration.targetInDisabledRegionNotification);
+            this.notificationSender.send(player, this.notificationSettings.targetInDisabledRegionNotification);
             return;
         }
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(playerGameMode)) {
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledGameModeNotification);
+        if (this.jumpSettings.restrictionsSettings.disabledGameModes.contains(playerGameMode)) {
+            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledGameModeNotification);
             return;
         }
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(playerWorldName)) {
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledWorldNotification);
+        if (this.jumpSettings.restrictionsSettings.disabledWorlds.contains(playerWorldName)) {
+            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledWorldNotification);
             return;
         }
 
         if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
             this.jumpPlayerService.disable(player);
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeDisabledNotification);
+            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledNotification);
         }
         else {
             this.jumpPlayerService.enable(player, true);
-            this.notificationSender.send(player, this.messageConfiguration.jumpModeEnabledNotification);
+            this.notificationSender.send(player, this.notificationSettings.jumpModeEnabledNotification);
         }
     }
 
@@ -69,24 +69,24 @@ public class DoubleJumpCommand {
         String targetWorldName = target.getWorld().getName();
 
         if (this.regionProvider.isInRegion(player)) {
-            this.notificationSender.send(player, this.messageConfiguration.targetInDisabledRegionNotification);
+            this.notificationSender.send(player, this.notificationSettings.targetInDisabledRegionNotification);
             return;
         }
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledGameModes.contains(targetGameMode)) {
-            this.notificationSender.send(player, this.messageConfiguration.targetHasDisabledGameModeNotification);
+        if (this.jumpSettings.restrictionsSettings.disabledGameModes.contains(targetGameMode)) {
+            this.notificationSender.send(player, this.notificationSettings.targetHasDisabledGameModeNotification);
             return;
         }
 
-        if (this.jumpConfiguration.restrictionsConfiguration.disabledWorlds.contains(targetWorldName)) {
-            this.notificationSender.send(player, this.messageConfiguration.targetInDisabledWorldNotification);
+        if (this.jumpSettings.restrictionsSettings.disabledWorlds.contains(targetWorldName)) {
+            this.notificationSender.send(player, this.notificationSettings.targetInDisabledWorldNotification);
             return;
         }
 
         this.jumpPlayerService.enable(player, true);
 
         Notification notification = Notification.builder()
-                .fromNotification(this.messageConfiguration.jumpModeEnabledForNotification)
+                .fromNotification(this.notificationSettings.jumpModeEnabledForNotification)
                 .placeholder("{PLAYER}", target.getName())
                 .build();
 
@@ -98,7 +98,7 @@ public class DoubleJumpCommand {
         this.jumpPlayerService.disable(target);
 
         Notification notification = Notification.builder()
-                .fromNotification(this.messageConfiguration.jumpModeDisabledForNotification)
+                .fromNotification(this.notificationSettings.jumpModeDisabledForNotification)
                 .placeholder("{PLAYER}", target.getName())
                 .build();
 

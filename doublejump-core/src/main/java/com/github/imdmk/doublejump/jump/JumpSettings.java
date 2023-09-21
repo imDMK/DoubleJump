@@ -1,8 +1,8 @@
 package com.github.imdmk.doublejump.jump;
 
-import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
-import com.github.imdmk.doublejump.jump.particle.JumpParticleConfiguration;
-import com.github.imdmk.doublejump.jump.sound.JumpSoundConfiguration;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemSettings;
+import com.github.imdmk.doublejump.jump.particle.JumpParticleSettings;
+import com.github.imdmk.doublejump.jump.sound.JumpSoundSettings;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import org.bukkit.GameMode;
@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
-public class JumpConfiguration extends OkaeriConfig {
+public class JumpSettings extends OkaeriConfig {
 
     @Comment({
             "# Specifies whether to enable double jump mode for the player when he joins the server",
@@ -39,9 +39,9 @@ public class JumpConfiguration extends OkaeriConfig {
             "# Jump streak configuration",
             "# "
     })
-    public StreakConfiguration streakConfiguration = new StreakConfiguration();
+    public streakSettings streakSettings = new streakSettings();
 
-    public static class StreakConfiguration extends OkaeriConfig {
+    public static class streakSettings extends OkaeriConfig {
 
         @Comment("# Specifies whether to enable double jump series reset")
         public boolean enabled = true;
@@ -59,9 +59,9 @@ public class JumpConfiguration extends OkaeriConfig {
             "# Jump delay configuration",
             "# "
     })
-    public DelayConfiguration delayConfiguration = new DelayConfiguration();
+    public DelaySettings delaySettings = new DelaySettings();
 
-    public static class DelayConfiguration extends OkaeriConfig {
+    public static class DelaySettings extends OkaeriConfig {
 
         @Comment("# Specifies whether double jump delay should be enabled")
         public boolean enabled = true;
@@ -79,9 +79,9 @@ public class JumpConfiguration extends OkaeriConfig {
             "# Jump limit configuration",
             "# "
     })
-    public LimitConfiguration limitConfiguration = new LimitConfiguration();
+    public LimitSettings limitSettings = new LimitSettings();
 
-    public static class LimitConfiguration extends OkaeriConfig {
+    public static class LimitSettings extends OkaeriConfig {
 
         @Comment("# Specifies whether the jump limit should be enabled")
         public boolean enabled = false;
@@ -115,23 +115,23 @@ public class JumpConfiguration extends OkaeriConfig {
             "# Jump sound configuration",
             "# "
     })
-    public JumpSoundConfiguration soundConfiguration = new JumpSoundConfiguration();
+    public JumpSoundSettings soundSettings = new JumpSoundSettings();
 
     @Comment({
             "# ",
             "# Jump particle configuration",
             "# "
     })
-    public JumpParticleConfiguration particleConfiguration = new JumpParticleConfiguration();
+    public JumpParticleSettings particleSettings = new JumpParticleSettings();
 
     @Comment({
             "# ",
             "# Jump restrictions configuration",
             "# "
     })
-    public RestrictionsConfiguration restrictionsConfiguration = new RestrictionsConfiguration();
+    public RestrictionsSettings restrictionsSettings = new RestrictionsSettings();
 
-    public static class RestrictionsConfiguration extends OkaeriConfig {
+    public static class RestrictionsSettings extends OkaeriConfig {
 
         @Comment({
                 "# Names of regions where the player will not be able to double-jump",
@@ -159,5 +159,5 @@ public class JumpConfiguration extends OkaeriConfig {
             "# Jump item configuration",
             "# "
     })
-    public JumpItemConfiguration itemConfiguration = new JumpItemConfiguration();
+    public JumpItemSettings itemSettings = new JumpItemSettings();
 }

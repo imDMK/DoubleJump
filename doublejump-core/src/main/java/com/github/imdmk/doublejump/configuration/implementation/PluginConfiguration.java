@@ -1,6 +1,8 @@
-package com.github.imdmk.doublejump.configuration;
+package com.github.imdmk.doublejump.configuration.implementation;
 
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
+import com.github.imdmk.doublejump.command.CommandSettings;
+import com.github.imdmk.doublejump.jump.JumpSettings;
+import com.github.imdmk.doublejump.notification.NotificationSettings;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -27,11 +29,11 @@ public class PluginConfiguration extends OkaeriConfig {
     public String doubleJumpUsePermission = "doublejump.use";
 
     @Comment({"# ", "# Command configuration", "# "})
-    public CommandConfiguration commandConfiguration = new CommandConfiguration();
+    public CommandSettings commandSettings = new CommandSettings();
 
     @Comment({"# ", "# Jump configuration", "# "})
-    public JumpConfiguration jumpConfiguration = new JumpConfiguration();
+    public JumpSettings jumpSettings = new JumpSettings();
 
     @Comment({"# ", "# Message configuration", "# "})
-    public MessageConfiguration messageConfiguration = new MessageConfiguration();
+    public NotificationSettings notificationSettings = new NotificationSettings();
 }

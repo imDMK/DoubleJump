@@ -25,7 +25,6 @@ import com.github.imdmk.doublejump.jump.listener.JumpFallDamageListener;
 import com.github.imdmk.doublejump.jump.listener.JumpRefreshListener;
 import com.github.imdmk.doublejump.jump.listener.JumpRegenerationListener;
 import com.github.imdmk.doublejump.jump.listener.JumpStreakResetListener;
-import com.github.imdmk.doublejump.jump.particle.JumpParticleSerializer;
 import com.github.imdmk.doublejump.jump.placeholder.JumpPlayerStreakPlaceholder;
 import com.github.imdmk.doublejump.jump.placeholder.delay.JumpPlayerDelayPlaceholder;
 import com.github.imdmk.doublejump.jump.placeholder.delay.JumpPlayerIsDelayPlaceholder;
@@ -33,10 +32,8 @@ import com.github.imdmk.doublejump.jump.placeholder.delay.JumpPlayerRegeneration
 import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerHasJumpsPlaceholder;
 import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerJumpsLimitPlaceholder;
 import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerJumpsPlaceholder;
-import com.github.imdmk.doublejump.jump.sound.JumpSoundSerializer;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.notification.NotificationSerializer;
 import com.github.imdmk.doublejump.placeholder.PlaceholderRegistry;
 import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.region.impl.EmptyRegionProvider;
@@ -49,9 +46,6 @@ import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
-import eu.okaeri.configs.ConfigManager;
-import eu.okaeri.configs.serdes.commons.SerdesCommons;
-import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
@@ -115,9 +109,9 @@ public class DoubleJump implements DoubleJumpApi {
         this.jumpPlayerManager = new JumpPlayerManager();
 
         /* Services */
-        this.jumpPlayerService = new JumpPlayerService(this.regionProvider, this.jumpPlayerManager, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledWorlds, this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpConfiguration.limitConfiguration.enabled, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limit, this.pluginConfiguration.jumpConfiguration.limitConfiguration.limitsByPermissions);
+        this.jumpPlayerService = new JumpPlayerService(this.regionProvider, this.jumpPlayerManager, this.pluginConfiguration.jumpSettings.restrictionsSettings.disabledWorlds, this.pluginConfiguration.jumpSettings.restrictionsSettings.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpSettings.limitSettings.enabled, this.pluginConfiguration.jumpSettings.limitSettings.limit, this.pluginConfiguration.jumpSettings.limitSettings.limitsByPermissions);
 
-        JumpItemService jumpItemService = new JumpItemService(this.pluginConfiguration.jumpConfiguration.itemConfiguration);
+        JumpItemService jumpItemService = new JumpItemService(this.pluginConfiguration.jumpSettings.itemSettings);
         UpdateService updateService = new UpdateService(pluginDescriptionFile);
 
         /* Task Scheduler */
@@ -125,23 +119,23 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Listeners */
         Stream.of(
-                new JumpItemActionBlockListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService),
-                new JumpItemDisableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager, this.jumpPlayerService),
-                new JumpItemDropListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerService),
-                new JumpItemEnableListener(this.pluginConfiguration.jumpConfiguration.itemConfiguration, jumpItemService, this.jumpPlayerManager, this.jumpPlayerService),
-                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, jumpItemService, this.jumpPlayerService, this.regionProvider),
-                new DoubleJumpListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender),
-                new JumpDisableListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerService),
-                new JumpEnableListener(plugin, this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.jumpPlayerManager, this.jumpPlayerService, this.notificationSender, taskScheduler, this.regionProvider),
-                new JumpFallDamageListener(this.pluginConfiguration.jumpConfiguration, this.jumpPlayerManager),
+                new JumpItemActionBlockListener(this.pluginConfiguration.jumpSettings.itemSettings, jumpItemService),
+                new JumpItemDisableListener(this.pluginConfiguration.jumpSettings.itemSettings, jumpItemService, this.jumpPlayerManager, this.jumpPlayerService),
+                new JumpItemDropListener(this.pluginConfiguration.jumpSettings.itemSettings, jumpItemService, this.jumpPlayerService),
+                new JumpItemEnableListener(this.pluginConfiguration.jumpSettings.itemSettings, jumpItemService, this.jumpPlayerManager, this.jumpPlayerService),
+                new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpSettings, this.pluginConfiguration.jumpSettings.itemSettings, this.pluginConfiguration.notificationSettings, this.notificationSender, this.jumpPlayerManager, jumpItemService, this.jumpPlayerService, this.regionProvider),
+                new DoubleJumpListener(this.pluginConfiguration.jumpSettings, this.pluginConfiguration.notificationSettings, this.notificationSender),
+                new JumpDisableListener(this.pluginConfiguration.jumpSettings, this.pluginConfiguration.notificationSettings, this.notificationSender, this.jumpPlayerService),
+                new JumpEnableListener(plugin, this.server, this.pluginConfiguration.jumpSettings, this.pluginConfiguration.notificationSettings, this.jumpPlayerManager, this.jumpPlayerService, this.notificationSender, taskScheduler, this.regionProvider),
+                new JumpFallDamageListener(this.pluginConfiguration.jumpSettings, this.jumpPlayerManager),
                 new JumpRefreshListener(this.jumpPlayerService, taskScheduler),
-                new JumpRegenerationListener(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
-                new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager),
+                new JumpRegenerationListener(this.pluginConfiguration.jumpSettings, this.pluginConfiguration.notificationSettings, this.notificationSender, this.jumpPlayerManager),
+                new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpSettings, this.pluginConfiguration.notificationSettings, this.notificationSender, this.jumpPlayerManager),
                 new UpdateListener(this.pluginConfiguration, this.notificationSender, updateService, taskScheduler)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
-        if (this.pluginConfiguration.commandConfiguration.doubleJumpEnabled) {
+        if (this.pluginConfiguration.commandSettings.doubleJumpEnabled) {
             this.liteCommands = this.registerLiteCommands();
         }
 
@@ -174,51 +168,29 @@ public class DoubleJump implements DoubleJumpApi {
         }
 
         this.placeholderRegistry.unregisterAll();
+        this.bukkitAudiences.close();
+        this.metrics.shutdown();
 
         this.disableAllowFlightForOnlinePlayers();
-
-        this.bukkitAudiences.close();
-
-        this.metrics.shutdown();
-    }
-
-    private PluginConfiguration createConfiguration(File dataFolder) {
-        return ConfigManager.create(PluginConfiguration.class, (it) -> {
-            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesCommons());
-            it.withSerdesPack(registry -> {
-                registry.register(new ColorTransformer());
-                registry.register(new ComponentTransformer());
-                registry.register(new EnchantmentTransformer());
-                registry.register(new ItemStackSerializer());
-                registry.register(new ItemMetaSerializer());
-                registry.register(new NotificationSerializer());
-                registry.register(new JumpParticleSerializer());
-                registry.register(new JumpSoundSerializer());
-            });
-            it.withBindFile(new File(dataFolder, "configuration.yml"));
-            it.withRemoveOrphans(true);
-            it.saveDefaults();
-            it.load(true);
-        });
     }
 
     private LiteCommands<CommandSender> registerLiteCommands() {
         return LiteBukkitAdventurePlatformFactory.builder(this.server, "DoubleJump", false, this.bukkitAudiences, true)
                 .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Only player can use this command."))
 
-                .argument(Player.class, new PlayerArgument(this.server, this.pluginConfiguration.messageConfiguration))
+                .argument(Player.class, new PlayerArgument(this.server, this.pluginConfiguration.notificationSettings))
 
-                .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration.messageConfiguration, this.notificationSender))
+                .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration.notificationSettings, this.notificationSender))
                 .resultHandler(Notification.class, new NotificationHandler(this.notificationSender))
-                .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.messageConfiguration, this.notificationSender))
+                .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.notificationSettings, this.notificationSender))
 
                 .commandInstance(
-                        new DoubleJumpCommand(this.pluginConfiguration.jumpConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender, this.jumpPlayerManager, this.jumpPlayerService, this.regionProvider),
-                        new DoubleJumpItemCommand(this.pluginConfiguration.jumpConfiguration.itemConfiguration, this.pluginConfiguration.messageConfiguration, this.notificationSender)
+                        new DoubleJumpCommand(this.pluginConfiguration.jumpSettings, this.pluginConfiguration.notificationSettings, this.notificationSender, this.jumpPlayerManager, this.jumpPlayerService, this.regionProvider),
+                        new DoubleJumpItemCommand(this.pluginConfiguration.jumpSettings.itemSettings, this.pluginConfiguration.notificationSettings, this.notificationSender)
                 )
 
-                .commandEditor(DoubleJumpCommand.class, new DoubleJumpCommandEditor(this.pluginConfiguration.commandConfiguration))
-                .commandEditor(DoubleJumpItemCommand.class, new DoubleJumpItemCommandEditor(this.pluginConfiguration.commandConfiguration))
+                .commandEditor(DoubleJumpCommand.class, new DoubleJumpCommandEditor(this.pluginConfiguration.commandSettings))
+                .commandEditor(DoubleJumpItemCommand.class, new DoubleJumpItemCommandEditor(this.pluginConfiguration.commandSettings))
 
                 .register();
     }
@@ -237,7 +209,7 @@ public class DoubleJump implements DoubleJumpApi {
 
     private RegionProvider hookRegionProvider() {
         if (this.server.getPluginManager().isPluginEnabled("WorldGuard")) {
-            return new WorldGuardRegionProvider(this.pluginConfiguration.jumpConfiguration.restrictionsConfiguration.disabledRegions);
+            return new WorldGuardRegionProvider(this.pluginConfiguration.jumpSettings.restrictionsSettings.disabledRegions);
         }
 
         return new EmptyRegionProvider();

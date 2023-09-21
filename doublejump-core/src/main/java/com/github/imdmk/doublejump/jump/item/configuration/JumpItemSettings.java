@@ -10,7 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-public class JumpItemConfiguration extends OkaeriConfig {
+public class JumpItemSettings extends OkaeriConfig {
 
     @Comment("# Specifies whether the item should be enabled")
     public boolean enabled = false;

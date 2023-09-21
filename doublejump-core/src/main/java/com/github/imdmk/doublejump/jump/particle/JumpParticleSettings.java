@@ -7,7 +7,7 @@ import org.bukkit.Particle;
 
 import java.util.List;
 
-public class JumpParticleConfiguration extends OkaeriConfig {
+public class JumpParticleSettings extends OkaeriConfig {
 
     @Comment("# Specifies whether particles during a double jump are to be enabled")
     public boolean enabled = true;

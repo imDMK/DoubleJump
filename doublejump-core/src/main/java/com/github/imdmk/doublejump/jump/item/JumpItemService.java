@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump.item;
 
-import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -15,11 +15,11 @@ public class JumpItemService {
     private final boolean ignoreEnchants;
     private final boolean ignoreDurability;
 
-    public JumpItemService(JumpItemConfiguration jumpItemConfiguration) {
-        this.jumpItem = jumpItemConfiguration.item;
-        this.jumpItemUsage = jumpItemConfiguration.usageConfiguration.usage;
-        this.ignoreEnchants = !jumpItemConfiguration.cancelEnchant;
-        this.ignoreDurability = !jumpItemConfiguration.cancelRepair;
+    public JumpItemService(JumpItemSettings jumpItemSettings) {
+        this.jumpItem = jumpItemSettings.item;
+        this.jumpItemUsage = jumpItemSettings.usageConfiguration.usage;
+        this.ignoreEnchants = !jumpItemSettings.cancelEnchant;
+        this.ignoreDurability = !jumpItemSettings.cancelRepair;
     }
 
     public boolean compare(ItemStack toCompare) {

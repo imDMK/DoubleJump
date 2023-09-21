@@ -1,11 +1,11 @@
-package com.github.imdmk.doublejump.configuration;
+package com.github.imdmk.doublejump.command;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 
 import java.util.List;
 
-public class CommandConfiguration extends OkaeriConfig {
+public class CommandSettings extends OkaeriConfig {
 
     @Comment("# Specifies whether \"/doublejump\" command should be enabled")
     public boolean doubleJumpEnabled = true;

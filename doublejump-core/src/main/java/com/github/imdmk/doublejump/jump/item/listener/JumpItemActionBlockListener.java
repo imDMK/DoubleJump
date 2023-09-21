@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump.jump.item.listener;
 
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
-import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemSettings;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,17 +14,17 @@ import org.bukkit.inventory.meta.Damageable;
 
 public class JumpItemActionBlockListener implements Listener {
 
-    private final JumpItemConfiguration jumpItemConfiguration;
+    private final JumpItemSettings jumpItemSettings;
     private final JumpItemService jumpItemService;
 
-    public JumpItemActionBlockListener(JumpItemConfiguration jumpItemConfiguration, JumpItemService jumpItemService) {
-        this.jumpItemConfiguration = jumpItemConfiguration;
+    public JumpItemActionBlockListener(JumpItemSettings jumpItemSettings, JumpItemService jumpItemService) {
+        this.jumpItemSettings = jumpItemSettings;
         this.jumpItemService = jumpItemService;
     }
 
     @EventHandler
     public void onEnchantItem(EnchantItemEvent event) {
-        if (!this.jumpItemConfiguration.cancelEnchant) {
+        if (!this.jumpItemSettings.cancelEnchant) {
             return;
         }
 
@@ -58,7 +58,7 @@ public class JumpItemActionBlockListener implements Listener {
             return;
         }
 
-        if (this.jumpItemConfiguration.cancelRepair) {
+        if (this.jumpItemSettings.cancelRepair) {
             event.setCancelled(true);
             event.setResult(Event.Result.DENY);
             return;
@@ -75,7 +75,7 @@ public class JumpItemActionBlockListener implements Listener {
             return;
         }
 
-        ItemStack jumpItemClone = new ItemStack(this.jumpItemConfiguration.item);
+        ItemStack jumpItemClone = new ItemStack(this.jumpItemSettings.item);
 
         if (!(jumpItemClone.getItemMeta() instanceof Damageable jumpItemDamageable)) {
             event.setCancelled(true);

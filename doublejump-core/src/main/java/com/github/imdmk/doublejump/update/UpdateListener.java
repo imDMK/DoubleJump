@@ -3,7 +3,7 @@ package com.github.imdmk.doublejump.update;
 import com.eternalcode.gitcheck.GitCheckResult;
 import com.eternalcode.gitcheck.git.GitException;
 import com.eternalcode.gitcheck.git.GitRelease;
-import com.github.imdmk.doublejump.configuration.PluginConfiguration;
+import com.github.imdmk.doublejump.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationType;

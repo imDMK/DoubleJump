@@ -1,9 +1,9 @@
 package com.github.imdmk.doublejump.jump.item.command;
 
-import com.github.imdmk.doublejump.configuration.MessageConfiguration;
-import com.github.imdmk.doublejump.jump.item.configuration.JumpItemConfiguration;
+import com.github.imdmk.doublejump.jump.item.configuration.JumpItemSettings;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
+import com.github.imdmk.doublejump.notification.NotificationSettings;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
@@ -16,35 +16,35 @@ import org.bukkit.inventory.ItemStack;
 @Route(name = "doublejump")
 public class DoubleJumpItemCommand {
 
-    private final JumpItemConfiguration jumpItemConfiguration;
-    private final MessageConfiguration messageConfiguration;
+    private final JumpItemSettings jumpItemSettings;
+    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
 
-    public DoubleJumpItemCommand(JumpItemConfiguration jumpItemConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender) {
-        this.jumpItemConfiguration = jumpItemConfiguration;
-        this.messageConfiguration = messageConfiguration;
+    public DoubleJumpItemCommand(JumpItemSettings jumpItemSettings, NotificationSettings notificationSettings, NotificationSender notificationSender) {
+        this.jumpItemSettings = jumpItemSettings;
+        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
     }
 
     @Execute(route = "item-give", required = 1)
     void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
-        if (!this.jumpItemConfiguration.enabled) {
-            this.notificationSender.send(sender, this.messageConfiguration.jumpItemDisabledNotification);
+        if (!this.jumpItemSettings.enabled) {
+            this.notificationSender.send(sender, this.notificationSettings.jumpItemDisabledNotification);
             return;
         }
 
-        ItemStack jumpItem = this.jumpItemConfiguration.item;
+        ItemStack jumpItem = this.jumpItemSettings.item;
         Inventory targetInventory = target.getInventory();
 
         if (targetInventory.firstEmpty() == -1) {
-            this.notificationSender.send(sender, this.messageConfiguration.targetFullInventoryNotification);
+            this.notificationSender.send(sender, this.notificationSettings.targetFullInventoryNotification);
             return;
         }
 
         targetInventory.addItem(jumpItem);
 
         Notification notification = Notification.builder()
-                .fromNotification(this.messageConfiguration.jumpItemAddedNotification)
+                .fromNotification(this.notificationSettings.jumpItemAddedNotification)
                 .placeholder("{PLAYER}", target.getName())
                 .build();
 
@@ -53,13 +53,13 @@ public class DoubleJumpItemCommand {
 
     @Execute(route = "item-remove", required = 1)
     void removeItem(CommandSender sender, @Arg @Name("target") Player target) {
-        ItemStack jumpItem = this.jumpItemConfiguration.item;
+        ItemStack jumpItem = this.jumpItemSettings.item;
 
         Inventory targetInventory = target.getInventory();
         Inventory targetEnderChest = target.getEnderChest();
 
         if (!targetInventory.contains(jumpItem) && !targetEnderChest.contains(jumpItem)) {
-            this.notificationSender.send(sender, this.messageConfiguration.targetHasNoJumpItemNotification);
+            this.notificationSender.send(sender, this.notificationSettings.targetHasNoJumpItemNotification);
             return;
         }
 
@@ -67,7 +67,7 @@ public class DoubleJumpItemCommand {
         targetEnderChest.remove(jumpItem);
 
         Notification notification = Notification.builder()
-                .fromNotification(this.messageConfiguration.jumpItemRemovedNotification)
+                .fromNotification(this.notificationSettings.jumpItemRemovedNotification)
                 .placeholder("{PLAYER}", target.getName())
                 .build();
 

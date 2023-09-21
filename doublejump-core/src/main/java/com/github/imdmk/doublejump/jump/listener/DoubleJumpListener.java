@@ -1,11 +1,11 @@
 package com.github.imdmk.doublejump.jump.listener;
 
-import com.github.imdmk.doublejump.configuration.MessageConfiguration;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
+import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
+import com.github.imdmk.doublejump.notification.NotificationSettings;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,13 +15,13 @@ import org.bukkit.util.Vector;
 
 public class DoubleJumpListener implements Listener {
 
-    private final JumpConfiguration jumpConfiguration;
-    private final MessageConfiguration messageConfiguration;
+    private final JumpSettings jumpSettings;
+    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
 
-    public DoubleJumpListener(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender) {
-        this.jumpConfiguration = jumpConfiguration;
-        this.messageConfiguration = messageConfiguration;
+    public DoubleJumpListener(JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender) {
+        this.jumpSettings = jumpSettings;
+        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
     }
 
@@ -40,39 +40,39 @@ public class DoubleJumpListener implements Listener {
         player.setAllowFlight(false);
 
         Vector vector = playerLocation.getDirection()
-                .multiply(this.jumpConfiguration.jumpMultiple)
-                .setY(this.jumpConfiguration.jumpUp);
+                .multiply(this.jumpSettings.jumpMultiple)
+                .setY(this.jumpSettings.jumpUp);
 
         player.setVelocity(vector);
 
-        if (this.jumpConfiguration.delayConfiguration.enabled) {
-            jumpPlayer.addDelay(this.jumpConfiguration.delayConfiguration.delay);
+        if (this.jumpSettings.delaySettings.enabled) {
+            jumpPlayer.addDelay(this.jumpSettings.delaySettings.delay);
         }
 
-        if (this.jumpConfiguration.soundConfiguration.enabled) {
-            this.jumpConfiguration.soundConfiguration.sounds.forEach(sound -> sound.play(player));
+        if (this.jumpSettings.soundSettings.enabled) {
+            this.jumpSettings.soundSettings.sounds.forEach(sound -> sound.play(player));
         }
 
-        if (this.jumpConfiguration.particleConfiguration.enabled) {
-            this.jumpConfiguration.particleConfiguration.particles.forEach(jumpParticle -> jumpParticle.spawn(player));
+        if (this.jumpSettings.particleSettings.enabled) {
+            this.jumpSettings.particleSettings.particles.forEach(jumpParticle -> jumpParticle.spawn(player));
         }
 
-        if (this.jumpConfiguration.streakConfiguration.enabled) {
+        if (this.jumpSettings.streakSettings.enabled) {
             jumpPlayer.addStreak(1);
 
             Notification notification = Notification.builder()
-                    .fromNotification(this.messageConfiguration.jumpStreakIncreaseNotification)
+                    .fromNotification(this.notificationSettings.jumpStreakIncreaseNotification)
                     .placeholder("{STREAK}", jumpPlayer.getStreak())
                     .build();
 
             this.notificationSender.send(player, notification);
         }
 
-        if (this.jumpConfiguration.limitConfiguration.enabled) {
+        if (this.jumpSettings.limitSettings.enabled) {
             jumpPlayer.removeJumps(1);
 
-            if (!this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
-                jumpPlayer.addJumpRegenerationDelay(this.jumpConfiguration.limitConfiguration.regenerationDelay);
+            if (!this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
+                jumpPlayer.addJumpRegenerationDelay(this.jumpSettings.limitSettings.regenerationDelay);
             }
         }
     }

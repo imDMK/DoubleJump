@@ -6,7 +6,7 @@ import org.bukkit.Sound;
 
 import java.util.List;
 
-public class JumpSoundConfiguration extends OkaeriConfig {
+public class JumpSoundSettings extends OkaeriConfig {
 
     @Comment("# Specifies whether to enable double jump sound")
     public boolean enabled = true;

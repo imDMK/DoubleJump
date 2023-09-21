@@ -1,11 +1,9 @@
-package com.github.imdmk.doublejump.configuration;
+package com.github.imdmk.doublejump.notification;
 
-import com.github.imdmk.doublejump.notification.Notification;
-import com.github.imdmk.doublejump.notification.NotificationType;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 
-public class MessageConfiguration extends OkaeriConfig {
+public class NotificationSettings extends OkaeriConfig {
 
     @Comment("# {TIME} - Remaining time")
     public Notification jumpDelayNotification = new Notification(NotificationType.CHAT, "<red>You must wait {TIME} before next double jump<dark_gray>.");

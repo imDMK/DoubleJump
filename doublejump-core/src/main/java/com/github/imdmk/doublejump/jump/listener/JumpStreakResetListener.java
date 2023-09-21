@@ -1,12 +1,12 @@
 package com.github.imdmk.doublejump.jump.listener;
 
-import com.github.imdmk.doublejump.configuration.MessageConfiguration;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.reset.JumpStreakResetEvent;
 import com.github.imdmk.doublejump.jump.event.reset.JumpStreakResetReason;
 import com.github.imdmk.doublejump.notification.NotificationSender;
+import com.github.imdmk.doublejump.notification.NotificationSettings;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,15 +19,15 @@ import java.util.Optional;
 public class JumpStreakResetListener implements Listener {
 
     private final Server server;
-    private final JumpConfiguration jumpConfiguration;
-    private final MessageConfiguration messageConfiguration;
+    private final JumpSettings jumpSettings;
+    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public JumpStreakResetListener(Server server, JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
+    public JumpStreakResetListener(Server server, JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
         this.server = server;
-        this.jumpConfiguration = jumpConfiguration;
-        this.messageConfiguration = messageConfiguration;
+        this.jumpSettings = jumpSettings;
+        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
     }
@@ -36,7 +36,7 @@ public class JumpStreakResetListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (!this.jumpConfiguration.streakConfiguration.resetOnDeath) {
+        if (!this.jumpSettings.streakSettings.resetOnDeath) {
             return;
         }
 
@@ -58,7 +58,7 @@ public class JumpStreakResetListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (!this.jumpConfiguration.streakConfiguration.resetOnGround) {
+        if (!this.jumpSettings.streakSettings.resetOnGround) {
             return;
         }
 
@@ -91,6 +91,6 @@ public class JumpStreakResetListener implements Listener {
 
         jumpPlayer.setStreak(0);
 
-        this.notificationSender.send(player, this.messageConfiguration.jumpStreakResetNotification);
+        this.notificationSender.send(player, this.notificationSettings.jumpStreakResetNotification);
     }
 }

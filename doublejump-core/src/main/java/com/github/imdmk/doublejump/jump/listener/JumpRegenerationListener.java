@@ -1,10 +1,10 @@
 package com.github.imdmk.doublejump.jump.listener;
 
-import com.github.imdmk.doublejump.configuration.MessageConfiguration;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.notification.NotificationSender;
+import com.github.imdmk.doublejump.notification.NotificationSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,21 +15,21 @@ import java.util.Optional;
 
 public class JumpRegenerationListener implements Listener {
 
-    private final JumpConfiguration jumpConfiguration;
-    private final MessageConfiguration messageConfiguration;
+    private final JumpSettings jumpSettings;
+    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public JumpRegenerationListener(JumpConfiguration jumpConfiguration, MessageConfiguration messageConfiguration, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
-        this.jumpConfiguration = jumpConfiguration;
-        this.messageConfiguration = messageConfiguration;
+    public JumpRegenerationListener(JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
+        this.jumpSettings = jumpSettings;
+        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (this.jumpConfiguration.limitConfiguration.regenerationDelay.isZero()) {
+        if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
             return;
         }
 
@@ -51,8 +51,8 @@ public class JumpRegenerationListener implements Listener {
         }
 
         jumpPlayer.addJumps(1);
-        jumpPlayer.addJumpRegenerationDelay(this.jumpConfiguration.limitConfiguration.regenerationDelay);
+        jumpPlayer.addJumpRegenerationDelay(this.jumpSettings.limitSettings.regenerationDelay);
 
-        this.notificationSender.send(player, this.messageConfiguration.jumpLimitRegenerationNotification);
+        this.notificationSender.send(player, this.notificationSettings.jumpLimitRegenerationNotification);
     }
 }
