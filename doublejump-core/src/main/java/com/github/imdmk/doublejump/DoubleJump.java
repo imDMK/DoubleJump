@@ -4,12 +4,8 @@ import com.github.imdmk.doublejump.command.argument.PlayerArgument;
 import com.github.imdmk.doublejump.command.handler.MissingPermissionHandler;
 import com.github.imdmk.doublejump.command.handler.NotificationHandler;
 import com.github.imdmk.doublejump.command.handler.UsageHandler;
-import com.github.imdmk.doublejump.configuration.PluginConfiguration;
-import com.github.imdmk.doublejump.configuration.serializer.ItemMetaSerializer;
-import com.github.imdmk.doublejump.configuration.serializer.ItemStackSerializer;
-import com.github.imdmk.doublejump.configuration.transformer.ColorTransformer;
-import com.github.imdmk.doublejump.configuration.transformer.ComponentTransformer;
-import com.github.imdmk.doublejump.configuration.transformer.EnchantmentTransformer;
+import com.github.imdmk.doublejump.configuration.ConfigurationService;
+import com.github.imdmk.doublejump.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommand;
@@ -76,6 +72,7 @@ public class DoubleJump implements DoubleJumpApi {
 
     private final Server server;
 
+    private final ConfigurationService configurationService;
     private final PluginConfiguration pluginConfiguration;
 
     private final BukkitAudiences bukkitAudiences;
@@ -102,7 +99,10 @@ public class DoubleJump implements DoubleJumpApi {
         this.server = plugin.getServer();
 
         /* Configuration */
-        this.pluginConfiguration = this.createConfiguration(plugin.getDataFolder());
+        File dataFolder = plugin.getDataFolder();
+
+        this.configurationService = new ConfigurationService();
+        this.pluginConfiguration = this.configurationService.create(PluginConfiguration.class, new File(dataFolder, "configuration.yml"));
 
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
