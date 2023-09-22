@@ -4,7 +4,6 @@ import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
-import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,14 +14,12 @@ public class JumpItemEnableListener implements Listener {
     private final JumpItemSettings jumpItemSettings;
     private final JumpPlayerManager jumpPlayerManager;
     private final JumpPlayerService jumpPlayerService;
-    private final JumpRestrictionService jumpRestrictionService;
     private final JumpItemService jumpItemService;
 
-    public JumpItemEnableListener(JumpItemSettings jumpItemSettings, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpRestrictionService jumpRestrictionService, JumpItemService jumpItemService) {
+    public JumpItemEnableListener(JumpItemSettings jumpItemSettings, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpItemService jumpItemService) {
         this.jumpItemSettings = jumpItemSettings;
         this.jumpPlayerManager = jumpPlayerManager;
         this.jumpPlayerService = jumpPlayerService;
-        this.jumpRestrictionService = jumpRestrictionService;
         this.jumpItemService = jumpItemService;
     }
 

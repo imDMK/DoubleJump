@@ -3,7 +3,6 @@ package com.github.imdmk.doublejump.jump.item.listener;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
-import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
@@ -99,10 +98,6 @@ public class JumpItemInteractListener implements Listener {
     }
 
     private void useDoubleJump(Player player, JumpPlayer jumpPlayer) {
-        if (this.jumpRestrictionService.isPassedRestrictions(player, jumpPlayer, true)) {
-            return;
-        }
-
         DoubleJumpEvent doubleJumpEvent = new DoubleJumpEvent(player, jumpPlayer);
 
         this.server.getPluginManager().callEvent(doubleJumpEvent);

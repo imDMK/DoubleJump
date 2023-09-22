@@ -126,7 +126,7 @@ public class DoubleJump implements DoubleJumpApi {
                 new JumpItemActionBlockListener(this.pluginConfiguration.jumpSettings.itemSettings, jumpItemService),
                 new JumpItemDisableListener(this.pluginConfiguration.jumpSettings.itemSettings, jumpItemService, this.jumpPlayerManager, this.jumpPlayerService),
                 new JumpItemDropListener(this.pluginConfiguration.jumpSettings.itemSettings, jumpItemService, this.jumpPlayerService),
-                new JumpItemEnableListener(this.pluginConfiguration.jumpSettings.itemSettings, this.jumpPlayerManager, this.jumpPlayerService, this.jumpRestrictionService, jumpItemService),
+                new JumpItemEnableListener(this.pluginConfiguration.jumpSettings.itemSettings, this.jumpPlayerManager, this.jumpPlayerService, jumpItemService),
                 new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpSettings.itemSettings, this.pluginConfiguration.notificationSettings, this.notificationSender, this.jumpPlayerManager, this.jumpPlayerService, jumpItemService, this.jumpRestrictionService),
                 new DoubleJumpListener(this.pluginConfiguration.jumpSettings, this.pluginConfiguration.notificationSettings, this.notificationSender),
                 new JumpDisableListener(this.jumpPlayerManager, this.jumpPlayerService, this.jumpRestrictionService, taskScheduler),
