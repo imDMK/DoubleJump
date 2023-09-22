@@ -9,10 +9,8 @@ import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
 import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
-import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
-import com.github.imdmk.doublejump.util.DurationUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +23,6 @@ import org.bukkit.inventory.meta.Damageable;
 public class JumpItemInteractListener implements Listener {
 
     private final Server server;
-    private final JumpSettings jumpSettings;
     private final JumpItemSettings jumpItemSettings;
     private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
@@ -34,9 +31,8 @@ public class JumpItemInteractListener implements Listener {
     private final JumpItemService jumpItemService;
     private final JumpRestrictionService jumpRestrictionService;
 
-    public JumpItemInteractListener(Server server, JumpSettings jumpSettings, JumpItemSettings jumpItemSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpItemService jumpItemService, JumpRestrictionService jumpRestrictionService) {
+    public JumpItemInteractListener(Server server, JumpItemSettings jumpItemSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpItemService jumpItemService, JumpRestrictionService jumpRestrictionService) {
         this.server = server;
-        this.jumpSettings = jumpSettings;
         this.jumpItemSettings = jumpItemSettings;
         this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
@@ -103,28 +99,7 @@ public class JumpItemInteractListener implements Listener {
     }
 
     private void useDoubleJump(Player player, JumpPlayer jumpPlayer) {
-        if (jumpPlayer.isDelay()) {
-            Notification notification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
-                    .build();
-
-            this.notificationSender.send(player, notification);
-            return;
-        }
-
-        if (!jumpPlayer.hasJumps()) {
-            if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
-                this.notificationSender.send(player, this.notificationSettings.jumpLimitNotification);
-                return;
-            }
-
-            Notification jumpLimitDelayNotification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpLimitDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
-                    .build();
-
-            this.notificationSender.send(player, jumpLimitDelayNotification);
+        if (this.jumpRestrictionService.isPassedRestrictions(player, jumpPlayer, true)) {
             return;
         }
 
