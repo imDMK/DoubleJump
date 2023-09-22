@@ -15,9 +15,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class UpdateListener implements Listener {
 
-    private static final String DOUBLE_JUMP_PREFIX = "<dark_gray>[<red>DoubleJump<dark_gray>]";
-    private static final String UPDATE_AVAILABLE = DOUBLE_JUMP_PREFIX + " <yellow>A new version is available: %s\n<yellow>Download it here: %s";
-    private static final String UPDATE_EXCEPTION = DOUBLE_JUMP_PREFIX + "<red>An error occurred while checking for update: %s";
+    private static final String PREFIX = "<dark_gray>[<rainbow>DoubleJump<dark_gray>] ";
+    private static final String UPDATE_AVAILABLE = "\n" + PREFIX + "<yellow>A new version is available: %s\n" + PREFIX + "<yellow><u><click:open_url:'%s'>Download it here</click></u>\n";
+    private static final String UPDATE_EXCEPTION = PREFIX + "<red>An error occurred while checking for update: %s";
 
     private final PluginConfiguration pluginConfiguration;
     private final NotificationSender notificationSender;
