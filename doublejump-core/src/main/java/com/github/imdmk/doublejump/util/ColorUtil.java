@@ -33,11 +33,11 @@ public final class ColorUtil {
         }
     }
 
-    public static Optional<Color> getColor(String colorName) {
+    public static Optional<Color> get(String colorName) {
         return Optional.ofNullable(colors.get(colorName));
     }
 
-    public static Optional<String> getColorName(Color color) {
+    public static Optional<String> getName(Color color) {
         return colors.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(color))
                 .map(Map.Entry::getKey)

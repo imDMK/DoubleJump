@@ -22,7 +22,7 @@ public class NotificationSender {
         NotificationType type = notification.type();
         Component message = ComponentUtil.deserialize(notification.message());
 
-        switch (notification.type()) {
+        switch (type) {
             case CHAT -> audience.sendMessage(message);
             case ACTIONBAR -> audience.sendActionBar(message);
             case TITLE -> {

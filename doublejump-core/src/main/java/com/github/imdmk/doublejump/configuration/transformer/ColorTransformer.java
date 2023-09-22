@@ -18,14 +18,14 @@ public class ColorTransformer extends BidirectionalTransformer<Color, String> {
 
     @Override
     public String leftToRight(@NonNull Color color, @NonNull SerdesContext serdesContext) {
-        Optional<String> colorNameOptional = ColorUtil.getColorName(color);
+        Optional<String> colorNameOptional = ColorUtil.getName(color);
 
         return colorNameOptional.orElseThrow(() -> new IllegalStateException("Unknown color: " + color));
     }
 
     @Override
     public Color rightToLeft(@NonNull String colorName, @NonNull SerdesContext serdesContext) {
-        Optional<Color> colorOptional = ColorUtil.getColor(colorName);
+        Optional<Color> colorOptional = ColorUtil.get(colorName);
 
         return colorOptional.orElseThrow(() -> new IllegalStateException("Unknown color name: " + colorName));
     }
