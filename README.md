@@ -90,16 +90,18 @@ Example:
         String message = event.getMessage();
 
         DoubleJumpApi doubleJumpApi = DoubleJumpApiProvider.get();
+
         JumpPlayerManager jumpPlayerManager = doubleJumpApi.getJumpPlayerManager();
+        JumpPlayerService jumpPlayerService = doubleJumpApi.getJumpPlayerService();
 
         if (message.equalsIgnoreCase("!testdoublejump")) {
-            if (jumpPlayerManager.isDoubleJumpMode(player)) {
+            if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
                 return;
             }
 
             event.setCancelled(true);
             
-            jumpPlayerManager.enable(player, true); //true to skip checking if player can use double jump
+            this.jumpPlayerService.enable(player, true); //true to skip checking if player can use double jump
 
             player.sendMessage("Now u can test our double jump plugin!");
         }
