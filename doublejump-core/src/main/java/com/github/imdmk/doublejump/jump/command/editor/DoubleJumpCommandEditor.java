@@ -16,10 +16,9 @@ public class DoubleJumpCommandEditor implements CommandEditor {
     @Override
     public State edit(State state) {
         state.permission(List.of(this.commandSettings.doubleJumpPermission));
-        state.aliases(this.commandSettings.doubleJumpAliases);
 
-        state.editChild("enable-for", s -> s.permission(List.of(this.commandSettings.doubleJumpEnableForPermission)));
-        state.editChild("disable-for", s -> s.permission(List.of(this.commandSettings.doubleJumpEnableForPermission)));
+        state.editChild("enable-for", s -> s.permission(List.of(this.commandSettings.doubleJumpForPermission)));
+        state.editChild("disable-for", s -> s.permission(List.of(this.commandSettings.doubleJumpForPermission)));
 
         return state;
     }

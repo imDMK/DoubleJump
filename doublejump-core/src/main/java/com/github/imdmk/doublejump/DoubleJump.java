@@ -197,7 +197,7 @@ public class DoubleJump implements DoubleJumpApi {
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpSettings.itemSettings, this.pluginConfiguration.notificationSettings, this.notificationSender)
                 )
 
-                .commandEditor(DoubleJumpCommand.class, new DoubleJumpCommandEditor(this.pluginConfiguration.commandSettings))
+                .commandEditor("doublejump", new DoubleJumpCommandEditor(this.pluginConfiguration.commandSettings))
                 .commandEditor(DoubleJumpItemCommand.class, new DoubleJumpItemCommandEditor(this.pluginConfiguration.commandSettings))
 
                 .register();

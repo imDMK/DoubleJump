@@ -15,8 +15,8 @@ public class DoubleJumpItemCommandEditor implements CommandEditor {
 
     @Override
     public State edit(State state) {
-        state.editChild("give-item", s -> s.permission(List.of(this.commandSettings.doubleJumpGiveItemPermission)));
-        state.editChild("remove-item", s -> s.permission(List.of(this.commandSettings.doubleJumpGiveItemPermission)));
+        state.editChild("give-item", s -> s.permission(List.of(this.commandSettings.doubleJumpItemPermission)));
+        state.editChild("remove-item", s -> s.permission(List.of(this.commandSettings.doubleJumpItemPermission)));
 
         return state;
     }
