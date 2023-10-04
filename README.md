@@ -108,8 +108,7 @@ Example:
     }
 ```
 ### Events
-You can listen to events that are called before action.
-Example usage:
+You can listen to events:
 ```java
     @EventHandler
     public void onPlayerDoubleJump(DoubleJumpEvent event) {
