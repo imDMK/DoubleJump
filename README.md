@@ -6,7 +6,7 @@
 ![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.20.1-green.svg)
 [![SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/doublejump-1-17-1-20-1.110632/)
 [![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://dev.bukkit.org/projects/d-doublejump)
-[![PaperMC](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/DoubleJump)
+[![Paper](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/DoubleJump)
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
 
 Efficient double jump plugin with many features and configuration possibilities.
@@ -90,24 +90,25 @@ Example:
         String message = event.getMessage();
 
         DoubleJumpApi doubleJumpApi = DoubleJumpApiProvider.get();
+
         JumpPlayerManager jumpPlayerManager = doubleJumpApi.getJumpPlayerManager();
+        JumpPlayerService jumpPlayerService = doubleJumpApi.getJumpPlayerService();
 
         if (message.equalsIgnoreCase("!testdoublejump")) {
-            if (jumpPlayerManager.isDoubleJumpMode(player)) {
+            if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
                 return;
             }
 
             event.setCancelled(true);
             
-            jumpPlayerManager.enable(player, true); //true to skip checking if player can use double jump
+            this.jumpPlayerService.enable(player, true); //true to skip checking if player can use double jump
 
             player.sendMessage("Now u can test our double jump plugin!");
         }
     }
 ```
 ### Events
-You can listen to events that are called before action.
-Example usage:
+You can listen to events:
 ```java
     @EventHandler
     public void onPlayerDoubleJump(DoubleJumpEvent event) {
