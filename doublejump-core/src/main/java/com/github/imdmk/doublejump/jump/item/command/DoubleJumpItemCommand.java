@@ -1,9 +1,9 @@
 package com.github.imdmk.doublejump.jump.item.command;
 
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
-import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
+import com.github.imdmk.doublejump.text.Formatter;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
@@ -43,12 +43,10 @@ public class DoubleJumpItemCommand {
 
         targetInventory.addItem(jumpItem);
 
-        Notification notification = Notification.builder()
-                .fromNotification(this.notificationSettings.jumpItemAddedNotification)
-                .placeholder("{PLAYER}", target.getName())
-                .build();
+        Formatter formatter = new Formatter()
+                .placeholder("{PLAYER}", target.getName());
 
-        this.notificationSender.send(sender, notification);
+        this.notificationSender.send(sender, this.notificationSettings.jumpItemAddedNotification, formatter);
     }
 
     @Execute(route = "item-remove", required = 1)
@@ -66,11 +64,9 @@ public class DoubleJumpItemCommand {
         targetInventory.remove(jumpItem);
         targetEnderChest.remove(jumpItem);
 
-        Notification notification = Notification.builder()
-                .fromNotification(this.notificationSettings.jumpItemRemovedNotification)
-                .placeholder("{PLAYER}", target.getName())
-                .build();
+        Formatter formatter = new Formatter()
+                .placeholder("{PLAYER}", target.getName());
 
-        this.notificationSender.send(sender, notification);
+        this.notificationSender.send(sender, this.notificationSettings.jumpItemRemovedNotification, formatter);
     }
 }

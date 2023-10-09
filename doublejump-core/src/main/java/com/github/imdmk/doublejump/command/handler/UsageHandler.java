@@ -1,8 +1,8 @@
 package com.github.imdmk.doublejump.command.handler;
 
-import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
+import com.github.imdmk.doublejump.text.Formatter;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.handle.InvalidUsageHandler;
 import dev.rollczi.litecommands.schematic.Schematic;
@@ -21,24 +21,20 @@ public class UsageHandler implements InvalidUsageHandler<CommandSender> {
     @Override
     public void handle(CommandSender sender, LiteInvocation invocation, Schematic schematic) {
         if (schematic.isOnlyFirst()) {
-            Notification notification = Notification.builder()
-                    .fromNotification(this.notificationSettings.invalidUsageNotification)
-                    .placeholder("{USAGE}", schematic.first())
-                    .build();
+            Formatter formatter = new Formatter()
+                    .placeholder("{USAGE}", schematic.first());
 
-            this.notificationSender.send(sender, notification);
+            this.notificationSender.send(sender, this.notificationSettings.invalidUsageNotification, formatter);
             return;
         }
 
         this.notificationSender.send(sender, this.notificationSettings.invalidUsageFirstNotification);
 
         for (String schema : schematic.getSchematics()) {
-            Notification notification = Notification.builder()
-                    .fromNotification(this.notificationSettings.invalidUsageListNotification)
-                    .placeholder("{USAGE}", schema)
-                    .build();
+            Formatter formatter = new Formatter()
+                    .placeholder("{USAGE}", schema);
 
-            this.notificationSender.send(sender, notification);
+            this.notificationSender.send(sender, this.notificationSettings.invalidUsageListNotification, formatter);
         }
     }
 }

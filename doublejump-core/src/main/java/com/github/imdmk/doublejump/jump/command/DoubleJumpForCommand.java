@@ -2,9 +2,9 @@ package com.github.imdmk.doublejump.jump.command;
 
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
-import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
+import com.github.imdmk.doublejump.text.Formatter;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
@@ -34,23 +34,19 @@ public class DoubleJumpForCommand {
 
         this.jumpPlayerService.enable(player, true);
 
-        Notification notification = Notification.builder()
-                .fromNotification(this.notificationSettings.jumpModeEnabledForNotification)
-                .placeholder("{PLAYER}", target.getName())
-                .build();
+        Formatter formatter = new Formatter()
+                .placeholder("{PLAYER}", target.getName());
 
-        this.notificationSender.send(player, notification);
+        this.notificationSender.send(player, this.notificationSettings.jumpModeEnabledForNotification, formatter);
     }
 
     @Execute(route = "disable-for", required = 1)
     void disableFor(Player player, @Arg @Name("target") Player target) {
         this.jumpPlayerService.disable(target);
 
-        Notification notification = Notification.builder()
-                .fromNotification(this.notificationSettings.jumpModeDisabledForNotification)
-                .placeholder("{PLAYER}", target.getName())
-                .build();
+        Formatter formatter = new Formatter()
+                .placeholder("{PLAYER}", target.getName());
 
-        this.notificationSender.send(player, notification);
+        this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledForNotification, formatter);
     }
 }

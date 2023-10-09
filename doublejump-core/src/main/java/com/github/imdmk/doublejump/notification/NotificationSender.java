@@ -1,5 +1,6 @@
 package com.github.imdmk.doublejump.notification;
 
+import com.github.imdmk.doublejump.text.Formatter;
 import com.github.imdmk.doublejump.util.ComponentUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.AudienceProvider;
@@ -16,22 +17,35 @@ public class NotificationSender {
         this.audienceProvider = audienceProvider;
     }
 
+    public void send(CommandSender sender, Notification notification, Formatter formatter) {
+        NotificationType type = notification.type();
+        String message = formatter.format(notification.message());
+
+        this.send(sender, type, message);
+    }
+
     public void send(CommandSender sender, Notification notification) {
+        NotificationType type = notification.type();
+        String message = notification.message();
+
+        this.send(sender, type, message);
+    }
+
+    public void send(CommandSender sender, NotificationType type, String message) {
         Audience audience = this.createAudience(sender);
 
-        NotificationType type = notification.type();
-        Component message = ComponentUtil.deserialize(notification.message());
+        Component deserializedMessage = ComponentUtil.deserialize(message);
 
         switch (type) {
-            case CHAT -> audience.sendMessage(message);
-            case ACTIONBAR -> audience.sendActionBar(message);
+            case CHAT -> audience.sendMessage(deserializedMessage);
+            case ACTIONBAR -> audience.sendActionBar(deserializedMessage);
             case TITLE -> {
-                Title title = Title.title(message, Component.empty(), Title.DEFAULT_TIMES);
+                Title title = Title.title(deserializedMessage, Component.empty(), Title.DEFAULT_TIMES);
 
                 audience.showTitle(title);
             }
             case SUBTITLE -> {
-                Title subtitle = Title.title(Component.empty(), message, Title.DEFAULT_TIMES);
+                Title subtitle = Title.title(Component.empty(), deserializedMessage, Title.DEFAULT_TIMES);
 
                 audience.showTitle(subtitle);
             }

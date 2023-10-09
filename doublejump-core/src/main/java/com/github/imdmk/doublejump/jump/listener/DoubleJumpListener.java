@@ -3,9 +3,9 @@ package com.github.imdmk.doublejump.jump.listener;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
-import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
+import com.github.imdmk.doublejump.text.Formatter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,12 +60,10 @@ public class DoubleJumpListener implements Listener {
         if (this.jumpSettings.streakSettings.enabled) {
             jumpPlayer.addStreak(1);
 
-            Notification notification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpStreakIncreaseNotification)
-                    .placeholder("{STREAK}", jumpPlayer.getStreak())
-                    .build();
+            Formatter formatter = new Formatter()
+                    .placeholder("{STREAK}", jumpPlayer.getStreak());
 
-            this.notificationSender.send(player, notification);
+            this.notificationSender.send(player, this.notificationSettings.jumpStreakIncreaseNotification, formatter);
         }
 
         if (this.jumpSettings.limitSettings.enabled) {

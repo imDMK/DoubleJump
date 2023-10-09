@@ -6,6 +6,7 @@ import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationSettings;
 import com.github.imdmk.doublejump.region.RegionProvider;
+import com.github.imdmk.doublejump.text.Formatter;
 import com.github.imdmk.doublejump.util.DurationUtil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -32,13 +33,11 @@ public class JumpRestrictionService {
                 return true;
             }
 
-            Notification notification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()))
-                    .build();
+            Formatter formatter = new Formatter()
+                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()));
 
             jumpPlayer.setDelayNotificationReceived(true);
-            this.sendNotification(player, notification, sendNotification);
+            this.sendNotification(player, this.notificationSettings.jumpDelayNotification, formatter, sendNotification);
 
             return true;
         }
@@ -55,13 +54,11 @@ public class JumpRestrictionService {
                 return true;
             }
 
-            Notification jumpLimitDelayNotification = Notification.builder()
-                    .fromNotification(this.notificationSettings.jumpLimitDelayNotification)
-                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()))
-                    .build();
+            Formatter formatter = new Formatter()
+                    .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()));
 
             jumpPlayer.setJumpsNotificationReceived(true);
-            this.sendNotification(player, jumpLimitDelayNotification, sendNotification);
+            this.sendNotification(player, this.notificationSettings.jumpLimitDelayNotification, formatter, sendNotification);
 
             return true;
         }
@@ -117,6 +114,12 @@ public class JumpRestrictionService {
     private void sendNotification(Player player, Notification notification, boolean send) {
         if (send) {
             this.notificationSender.send(player, notification);
+        }
+    }
+
+    private void sendNotification(Player player, Notification notification, Formatter formatter, boolean send) {
+        if (send) {
+            this.notificationSender.send(player, notification, formatter);
         }
     }
 }
