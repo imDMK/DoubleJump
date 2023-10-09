@@ -1,5 +1,7 @@
 package com.github.imdmk.doublejump.jump.item;
 
+import com.github.imdmk.doublejump.notification.Notification;
+import com.github.imdmk.doublejump.notification.NotificationType;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
@@ -34,10 +36,10 @@ public class JumpItemSettings extends OkaeriConfig {
             .enchant(Enchantment.DURABILITY, 10)
             .build();
 
-    @Comment({"# ", "# Jump item usage configuration", "# "})
-    public UsageConfiguration usageConfiguration = new UsageConfiguration();
+    @Comment({"# ", "# Jump item usage settings", "# "})
+    public JumpItemUsageSettings usageSettings = new JumpItemUsageSettings();
 
-    public static class UsageConfiguration extends OkaeriConfig {
+    public static class JumpItemUsageSettings extends OkaeriConfig {
 
         @Comment({
                 "# This specifies the use of a double jump",
@@ -75,10 +77,10 @@ public class JumpItemSettings extends OkaeriConfig {
 
     }
 
-    @Comment({"# ", "# Jump item drop configuration", "# "})
-    public DropConfiguration dropConfiguration = new DropConfiguration();
+    @Comment({"# ", "# Jump item drop settings", "# "})
+    public JumpItemDropSettings dropSettings = new JumpItemDropSettings();
 
-    public static class DropConfiguration extends OkaeriConfig {
+    public static class JumpItemDropSettings extends OkaeriConfig {
 
         @Comment("# Specifies whether to cancel the item drop")
         public boolean cancel = false;
@@ -88,6 +90,24 @@ public class JumpItemSettings extends OkaeriConfig {
 
         @Comment("# Specifies whether to cancel double jump mode after dropping an item")
         public boolean disableDoubleJumpMode = false;
+
+    }
+
+    @Comment({"#", "# Jump item notification settings", "#"})
+    public JumpItemNotificationSettings notificationSettings = new JumpItemNotificationSettings();
+
+    public static class JumpItemNotificationSettings extends OkaeriConfig {
+
+        public Notification jumpItemDisabled = new Notification(NotificationType.CHAT, "<red>The jump item is disabled");
+
+        @Comment("# {PLAYER} - The name of the player for whom the jump item was added")
+        public Notification jumpItemAdded = new Notification(NotificationType.CHAT, "<green>Added a jump item to player {PLAYER}");
+
+        @Comment("# {PLAYER} - The name of the player for whom the jump item was removed")
+        public Notification jumpItemRemoved = new Notification(NotificationType.CHAT, "<green>Removed a jump item from player {PLAYER} inventory and ender chest");
+
+        public Notification targetHasNoJumpItem = new Notification(NotificationType.CHAT, "<red>The player has no jump item in inventory and ender chest");
+        public Notification targetHasFullInventory = new Notification(NotificationType.CHAT, "<red>The player has a full inventory");
 
     }
 }

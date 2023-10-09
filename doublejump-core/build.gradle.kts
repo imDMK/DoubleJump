@@ -29,7 +29,7 @@ dependencies {
 
     implementation("dev.triumphteam:triumph-gui:3.1.5")
 
-    implementation("eu.okaeri:okaeri-configs-yaml-bukkit:5.0.0-beta.5")
+    implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.0-beta.5")
     implementation("eu.okaeri:okaeri-configs-serdes-commons:5.0.0-beta.5")
     implementation("eu.okaeri:okaeri-configs-serdes-bukkit:5.0.0-beta.5")
 
@@ -94,6 +94,7 @@ tasks.withType<ShadowJar> {
         "dev.rollczi.litecommands",
         "org.json.simple",
         "org.bstats",
+        "org.yaml",
         "net.kyori",
         "eu.okaeri",
         "com.eternalcode",

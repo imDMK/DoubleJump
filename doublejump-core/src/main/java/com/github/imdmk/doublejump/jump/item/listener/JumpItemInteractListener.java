@@ -3,13 +3,13 @@ package com.github.imdmk.doublejump.jump.item.listener;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
+import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
 import com.github.imdmk.doublejump.jump.item.JumpItemUsage;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.notification.NotificationSettings;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,18 +22,18 @@ import org.bukkit.inventory.meta.Damageable;
 public class JumpItemInteractListener implements Listener {
 
     private final Server server;
+    private final JumpSettings jumpSettings;
     private final JumpItemSettings jumpItemSettings;
-    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
     private final JumpPlayerService jumpPlayerService;
     private final JumpItemService jumpItemService;
     private final JumpRestrictionService jumpRestrictionService;
 
-    public JumpItemInteractListener(Server server, JumpItemSettings jumpItemSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpItemService jumpItemService, JumpRestrictionService jumpRestrictionService) {
+    public JumpItemInteractListener(Server server, JumpSettings jumpSettings, JumpItemSettings jumpItemSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpItemService jumpItemService, JumpRestrictionService jumpRestrictionService) {
         this.server = server;
+        this.jumpSettings = jumpSettings;
         this.jumpItemSettings = jumpItemSettings;
-        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
         this.jumpPlayerService = jumpPlayerService;
@@ -49,7 +49,7 @@ public class JumpItemInteractListener implements Listener {
             return;
         }
 
-        if (this.jumpItemSettings.usageConfiguration.usage != JumpItemUsage.CLICK_ITEM) {
+        if (this.jumpItemSettings.usageSettings.usage != JumpItemUsage.CLICK_ITEM) {
             return;
         }
 
@@ -72,27 +72,27 @@ public class JumpItemInteractListener implements Listener {
             return;
         }
 
-        if (this.jumpItemSettings.usageConfiguration.delete) {
+        if (this.jumpItemSettings.usageSettings.delete) {
             player.getInventory().removeItem(clickedItem);
         }
 
-        if (this.jumpItemSettings.usageConfiguration.cancel) {
+        if (this.jumpItemSettings.usageSettings.cancel) {
             event.setCancelled(true);
         }
 
-        if (this.jumpItemSettings.usageConfiguration.switchDoubleJumpMode) {
+        if (this.jumpItemSettings.usageSettings.switchDoubleJumpMode) {
             this.switchDoubleJump(player);
         }
 
-        if (this.jumpItemSettings.usageConfiguration.doubleJump) {
+        if (this.jumpItemSettings.usageSettings.doubleJump) {
             JumpPlayer jumpPlayer = this.jumpPlayerService.getOrCreateJumpPlayer(player);
 
             this.useDoubleJump(player, jumpPlayer);
         }
 
-        this.reduceDurability(clickedItem, this.jumpItemSettings.usageConfiguration.reduceDurability);
+        this.reduceDurability(clickedItem, this.jumpItemSettings.usageSettings.reduceDurability);
 
-        if (this.jumpItemSettings.usageConfiguration.disableDoubleJumpMode) {
+        if (this.jumpItemSettings.usageSettings.disableDoubleJumpMode) {
             this.jumpPlayerService.disable(player);
         }
     }
@@ -130,12 +130,12 @@ public class JumpItemInteractListener implements Listener {
         if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
             this.jumpPlayerService.disable(player);
 
-            this.notificationSender.send(player, this.notificationSettings.jumpModeDisabledNotification);
+            this.notificationSender.send(player, this.jumpSettings.notificationSettings.jumpModeDisabled);
         }
         else {
             this.jumpPlayerService.enable(player, false);
 
-            this.notificationSender.send(player, this.notificationSettings.jumpModeEnabledNotification);
+            this.notificationSender.send(player, this.jumpSettings.notificationSettings.jumpModeEnabled);
         }
     }
 }

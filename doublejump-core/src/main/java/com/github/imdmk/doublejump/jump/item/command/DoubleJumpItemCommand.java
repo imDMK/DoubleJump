@@ -2,7 +2,6 @@ package com.github.imdmk.doublejump.jump.item.command;
 
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.notification.NotificationSettings;
 import com.github.imdmk.doublejump.text.Formatter;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
@@ -17,19 +16,17 @@ import org.bukkit.inventory.ItemStack;
 public class DoubleJumpItemCommand {
 
     private final JumpItemSettings jumpItemSettings;
-    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
 
-    public DoubleJumpItemCommand(JumpItemSettings jumpItemSettings, NotificationSettings notificationSettings, NotificationSender notificationSender) {
+    public DoubleJumpItemCommand(JumpItemSettings jumpItemSettings, NotificationSender notificationSender) {
         this.jumpItemSettings = jumpItemSettings;
-        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
     }
 
     @Execute(route = "item-give", required = 1)
     void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
         if (!this.jumpItemSettings.enabled) {
-            this.notificationSender.send(sender, this.notificationSettings.jumpItemDisabledNotification);
+            this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.jumpItemDisabled);
             return;
         }
 
@@ -37,7 +34,7 @@ public class DoubleJumpItemCommand {
         Inventory targetInventory = target.getInventory();
 
         if (targetInventory.firstEmpty() == -1) {
-            this.notificationSender.send(sender, this.notificationSettings.targetFullInventoryNotification);
+            this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.targetHasFullInventory);
             return;
         }
 
@@ -46,7 +43,7 @@ public class DoubleJumpItemCommand {
         Formatter formatter = new Formatter()
                 .placeholder("{PLAYER}", target.getName());
 
-        this.notificationSender.send(sender, this.notificationSettings.jumpItemAddedNotification, formatter);
+        this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.jumpItemAdded, formatter);
     }
 
     @Execute(route = "item-remove", required = 1)
@@ -57,7 +54,7 @@ public class DoubleJumpItemCommand {
         Inventory targetEnderChest = target.getEnderChest();
 
         if (!targetInventory.contains(jumpItem) && !targetEnderChest.contains(jumpItem)) {
-            this.notificationSender.send(sender, this.notificationSettings.targetHasNoJumpItemNotification);
+            this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.targetHasNoJumpItem);
             return;
         }
 
@@ -67,6 +64,6 @@ public class DoubleJumpItemCommand {
         Formatter formatter = new Formatter()
                 .placeholder("{PLAYER}", target.getName());
 
-        this.notificationSender.send(sender, this.notificationSettings.jumpItemRemovedNotification, formatter);
+        this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.jumpItemRemoved, formatter);
     }
 }

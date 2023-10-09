@@ -8,6 +8,7 @@ import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.NotificationType;
 import com.github.imdmk.doublejump.scheduler.TaskScheduler;
+import com.github.imdmk.doublejump.text.Formatter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,9 +16,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class UpdateListener implements Listener {
 
-    private static final String PREFIX = "<dark_gray>[<rainbow>DoubleJump<dark_gray>] ";
-    private static final String UPDATE_AVAILABLE = "\n" + PREFIX + "<yellow>A new version is available: %s\n" + PREFIX + "<yellow><u><click:open_url:'%s'>Download it here</click></u>\n";
-    private static final String UPDATE_EXCEPTION = PREFIX + "<red>An error occurred while checking for update: %s";
+    private static final String PREFIX = "<dark_gray>[<rainbow>DoubleJump<dark_gray>]";
+
+    private static final Notification UPDATE_AVAILABLE = new Notification(NotificationType.CHAT, "\n" + PREFIX + "<yellow>A new version is available: {TAG}\n" + PREFIX + "<yellow><u><click:open_url:'{URL}'>Download it here</click></u>\n");
+    private static final Notification UPDATE_EXCEPTION = new Notification(NotificationType.CHAT, PREFIX + "<red>An error occurred while checking for update: {MESSAGE}");
 
     private final PluginConfiguration pluginConfiguration;
     private final NotificationSender notificationSender;
@@ -56,16 +58,17 @@ public class UpdateListener implements Listener {
 
             GitRelease latestRelease = gitCheckResult.getLatestRelease();
 
-            String message = UPDATE_AVAILABLE.formatted(latestRelease.getTag(), latestRelease.getPageUrl());
-            Notification updateAvailableNotification = new Notification(NotificationType.CHAT, message);
+            Formatter formatter = new Formatter()
+                    .placeholder("{TAG}", latestRelease.getTag())
+                    .placeholder("{URL}", latestRelease.getPageUrl());
 
-            this.notificationSender.send(player, updateAvailableNotification);
+            this.notificationSender.send(player, UPDATE_AVAILABLE, formatter);
         }
         catch (GitException gitException) {
-            String message = UPDATE_EXCEPTION.formatted(gitException.getMessage());
-            Notification updateExceptionNotification = new Notification(NotificationType.CHAT, message);
+            Formatter formatter = new Formatter()
+                    .placeholder("{MESSAGE}", gitException.getMessage());
 
-            this.notificationSender.send(player, updateExceptionNotification);
+            this.notificationSender.send(player, UPDATE_EXCEPTION, formatter);
         }
     }
 }

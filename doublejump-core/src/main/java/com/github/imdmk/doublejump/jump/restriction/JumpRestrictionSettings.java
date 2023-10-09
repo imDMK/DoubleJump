@@ -1,5 +1,7 @@
 package com.github.imdmk.doublejump.jump.restriction;
 
+import com.github.imdmk.doublejump.notification.Notification;
+import com.github.imdmk.doublejump.notification.NotificationType;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import org.bukkit.GameMode;
@@ -27,4 +29,18 @@ public class JumpRestrictionSettings extends OkaeriConfig {
             GameMode.CREATIVE
     );
 
+    @Comment({"#", "# Jump restriction notification settings", "#"})
+    public JumpRestrictionNotificationSettings notificationSettings = new JumpRestrictionNotificationSettings();
+
+    public static class JumpRestrictionNotificationSettings extends OkaeriConfig {
+
+        public Notification jumpDisabledRegion = new Notification(NotificationType.CHAT, "<red>You are in disabled region");
+        public Notification jumpDisabledGameMode = new Notification(NotificationType.CHAT, "<red>You cannot use double jump on this game mode");
+        public Notification jumpDisabledWorld = new Notification(NotificationType.CHAT, "<red>You cannot use double jump in this world");
+
+        public Notification targetInDisabledRegion = new Notification(NotificationType.CHAT, "<red>The player is in disabled region");
+        public Notification targetHasDisabledGameMode = new Notification(NotificationType.CHAT, "<red>The player has a game mode that is disabled");
+        public Notification targetInDisabledWorld = new Notification(NotificationType.CHAT, "<red>The player is in disabled world");
+
+    }
 }

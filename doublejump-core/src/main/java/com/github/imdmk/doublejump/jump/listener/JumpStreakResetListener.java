@@ -6,7 +6,6 @@ import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.reset.JumpStreakResetEvent;
 import com.github.imdmk.doublejump.jump.event.reset.JumpStreakResetReason;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.notification.NotificationSettings;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -23,14 +22,12 @@ public class JumpStreakResetListener implements Listener {
 
     private final Server server;
     private final JumpSettings jumpSettings;
-    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public JumpStreakResetListener(Server server, JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
+    public JumpStreakResetListener(Server server, JumpSettings jumpSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager) {
         this.server = server;
         this.jumpSettings = jumpSettings;
-        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
     }
@@ -100,6 +97,6 @@ public class JumpStreakResetListener implements Listener {
 
         jumpPlayer.setStreak(0);
 
-        this.notificationSender.send(player, this.notificationSettings.jumpStreakResetNotification);
+        this.notificationSender.send(player, this.jumpSettings.notificationSettings.jumpStreakHasBeenReset);
     }
 }

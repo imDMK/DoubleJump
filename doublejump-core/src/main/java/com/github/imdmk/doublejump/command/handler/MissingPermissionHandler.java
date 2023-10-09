@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump.command.handler;
 
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.notification.NotificationSettings;
+import com.github.imdmk.doublejump.notification.configuration.NotificationSettings;
 import com.github.imdmk.doublejump.text.Formatter;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.command.permission.RequiredPermissions;
@@ -23,6 +23,6 @@ public class MissingPermissionHandler implements PermissionHandler<CommandSender
         Formatter formatter = new Formatter()
                 .placeholder("{PERMISSIONS}", requiredPermissions.getPermissions());
 
-        this.notificationSender.send(commandSender, this.notificationSettings.missingPermissionsNotification, formatter);
+        this.notificationSender.send(commandSender, this.notificationSettings.missingPermissions, formatter);
     }
 }

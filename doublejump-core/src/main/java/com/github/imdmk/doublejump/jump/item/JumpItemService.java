@@ -16,7 +16,7 @@ public class JumpItemService {
 
     public JumpItemService(JumpItemSettings jumpItemSettings) {
         this.jumpItem = jumpItemSettings.item;
-        this.jumpItemUsage = jumpItemSettings.usageConfiguration.usage;
+        this.jumpItemUsage = jumpItemSettings.usageSettings.usage;
         this.ignoreEnchants = !jumpItemSettings.cancelEnchant;
         this.ignoreDurability = !jumpItemSettings.cancelRepair;
     }

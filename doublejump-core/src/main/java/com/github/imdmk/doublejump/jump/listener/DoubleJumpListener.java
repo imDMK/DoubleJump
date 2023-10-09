@@ -4,7 +4,6 @@ import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.notification.NotificationSettings;
 import com.github.imdmk.doublejump.text.Formatter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,12 +15,10 @@ import org.bukkit.util.Vector;
 public class DoubleJumpListener implements Listener {
 
     private final JumpSettings jumpSettings;
-    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
 
-    public DoubleJumpListener(JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender) {
+    public DoubleJumpListener(JumpSettings jumpSettings, NotificationSender notificationSender) {
         this.jumpSettings = jumpSettings;
-        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
     }
 
@@ -63,7 +60,7 @@ public class DoubleJumpListener implements Listener {
             Formatter formatter = new Formatter()
                     .placeholder("{STREAK}", jumpPlayer.getStreak());
 
-            this.notificationSender.send(player, this.notificationSettings.jumpStreakIncreaseNotification, formatter);
+            this.notificationSender.send(player, this.jumpSettings.notificationSettings.jumpStreakIncreased, formatter);
         }
 
         if (this.jumpSettings.limitSettings.enabled) {

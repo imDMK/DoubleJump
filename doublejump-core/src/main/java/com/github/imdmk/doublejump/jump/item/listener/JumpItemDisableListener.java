@@ -38,7 +38,7 @@ public class JumpItemDisableListener implements Listener {
             return;
         }
 
-        if (this.jumpItemSettings.usageConfiguration.usage != JumpItemUsage.WEAR_ITEM) {
+        if (this.jumpItemSettings.usageSettings.usage != JumpItemUsage.WEAR_ITEM) {
             return;
         }
 
@@ -55,7 +55,7 @@ public class JumpItemDisableListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (this.jumpItemSettings.dropConfiguration.disableDoubleJumpMode) {
+        if (this.jumpItemSettings.dropSettings.disableDoubleJumpMode) {
             return;
         }
 
@@ -78,7 +78,7 @@ public class JumpItemDisableListener implements Listener {
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
 
-        if (this.jumpItemSettings.usageConfiguration.usage != JumpItemUsage.HOLD_ITEM) {
+        if (this.jumpItemSettings.usageSettings.usage != JumpItemUsage.HOLD_ITEM) {
             return;
         }
 

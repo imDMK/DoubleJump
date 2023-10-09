@@ -4,7 +4,6 @@ import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.notification.NotificationSettings;
 import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.text.Formatter;
 import com.github.imdmk.doublejump.util.DurationUtil;
@@ -15,14 +14,12 @@ public class JumpRestrictionService {
 
     private final JumpSettings jumpSettings;
     private final JumpRestrictionSettings restrictionSettings;
-    private final NotificationSettings notificationSettings;
     private final RegionProvider regionProvider;
     private final NotificationSender notificationSender;
 
-    public JumpRestrictionService(JumpSettings jumpSettings, JumpRestrictionSettings restrictionSettings, NotificationSettings notificationSettings, RegionProvider regionProvider, NotificationSender notificationSender) {
+    public JumpRestrictionService(JumpSettings jumpSettings, JumpRestrictionSettings restrictionSettings, RegionProvider regionProvider, NotificationSender notificationSender) {
         this.jumpSettings = jumpSettings;
         this.restrictionSettings = restrictionSettings;
-        this.notificationSettings = notificationSettings;
         this.regionProvider = regionProvider;
         this.notificationSender = notificationSender;
     }
@@ -37,7 +34,7 @@ public class JumpRestrictionService {
                     .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingDelayDuration()));
 
             jumpPlayer.setDelayNotificationReceived(true);
-            this.sendNotification(player, this.notificationSettings.jumpDelayNotification, formatter, sendNotification);
+            this.sendNotification(player, this.jumpSettings.notificationSettings.jumpDelay, formatter, sendNotification);
 
             return true;
         }
@@ -49,7 +46,7 @@ public class JumpRestrictionService {
 
             if (this.jumpSettings.limitSettings.regenerationDelay.isZero()) {
                 jumpPlayer.setJumpsNotificationReceived(true);
-                this.sendNotification(player, this.notificationSettings.jumpLimitNotification, sendNotification);
+                this.sendNotification(player, this.jumpSettings.limitSettings.notificationSettings.jumpLimit, sendNotification);
 
                 return true;
             }
@@ -58,7 +55,7 @@ public class JumpRestrictionService {
                     .placeholder("{TIME}", DurationUtil.toHumanReadable(jumpPlayer.getRemainingJumpRegenerationDuration()));
 
             jumpPlayer.setJumpsNotificationReceived(true);
-            this.sendNotification(player, this.notificationSettings.jumpLimitDelayNotification, formatter, sendNotification);
+            this.sendNotification(player, this.jumpSettings.limitSettings.notificationSettings.jumpLimitRegenerationDelay, formatter, sendNotification);
 
             return true;
         }
@@ -71,19 +68,19 @@ public class JumpRestrictionService {
 
     public boolean isPassedRestrictions(Player player, boolean sendNotification) {
         if (this.regionProvider.isInRegion(player)) {
-            this.sendNotification(player, this.notificationSettings.jumpModeDisableRegionNotification, sendNotification);
+            this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledRegion, sendNotification);
             return true;
         }
 
         GameMode playerGameMode = player.getGameMode();
         if (this.restrictionSettings.disabledGameModes.contains(playerGameMode)) {
-            this.sendNotification(player, this.notificationSettings.jumpModeDisabledGameModeNotification, sendNotification);
+            this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledGameMode, sendNotification);
             return true;
         }
 
         String playerWorldName = player.getWorld().getName();
         if (this.restrictionSettings.disabledWorlds.contains(playerWorldName)) {
-            this.sendNotification(player, this.notificationSettings.jumpModeDisabledWorldNotification, sendNotification);
+            this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledWorld, sendNotification);
             return true;
         }
 
@@ -92,19 +89,19 @@ public class JumpRestrictionService {
 
     public boolean isPassedRestrictions(Player player, Player target, boolean sendNotification) {
         if (this.regionProvider.isInRegion(target)) {
-            this.sendNotification(player, this.notificationSettings.targetInDisabledRegionNotification, sendNotification);
+            this.sendNotification(player, this.restrictionSettings.notificationSettings.targetInDisabledRegion, sendNotification);
             return true;
         }
 
         GameMode targetGameMode = target.getGameMode();
         if (this.restrictionSettings.disabledGameModes.contains(targetGameMode)) {
-            this.sendNotification(player, this.notificationSettings.targetHasDisabledGameModeNotification, sendNotification);
+            this.sendNotification(player, this.restrictionSettings.notificationSettings.targetHasDisabledGameMode, sendNotification);
             return true;
         }
 
         String targetWorldName = target.getWorld().getName();
         if (this.restrictionSettings.disabledWorlds.contains(targetWorldName)) {
-            this.sendNotification(player, this.notificationSettings.targetInDisabledWorldNotification, sendNotification);
+            this.sendNotification(player, this.restrictionSettings.notificationSettings.targetInDisabledWorld, sendNotification);
             return true;
         }
 

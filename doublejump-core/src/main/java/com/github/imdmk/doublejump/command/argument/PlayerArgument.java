@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.command.argument;
 
-import com.github.imdmk.doublejump.notification.NotificationSettings;
+import com.github.imdmk.doublejump.notification.configuration.NotificationSettings;
 import dev.rollczi.litecommands.argument.simple.OneArgument;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.suggestion.Suggestion;
@@ -26,7 +26,7 @@ public class PlayerArgument implements OneArgument<Player> {
         Optional<Player> playerOptional = Optional.ofNullable(this.server.getPlayerExact(argument));
 
         return playerOptional.map(Result::ok)
-                .orElseGet(() -> Result.error(this.notificationSettings.playerNotFoundNotification));
+                .orElseGet(() -> Result.error(this.notificationSettings.playerNotFound));
     }
 
     @Override

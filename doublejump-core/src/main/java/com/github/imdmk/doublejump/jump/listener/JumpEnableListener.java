@@ -6,8 +6,6 @@ import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
-import com.github.imdmk.doublejump.notification.NotificationSender;
-import com.github.imdmk.doublejump.notification.NotificationSettings;
 import com.github.imdmk.doublejump.scheduler.TaskScheduler;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -23,18 +21,14 @@ public class JumpEnableListener implements Listener {
 
     private final Server server;
     private final JumpSettings jumpSettings;
-    private final NotificationSettings notificationSettings;
-    private final NotificationSender notificationSender;
     private final JumpPlayerManager jumpPlayerManager;
     private final JumpPlayerService jumpPlayerService;
     private final JumpRestrictionService jumpRestrictionService;
     private final TaskScheduler taskScheduler;
 
-    public JumpEnableListener(Server server, JumpSettings jumpSettings, NotificationSettings notificationSettings, NotificationSender notificationSender, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpRestrictionService jumpRestrictionService, TaskScheduler taskScheduler) {
+    public JumpEnableListener(Server server, JumpSettings jumpSettings, JumpPlayerManager jumpPlayerManager, JumpPlayerService jumpPlayerService, JumpRestrictionService jumpRestrictionService, TaskScheduler taskScheduler) {
         this.server = server;
         this.jumpSettings = jumpSettings;
-        this.notificationSettings = notificationSettings;
-        this.notificationSender = notificationSender;
         this.jumpPlayerManager = jumpPlayerManager;
         this.jumpPlayerService = jumpPlayerService;
         this.jumpRestrictionService = jumpRestrictionService;

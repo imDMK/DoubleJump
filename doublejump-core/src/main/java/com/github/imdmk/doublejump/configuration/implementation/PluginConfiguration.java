@@ -2,7 +2,7 @@ package com.github.imdmk.doublejump.configuration.implementation;
 
 import com.github.imdmk.doublejump.command.CommandSettings;
 import com.github.imdmk.doublejump.jump.JumpSettings;
-import com.github.imdmk.doublejump.notification.NotificationSettings;
+import com.github.imdmk.doublejump.notification.configuration.NotificationSettings;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -12,9 +12,10 @@ import eu.okaeri.configs.annotation.Header;
         "# Configuration file for the DoubleJump plugin.",
         "#",
         "# If you have a problem with plugin configuration, please create an issue on the project's github.",
+        "# However, if you like the plugin, leave a star for the project on GitHub.",
         "# ",
         "# Support site: https://github.com/imDMK/DoubleJump/issues/new/choose",
-        "# Source code: https://github.com/imDMK/DoubleJump",
+        "# GitHub: https://github.com/imDMK/DoubleJump",
         "#",
 })
 public class PluginConfiguration extends OkaeriConfig {
@@ -25,15 +26,15 @@ public class PluginConfiguration extends OkaeriConfig {
     })
     public boolean checkForUpdate = true;
 
-    @Comment("# Global double jump use permission")
+    @Comment("# Double jump use permission")
     public String doubleJumpUsePermission = "doublejump.use";
 
-    @Comment({"# ", "# Command configuration", "# "})
+    @Comment({"# ", "# Command settings", "# "})
     public CommandSettings commandSettings = new CommandSettings();
 
-    @Comment({"# ", "# Jump configuration", "# "})
+    @Comment({"# ", "# Jump settings", "# "})
     public JumpSettings jumpSettings = new JumpSettings();
 
-    @Comment({"# ", "# Message configuration", "# "})
+    @Comment({"# ", "# Notification settings", "# "})
     public NotificationSettings notificationSettings = new NotificationSettings();
 }

@@ -31,16 +31,16 @@ public class JumpItemDropListener implements Listener {
             return;
         }
 
-        if (this.jumpItemSettings.dropConfiguration.delete) {
+        if (this.jumpItemSettings.dropSettings.delete) {
             event.setCancelled(true);
             player.getInventory().removeItem(itemDrop);
         }
 
-        if (this.jumpItemSettings.dropConfiguration.disableDoubleJumpMode) {
+        if (this.jumpItemSettings.dropSettings.disableDoubleJumpMode) {
             this.jumpPlayerService.disable(player);
         }
 
-        if (this.jumpItemSettings.dropConfiguration.cancel) {
+        if (this.jumpItemSettings.dropSettings.cancel) {
             event.setCancelled(true);
         }
     }

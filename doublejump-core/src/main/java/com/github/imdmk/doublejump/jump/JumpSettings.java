@@ -4,6 +4,8 @@ import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
 import com.github.imdmk.doublejump.jump.particle.JumpParticleSettings;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionSettings;
 import com.github.imdmk.doublejump.jump.sound.JumpSoundSettings;
+import com.github.imdmk.doublejump.notification.Notification;
+import com.github.imdmk.doublejump.notification.NotificationType;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 
@@ -33,14 +35,22 @@ public class JumpSettings extends OkaeriConfig {
     @Comment("# The value of how much up the jump is to be made")
     public double jumpUp = 0.6;
 
-    @Comment({
-            "# ",
-            "# Jump streak configuration",
-            "# "
-    })
-    public streakSettings streakSettings = new streakSettings();
+    @Comment({"#", "# Jump sound settings", "#"})
+    public JumpSoundSettings soundSettings = new JumpSoundSettings();
 
-    public static class streakSettings extends OkaeriConfig {
+    @Comment({"#", "# Jump particle settings", "#"})
+    public JumpParticleSettings particleSettings = new JumpParticleSettings();
+
+    @Comment({"#", "# Jump restrictions settings", "#"})
+    public JumpRestrictionSettings restrictionSettings = new JumpRestrictionSettings();
+
+    @Comment({"#", "# Jump item settings", "#"})
+    public JumpItemSettings itemSettings = new JumpItemSettings();
+
+    @Comment({"# ", "# Jump streak settings", "# "})
+    public JumpStreakSettings streakSettings = new JumpStreakSettings();
+
+    public static class JumpStreakSettings extends OkaeriConfig {
 
         @Comment("# Specifies whether to enable double jump series reset")
         public boolean enabled = true;
@@ -53,14 +63,10 @@ public class JumpSettings extends OkaeriConfig {
 
     }
 
-    @Comment({
-            "# ",
-            "# Jump delay configuration",
-            "# "
-    })
-    public DelaySettings delaySettings = new DelaySettings();
+    @Comment({"# ", "# Jump delay settings", "# "})
+    public JumpDelaySettings delaySettings = new JumpDelaySettings();
 
-    public static class DelaySettings extends OkaeriConfig {
+    public static class JumpDelaySettings extends OkaeriConfig {
 
         @Comment("# Specifies whether double jump delay should be enabled")
         public boolean enabled = true;
@@ -73,14 +79,10 @@ public class JumpSettings extends OkaeriConfig {
 
     }
 
-    @Comment({
-            "# ",
-            "# Jump limit configuration",
-            "# "
-    })
-    public LimitSettings limitSettings = new LimitSettings();
+    @Comment({"#", "# Jump limit settings", "#"})
+    public JumpLimitSettings limitSettings = new JumpLimitSettings();
 
-    public static class LimitSettings extends OkaeriConfig {
+    public static class JumpLimitSettings extends OkaeriConfig {
 
         @Comment("# Specifies whether the jump limit should be enabled")
         public boolean enabled = false;
@@ -107,33 +109,40 @@ public class JumpSettings extends OkaeriConfig {
         })
         public Duration regenerationDelay = Duration.ofSeconds(3);
 
+        @Comment({"#", "# Jump limit notification settings", "#"})
+        public JumpLimitNotificationSettings notificationSettings = new JumpLimitNotificationSettings();
+
+        public static class JumpLimitNotificationSettings extends OkaeriConfig {
+
+            public Notification jumpLimit = new Notification(NotificationType.CHAT, "<red>You have no more jumps");
+            public Notification jumpLimitReceived = new Notification(NotificationType.CHAT, "<green>You received one jump");
+
+            @Comment("# {TIME} - Time left until get one double jump")
+            public Notification jumpLimitRegenerationDelay = new Notification(NotificationType.CHAT, "<red>You must wait {TIME} to get next jump");
+
+        }
     }
 
-    @Comment({
-            "# ",
-            "# Jump sound configuration",
-            "# "
-    })
-    public JumpSoundSettings soundSettings = new JumpSoundSettings();
+    @Comment({"#", "# Jump notification settings", "#"})
+    public JumpNotificationSettings notificationSettings = new JumpNotificationSettings();
 
-    @Comment({
-            "# ",
-            "# Jump particle configuration",
-            "# "
-    })
-    public JumpParticleSettings particleSettings = new JumpParticleSettings();
+    public static class JumpNotificationSettings extends OkaeriConfig {
 
-    @Comment({
-            "# ",
-            "# Jump restrictions configuration",
-            "# "
-    })
-    public JumpRestrictionSettings restrictionSettings = new JumpRestrictionSettings();
+        @Comment("# {TIME} - Time remaining until double jump can be used")
+        public Notification jumpDelay = new Notification(NotificationType.CHAT, "<red>You must wait {TIME} before next double jump");
 
-    @Comment({
-            "# ",
-            "# Jump item configuration",
-            "# "
-    })
-    public JumpItemSettings itemSettings = new JumpItemSettings();
+        @Comment("# {STREAK} - New number of jump streak")
+        public Notification jumpStreakIncreased = new Notification(NotificationType.ACTIONBAR, "<green>Yeah! Current streak: <dark_green>{STREAK}");
+        public Notification jumpStreakHasBeenReset = new Notification(NotificationType.CHAT, "<red>Ops! Your jump streak has been reset");
+
+        public Notification jumpModeEnabled = new Notification(NotificationType.CHAT, "<green>Enabled double jump mode!");
+        public Notification jumpModeDisabled = new Notification(NotificationType.CHAT, "<red>Disabled double jump mode!");
+
+        @Comment("# {PLAYER} - The name of the player for whom double jump mode has been enabled")
+        public Notification jumpModeEnabledFor = new Notification(NotificationType.CHAT, "<green>Enabled double jump mode for player {PLAYER}");
+
+        @Comment("# {PLAYER} - The name of the player for whom double jump mode has been disabled")
+        public Notification jumpModeDisabledFor = new Notification(NotificationType.CHAT, "<red>Disabled double jump mode for player {PLAYER}");
+
+    }
 }
