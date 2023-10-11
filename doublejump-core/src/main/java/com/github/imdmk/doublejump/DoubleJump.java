@@ -135,7 +135,7 @@ public class DoubleJump implements DoubleJumpApi {
                 new JumpRefreshListener(this.jumpPlayerService, taskScheduler),
                 new JumpRegenerationListener(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerManager),
                 new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerManager),
-                new UpdateListener(this.pluginConfiguration, this.notificationSender, updateService, taskScheduler)
+                new UpdateListener(logger, this.pluginConfiguration, this.notificationSender, updateService, taskScheduler)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
