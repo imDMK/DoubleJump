@@ -61,6 +61,17 @@ public class JumpSettings extends OkaeriConfig {
         @Comment("# Specifies whether the jump streak will be reset when the player dies")
         public boolean resetOnDeath = true;
 
+        @Comment({"# ", "# Jump streak notification settings", "# "})
+        public JumpStreakNotificationSettings notificationSettings = new JumpStreakNotificationSettings();
+
+        public static class JumpStreakNotificationSettings extends OkaeriConfig {
+
+            @Comment("# {STREAK} - New number of jump streak")
+            public Notification jumpStreakIncreased = new Notification(NotificationType.ACTIONBAR, "<green>Yeah! Current streak: <dark_green>{STREAK}");
+
+            public Notification jumpStreakHasBeenReset = new Notification(NotificationType.CHAT, "<red>Ops! Your jump streak has been reset");
+
+        }
     }
 
     @Comment({"# ", "# Jump delay settings", "# "})
@@ -130,10 +141,6 @@ public class JumpSettings extends OkaeriConfig {
 
         @Comment("# {TIME} - Time remaining until double jump can be used")
         public Notification jumpDelay = new Notification(NotificationType.CHAT, "<red>You must wait {TIME} before next double jump");
-
-        @Comment("# {STREAK} - New number of jump streak")
-        public Notification jumpStreakIncreased = new Notification(NotificationType.ACTIONBAR, "<green>Yeah! Current streak: <dark_green>{STREAK}");
-        public Notification jumpStreakHasBeenReset = new Notification(NotificationType.CHAT, "<red>Ops! Your jump streak has been reset");
 
         public Notification jumpModeEnabled = new Notification(NotificationType.CHAT, "<green>Enabled double jump mode!");
         public Notification jumpModeDisabled = new Notification(NotificationType.CHAT, "<red>Disabled double jump mode!");

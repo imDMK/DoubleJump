@@ -97,6 +97,6 @@ public class JumpStreakResetListener implements Listener {
 
         jumpPlayer.setStreak(0);
 
-        this.notificationSender.send(player, this.jumpSettings.notificationSettings.jumpStreakHasBeenReset);
+        this.notificationSender.send(player, this.jumpSettings.streakSettings.notificationSettings.jumpStreakHasBeenReset);
     }
 }

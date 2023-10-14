@@ -60,7 +60,7 @@ public class DoubleJumpListener implements Listener {
             Formatter formatter = new Formatter()
                     .placeholder("{STREAK}", jumpPlayer.getStreak());
 
-            this.notificationSender.send(player, this.jumpSettings.notificationSettings.jumpStreakIncreased, formatter);
+            this.notificationSender.send(player, this.jumpSettings.streakSettings.notificationSettings.jumpStreakIncreased, formatter);
         }
 
         if (this.jumpSettings.limitSettings.enabled) {
