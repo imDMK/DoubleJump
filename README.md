@@ -9,27 +9,36 @@
 [![Paper](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/DoubleJump)
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
 
-Efficient double jump plugin with many features and configuration possibilities.
+### Information
+This is a plugin that allows you to double jump on the server.
+* **Performance-focused** - Minimizes the impact on server resources, allowing you to maintain high server performance.
+* **Simplicity of configuration** - Thanks to clear documentation, even people without advanced knowledge can easily adapt the plugin to their own needs.
+* **Regularly Updated** - We update our plugin regularly, both fixing bugs and adding new features to ensure full compatibility with the latest versions of the game.
 
-# Features
-* Spawn particles when a player uses double jump,
-* Playing sound when a player uses double jump,
+### Features
+* Spawn particles when a player executes a double jump,
+* Play a sound when a player performs a double jump,
 * Double jump streaks,
 * Double jump item,
-* Possibility to customize messages (disable or type, e.g. ACTIONBAR or CHAT),
-* Possibility to disable using double jump in selected worlds,
-* Possibility to enable or disable double jump mode for the selected player.
-* Possibility to enable double jump mode when joining the server (U can set it only for administrators),
-* Ability to disable using double jump in selected game modes,
-* Ability to set double jump series to reset after dying or touching the ground.
-* [WorldGuard](https://github.com/EngineHub/WorldGuard) support - Possibility to disable using double jump in selected regions
-* [Adventure](https://github.com/KyoriPowered/adventure) components support.
+* Option to customize messages (ACTIONBAR, CHAT etc.),
+* Option to disable double jump in selected worlds,
+* Option to enable or disable double jump mode for a selected player,
+* Option to enable double jump mode upon joining the server,
+* Ability to disable double jump in selected game modes,
+* Ability to set double jump streaks to reset after death or upon touching the ground.
+* [WorldGuard](https://github.com/EngineHub/WorldGuard) support - Ability to disable double jump in selected regions,
+* [Adventure components](https://github.com/KyoriPowered/adventure) support.
 * [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support.
-* Easy to use API.
+* User-friendly API.
 
-# FAQ
-#### **Q: What are the available placeholders?**
-**A:** Available placeholders:
+### Preview
+* ### Double jumping without delay
+![gif](assets/without-delay.gif)
+
+* ### Double jumping with delay and streak
+![gif](assets/delay-streak.gif)
+
+### Placeholder API formats
 * `jump-player-delay` - Displays the remaining delay time until the next double jump can be used.
 * `jump-player-is-delay` - Returns "yes" or "no" depending on whether the player has a jump delay.
 * `jump-player-regeneration-delay` - Shows the remaining time to regenerate one jump in human-readable.
@@ -38,17 +47,21 @@ Efficient double jump plugin with many features and configuration possibilities.
 * `jump-player-jumps` - Returns the total value of all double jumps performed.
 * `jump-player-streak` - Returns the player's current double jump streak.
 
-**ATTENTION:** All placeholders will return null if the player does not have an active double jump (placeholder will not be applied).
+All placeholders will return null if the player does not have an active double jump (placeholder will not be applied).
   
-#### **Q: What are the notification types?**
-**A:** CHAT, ACTIONBAR, TITLE, SUBTITLE, DISABLED
+### Notification types
+* `CHAT`
+* `ACTIONBAR`
+* `TITLE`
+* `SUBTITLE`
+* `DISABLED`
 
-#### **Q: An error occurred while configuring particles. How to fix it?**
-**A:** Probably the error is because the particle type needs additional data. 
+### Particle spawn error
+* The error is because the particle type needs additional data. 
 Currently, the plugin supports particle types that contain **no data** or only **DustOptions**. 
 [Here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html) you have a list of all (The description indicates the data).
 
-# API
+### API
 To start using API you have to include a double-jump-API jar to your libraries or use:
 ### Maven
 ```xml
@@ -78,11 +91,11 @@ To start using API you have to include a double-jump-API jar to your libraries o
   }
 ```
 ### Usage
-You can access the API using:
+After install dependency, you can access the API using:
 ```java
 DoubleJumpApiProvider.get();
 ```
-Example:
+Example usage:
 ```java
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
@@ -108,7 +121,10 @@ Example:
     }
 ```
 ### Events
-You can listen to events:
+* `DoubleJumpEvent` - Called when the player tries to use a double jump
+* `JumpStreakResetEvent` - Called when the player's jump streak will be reset.
+
+Example usage:
 ```java
     @EventHandler
     public void onPlayerDoubleJump(DoubleJumpEvent event) {
@@ -133,5 +149,5 @@ You can listen to events:
         }
     }
 ```
-# Information
+### Reporting issues
 If you have any suggestions or found a bug, please report it using [this](https://github.com/imDMK/DoubleJump/issues/new/choose) site.
