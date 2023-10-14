@@ -150,4 +150,4 @@ Example usage:
     }
 ```
 ### Reporting issues
-If you have any suggestions or found a bug, please report it using [this](https://github.com/imDMK/DoubleJump/issues/new/choose) site.
+If you have any suggestions or find a bug, please report it using [this](https://github.com/imDMK/DoubleJump/issues/new/choose) site.
