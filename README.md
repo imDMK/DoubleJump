@@ -32,10 +32,10 @@ This is a plugin that allows you to double jump on the server.
 * User-friendly API.
 
 ### Preview
-* ### Double jumping without delay
+* #### Double jumping without delay
 ![gif](assets/without-delay.gif)
 
-* ### Double jumping with delay and streak
+* #### Double jumping with delay and streak
 ![gif](assets/delay-streak.gif)
 
 ### Placeholder API formats
@@ -63,7 +63,7 @@ Currently, the plugin supports particle types that contain **no data** or only *
 
 ### API
 To start using API you have to include a double-jump-API jar to your libraries or use:
-### Maven
+#### Maven
 ```xml
   <repositories>
     <repository>
@@ -80,7 +80,7 @@ To start using API you have to include a double-jump-API jar to your libraries o
     </dependency>
   </dependencies>
 ```
-### Gradle
+#### Gradle
 ```groovy
   repositories {
     maven { url 'https://jitpack.io' }
@@ -90,7 +90,7 @@ To start using API you have to include a double-jump-API jar to your libraries o
     implementation 'com.github.imDMK.DoubleJump:doublejump-api:VERSION'
   }
 ```
-### Usage
+#### Usage
 After install dependency, you can access the API using:
 ```java
 DoubleJumpApiProvider.get();
@@ -120,7 +120,7 @@ Example usage:
         }
     }
 ```
-### Events
+#### Events
 * `DoubleJumpEvent` - Called when the player tries to use a double jump
 * `JumpStreakResetEvent` - Called when the player's jump streak will be reset.
 
