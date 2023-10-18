@@ -10,7 +10,7 @@
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
 
 ### Information
-This is a plugin that allows you to double jump on the server.
+This is a plugin that allows you to double-jump on the server.
 * **Performance-focused** - Minimizes the impact on server resources, allowing you to maintain high server performance.
 * **Simplicity of configuration** - Thanks to clear documentation, even people without advanced knowledge can easily adapt the plugin to their own needs.
 * **Regularly Updated** - We update our plugin regularly, both fixing bugs and adding new features to ensure full compatibility with the latest versions of the game.
@@ -20,7 +20,7 @@ This is a plugin that allows you to double jump on the server.
 * Play a sound when a player performs a double jump,
 * Double jump streaks,
 * Double jump item,
-* Option to customize messages (ACTIONBAR, CHAT etc.),
+* Option to customize messages (ACTIONBAR, CHAT, etc.),
 * Option to disable double jump in selected worlds,
 * Option to enable or disable double jump mode for a selected player,
 * Option to enable double jump mode upon joining the server,
