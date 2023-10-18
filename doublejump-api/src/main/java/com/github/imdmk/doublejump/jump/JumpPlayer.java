@@ -9,9 +9,10 @@ import java.time.Instant;
 public class JumpPlayer {
 
     private Instant endOfDelay;
-    private int streak;
 
+    private int streak;
     private int jumps;
+
     private final int jumpsLimit;
 
     private Instant endOfJumpsRegenerationDelay;
