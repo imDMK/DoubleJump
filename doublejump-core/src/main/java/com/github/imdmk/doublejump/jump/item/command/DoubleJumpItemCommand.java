@@ -6,13 +6,14 @@ import com.github.imdmk.doublejump.text.Formatter;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
+import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-@Route(name = "doublejump")
+@Route(name = "doublejump item")
 public class DoubleJumpItemCommand {
 
     private final JumpItemSettings jumpItemSettings;
@@ -23,7 +24,8 @@ public class DoubleJumpItemCommand {
         this.notificationSender = notificationSender;
     }
 
-    @Execute(route = "item-give", required = 1)
+    @Execute(route = "give", required = 1)
+    @Permission("command.doublejump.item.give")
     void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
         if (!this.jumpItemSettings.enabled) {
             this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.jumpItemDisabled);
@@ -46,7 +48,8 @@ public class DoubleJumpItemCommand {
         this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.jumpItemAdded, formatter);
     }
 
-    @Execute(route = "item-remove", required = 1)
+    @Execute(route = "remove", required = 1)
+    @Permission("command.doublejump.item.remove")
     void removeItem(CommandSender sender, @Arg @Name("target") Player target) {
         ItemStack jumpItem = this.jumpItemSettings.item;
 

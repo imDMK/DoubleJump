@@ -10,10 +10,8 @@ import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommand;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpForCommand;
-import com.github.imdmk.doublejump.jump.command.editor.DoubleJumpCommandEditor;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.command.DoubleJumpItemCommand;
-import com.github.imdmk.doublejump.jump.item.command.DoubleJumpItemCommandEditor;
 import com.github.imdmk.doublejump.jump.item.listener.JumpItemActionBlockListener;
 import com.github.imdmk.doublejump.jump.item.listener.JumpItemDisableListener;
 import com.github.imdmk.doublejump.jump.item.listener.JumpItemDropListener;
@@ -196,9 +194,6 @@ public class DoubleJump implements DoubleJumpApi {
                         new DoubleJumpForCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerService, this.jumpRestrictionService),
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpSettings.itemSettings, this.notificationSender)
                 )
-
-                .commandEditor(DoubleJumpCommand.class, new DoubleJumpCommandEditor(this.pluginConfiguration.commandSettings))
-                .commandEditor(DoubleJumpItemCommand.class, new DoubleJumpItemCommandEditor(this.pluginConfiguration.commandSettings))
 
                 .register();
     }

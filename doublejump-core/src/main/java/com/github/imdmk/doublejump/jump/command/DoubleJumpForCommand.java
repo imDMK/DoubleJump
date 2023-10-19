@@ -8,10 +8,12 @@ import com.github.imdmk.doublejump.text.Formatter;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
+import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.entity.Player;
 
 @Route(name = "doublejump")
+@Permission("command.doublejump.for")
 public class DoubleJumpForCommand {
 
     private final JumpSettings jumpSettings;

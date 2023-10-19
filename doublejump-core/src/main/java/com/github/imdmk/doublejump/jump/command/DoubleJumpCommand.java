@@ -6,10 +6,12 @@ import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import dev.rollczi.litecommands.command.execute.Execute;
+import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.entity.Player;
 
 @Route(name = "doublejump")
+@Permission("command.doublejump")
 public class DoubleJumpCommand {
 
     private final JumpSettings jumpSettings;
