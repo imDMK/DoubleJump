@@ -83,7 +83,8 @@ public class JumpStreakResetListener implements Listener {
     private boolean isOnGround(Player player) {
         Location playerLocation = player.getLocation();
 
-        return playerLocation.getBlock().getRelative(BlockFace.SOUTH).getType() != Material.AIR;
+        Material groundBlockType = playerLocation.getBlock().getRelative(BlockFace.DOWN).getType();
+        return groundBlockType != Material.AIR && groundBlockType != Material.LIGHT;
     }
 
     private void resetStreak(Player player, JumpPlayer jumpPlayer, JumpStreakResetReason streakResetReason) {

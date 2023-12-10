@@ -39,6 +39,14 @@ This is a plugin that allows you to double-jump on the server.
 * #### Double jumping with delay and streak
 ![gif](assets/delay-streak.gif)
 
+### Command permissions
+| Command                  | Permission                       |
+|:-------------------------|:---------------------------------|
+| `doublejump`             | command.doublejump               |
+| `doublejump -for`        | command.doublejump.for           |
+| `doublejump item give`   | command.doublejump.item.give     |          
+| `doublejump item remove` | command.doublejump.item.remove   |
+
 ### Placeholder API formats
 * `jump-player-delay` - Displays the remaining delay time until the next double jump can be used.
 * `jump-player-is-delay` - Returns "yes" or "no" depending on whether the player has a jump delay.
@@ -56,6 +64,7 @@ All placeholders will return null if the player does not have an active double j
 * `TITLE`
 * `SUBTITLE`
 * `DISABLED`
+* 
 
 ### Particle spawn error
 * The error is because the particle type needs additional data. 
