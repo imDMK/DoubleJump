@@ -1,12 +1,11 @@
 package com.github.imdmk.doublejump.jump;
 
 import com.github.imdmk.doublejump.region.RegionProvider;
+import com.github.imdmk.doublejump.restriction.JumpRestriction;
 import com.github.imdmk.doublejump.util.GameModeUtil;
 import org.bukkit.GameMode;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -16,19 +15,19 @@ public class JumpPlayerService {
     private final RegionProvider regionProvider;
     private final JumpPlayerManager playerManager;
 
-    private final List<String> disabledWorlds;
-    private final List<GameMode> disabledGameModes;
+    private final JumpRestriction<String> worldRestriction;
+    private final JumpRestriction<GameMode> gameModeRestriction;
     private final String doubleJumpUsePermission;
 
     private final boolean jumpsLimitEnabled;
     private final int jumpsLimit;
     private final Map<String, Integer> jumpsLimitByPermissions;
 
-    public JumpPlayerService(RegionProvider regionProvider, JumpPlayerManager playerManager, List<String> disabledWorlds, List<GameMode> disabledGameModes, String doubleJumpUsePermission, boolean jumpsLimitEnabled, int jumpsLimit, Map<String, Integer> jumpsLimitByPermissions) {
+    public JumpPlayerService(RegionProvider regionProvider, JumpPlayerManager playerManager, JumpRestriction<String> worldRestriction, JumpRestriction<GameMode> gameModeRestriction, String doubleJumpUsePermission, boolean jumpsLimitEnabled, int jumpsLimit, Map<String, Integer> jumpsLimitByPermissions) {
         this.regionProvider = regionProvider;
         this.playerManager = playerManager;
-        this.disabledWorlds = disabledWorlds;
-        this.disabledGameModes = disabledGameModes;
+        this.worldRestriction = worldRestriction;
+        this.gameModeRestriction = gameModeRestriction;
         this.doubleJumpUsePermission = doubleJumpUsePermission;
         this.jumpsLimitEnabled = jumpsLimitEnabled;
         this.jumpsLimit = jumpsLimit;
@@ -118,17 +117,17 @@ public class JumpPlayerService {
      * @return Whether the player can use double jump.
      */
     public boolean canUseDoubleJump(Player player) {
-        if (this.regionProvider.isInRegion(player)) {
+        if (!this.regionProvider.isInAllowedRegion(player)) {
             return false;
         }
 
         GameMode playerGameMode = player.getGameMode();
-        if (this.disabledGameModes.contains(playerGameMode)) {
+        if (!this.gameModeRestriction.isAllowed(playerGameMode)) {
             return false;
         }
 
-        World playerWorld = player.getWorld();
-        if (this.disabledWorlds.contains(playerWorld.getName())) {
+        String playerWorldName = player.getWorld().getName();
+        if (!this.worldRestriction.isAllowed(playerWorldName)) {
             return false;
         }
 

@@ -2,6 +2,8 @@ package com.github.imdmk.doublejump.jump.restriction;
 
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationType;
+import com.github.imdmk.doublejump.restriction.JumpRestriction;
+import com.github.imdmk.doublejump.restriction.JumpRestrictionType;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import org.bukkit.GameMode;
@@ -11,23 +13,16 @@ import java.util.List;
 public class JumpRestrictionSettings extends OkaeriConfig {
 
     @Comment({
-            "# Names of regions where the player will not be able to double-jump",
+            "# Restriction of regions where the player will not be able to double-jump",
             "# The WorldGuard plugin is required for this feature to work"
     })
-    public List<String> disabledRegions = List.of(
-            "example-region"
-    );
+    public JumpRestriction<String> regionRestriction = new JumpRestriction<>(JumpRestrictionType.WHITELIST, List.of("example-region"));
 
-    @Comment("# Names of worlds where the player will not be able to double-jump")
-    public List<String> disabledWorlds = List.of(
-            "example-world"
-    );
+    @Comment("# Restriction of worlds where the player will not be able to double-jump")
+    public JumpRestriction<String> worldRestriction = new JumpRestriction<>(JumpRestrictionType.BLACKLIST, List.of("example-world"));
 
-    @Comment("# The names of the game modes during which the player will not be able to double-jump")
-    public List<GameMode> disabledGameModes = List.of(
-            GameMode.SPECTATOR,
-            GameMode.CREATIVE
-    );
+    @Comment("# The restriction of the game modes during which the player will not be able to double-jump")
+    public JumpRestriction<GameMode> gameModeRestriction = new JumpRestriction<>(JumpRestrictionType.BLACKLIST, List.of(GameMode.CREATIVE));
 
     @Comment({"#", "# Jump restriction notification settings", "#"})
     public JumpRestrictionNotificationSettings notificationSettings = new JumpRestrictionNotificationSettings();
