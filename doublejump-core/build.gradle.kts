@@ -24,7 +24,7 @@ repositories {
 dependencies {
     implementation(project(":doublejump-api"))
 
-    compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.3")
 
     implementation("dev.triumphteam:triumph-gui:3.1.5")
