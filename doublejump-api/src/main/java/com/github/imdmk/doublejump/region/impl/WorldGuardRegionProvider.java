@@ -21,8 +21,8 @@ public class WorldGuardRegionProvider implements RegionProvider {
     @Override
     public boolean isInAllowedRegion(Player player) {
         return switch (this.regionRestriction.type()) {
-            case BLACKLIST -> this.regionRestriction.list().stream().anyMatch(region -> this.isInRegion(player, region));
-            case WHITELIST -> this.regionRestriction.list().stream().anyMatch(region -> !this.isInRegion(player, region));
+            case BLACKLIST -> this.regionRestriction.list().stream().anyMatch(region -> !this.isInRegion(player, region));
+            case WHITELIST -> this.regionRestriction.list().stream().anyMatch(region -> this.isInRegion(player, region));
         };
     }
 
