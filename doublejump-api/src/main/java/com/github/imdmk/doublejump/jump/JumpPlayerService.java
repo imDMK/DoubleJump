@@ -86,7 +86,7 @@ public class JumpPlayerService {
 
         this.playerManager.remove(playerUniqueId);
 
-        if (!GameModeUtil.isGameModeCanFly(playerGameMode)) {
+        if (!GameModeUtil.canFly(playerGameMode)) {
             player.setAllowFlight(false);
         }
     }

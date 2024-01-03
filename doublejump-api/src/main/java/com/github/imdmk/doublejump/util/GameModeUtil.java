@@ -14,7 +14,7 @@ public class GameModeUtil {
      * @param gameMode Game mode to check
      * @return Whether the game mode has permission to fly
      */
-    public static boolean isGameModeCanFly(GameMode gameMode) {
+    public static boolean canFly(GameMode gameMode) {
         return gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE;
     }
 }
