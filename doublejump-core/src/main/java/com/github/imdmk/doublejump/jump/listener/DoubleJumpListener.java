@@ -3,6 +3,7 @@ package com.github.imdmk.doublejump.jump.listener;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
+import com.github.imdmk.doublejump.jump.sound.JumpSoundService;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.text.Formatter;
 import org.bukkit.Location;
@@ -15,10 +16,12 @@ import org.bukkit.util.Vector;
 public class DoubleJumpListener implements Listener {
 
     private final JumpSettings jumpSettings;
+    private final JumpSoundService jumpSoundService;
     private final NotificationSender notificationSender;
 
-    public DoubleJumpListener(JumpSettings jumpSettings, NotificationSender notificationSender) {
+    public DoubleJumpListener(JumpSettings jumpSettings, JumpSoundService jumpSoundService, NotificationSender notificationSender) {
         this.jumpSettings = jumpSettings;
+        this.jumpSoundService = jumpSoundService;
         this.notificationSender = notificationSender;
     }
 
@@ -46,8 +49,12 @@ public class DoubleJumpListener implements Listener {
             jumpPlayer.addDelay(this.jumpSettings.delaySettings.delay);
         }
 
-        if (this.jumpSettings.soundSettings.enabled) {
-            this.jumpSettings.soundSettings.sounds.forEach(sound -> sound.play(player));
+        if (this.jumpSoundService.isSoundsEnabled()) {
+            this.jumpSoundService.play(player);
+
+            if (this.jumpSoundService.isPlayNearbyEnabled()) {
+                this.jumpSoundService.playNearby(player);
+            }
         }
 
         if (this.jumpSettings.particleSettings.enabled) {
