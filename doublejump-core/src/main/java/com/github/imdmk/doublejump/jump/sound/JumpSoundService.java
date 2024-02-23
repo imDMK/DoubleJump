@@ -1,8 +1,6 @@
 package com.github.imdmk.doublejump.jump.sound;
 
 import com.github.imdmk.doublejump.configuration.implementation.PluginConfiguration;
-import com.github.imdmk.doublejump.jump.JumpSettings;
-import com.github.imdmk.doublejump.placeholder.PlaceholderRegistry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 

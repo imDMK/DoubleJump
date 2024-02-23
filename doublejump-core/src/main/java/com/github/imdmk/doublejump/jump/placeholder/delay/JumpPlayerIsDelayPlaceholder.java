@@ -2,6 +2,7 @@ package com.github.imdmk.doublejump.jump.placeholder.delay;
 
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
+import com.github.imdmk.doublejump.placeholder.PlaceholderSettings;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -13,10 +14,12 @@ import java.util.Optional;
 public class JumpPlayerIsDelayPlaceholder extends PlaceholderExpansion {
 
     private final PluginDescriptionFile pluginDescriptionFile;
+    private final PlaceholderSettings placeholderSettings;
     private final JumpPlayerManager jumpPlayerManager;
 
-    public JumpPlayerIsDelayPlaceholder(PluginDescriptionFile pluginDescriptionFile, JumpPlayerManager jumpPlayerManager) {
+    public JumpPlayerIsDelayPlaceholder(PluginDescriptionFile pluginDescriptionFile, PlaceholderSettings placeholderSettings, JumpPlayerManager jumpPlayerManager) {
         this.pluginDescriptionFile = pluginDescriptionFile;
+        this.placeholderSettings = placeholderSettings;
         this.jumpPlayerManager = jumpPlayerManager;
     }
 
@@ -45,7 +48,7 @@ public class JumpPlayerIsDelayPlaceholder extends PlaceholderExpansion {
 
         return jumpPlayerOptional
                 .map(JumpPlayer::isDelay)
-                .map(aBoolean -> aBoolean ? "yes" : "no")
+                .map(aBoolean -> aBoolean ? this.placeholderSettings.whenTrueMessage : this.placeholderSettings.whenFalseMessage)
                 .orElse(null);
     }
 }

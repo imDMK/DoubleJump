@@ -149,9 +149,9 @@ public class DoubleJump implements DoubleJumpApi {
 
             Stream.of(
                     new JumpPlayerDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
-                    new JumpPlayerIsDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerIsDelayPlaceholder(pluginDescriptionFile, this.pluginConfiguration.placeholderSettings, this.jumpPlayerManager),
                     new JumpPlayerRegenerationDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
-                    new JumpPlayerHasJumpsPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerHasJumpsPlaceholder(pluginDescriptionFile, this.pluginConfiguration.placeholderSettings, this.jumpPlayerManager),
                     new JumpPlayerJumpsLimitPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
                     new JumpPlayerJumpsPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
                     new JumpPlayerStreakPlaceholder(pluginDescriptionFile, this.jumpPlayerManager)

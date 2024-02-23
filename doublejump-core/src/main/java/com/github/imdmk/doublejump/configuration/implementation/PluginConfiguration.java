@@ -3,6 +3,7 @@ package com.github.imdmk.doublejump.configuration.implementation;
 import com.github.imdmk.doublejump.command.CommandSettings;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.notification.configuration.NotificationSettings;
+import com.github.imdmk.doublejump.placeholder.PlaceholderSettings;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -37,4 +38,7 @@ public class PluginConfiguration extends OkaeriConfig {
 
     @Comment({"# ", "# Notification settings", "# "})
     public NotificationSettings notificationSettings = new NotificationSettings();
+
+    @Comment({"# ", "# Placeholder settings", "# "})
+    public PlaceholderSettings placeholderSettings = new PlaceholderSettings();
 }
