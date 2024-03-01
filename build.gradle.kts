@@ -1,17 +1,20 @@
 plugins {
+    `java-library`
     `maven-publish`
 }
 
-subprojects {
-    apply(plugin = "maven-publish")
+group = "com.github.imdmk"
+version = "2.1.2"
 
-    configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>("maven") {
-                groupId = project.group.toString()
-                artifactId = project.name
-                version = project.version.toString()
-            }
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
         }
     }
 }
