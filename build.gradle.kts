@@ -7,6 +7,11 @@ allprojects {
     apply(plugin="java-library")
     apply(plugin="maven-publish")
 
+    java {
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+    }
+
     publishing {
         publications {
             create<MavenPublication>("maven") {
