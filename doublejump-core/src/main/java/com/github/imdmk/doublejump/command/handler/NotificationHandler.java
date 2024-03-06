@@ -2,11 +2,12 @@ package com.github.imdmk.doublejump.command.handler;
 
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import dev.rollczi.litecommands.command.LiteInvocation;
-import dev.rollczi.litecommands.handle.Handler;
+import dev.rollczi.litecommands.handler.result.ResultHandler;
+import dev.rollczi.litecommands.handler.result.ResultHandlerChain;
+import dev.rollczi.litecommands.invocation.Invocation;
 import org.bukkit.command.CommandSender;
 
-public class NotificationHandler implements Handler<CommandSender, Notification> {
+public class NotificationHandler implements ResultHandler<CommandSender, Notification> {
 
     private final NotificationSender notificationSender;
 
@@ -15,7 +16,9 @@ public class NotificationHandler implements Handler<CommandSender, Notification>
     }
 
     @Override
-    public void handle(CommandSender sender, LiteInvocation invocation, Notification notification) {
+    public void handle(Invocation<CommandSender> invocation, Notification notification, ResultHandlerChain<CommandSender> resultHandlerChain) {
+        CommandSender sender = invocation.sender();
+
         this.notificationSender.send(sender, notification);
     }
 }

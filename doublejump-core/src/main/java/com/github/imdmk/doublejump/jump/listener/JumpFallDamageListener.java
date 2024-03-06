@@ -56,6 +56,10 @@ public class JumpFallDamageListener implements Listener {
             return;
         }
 
+        if (!this.jumpPlayerManager.isDoubleJumpMode(player)) {
+            return;
+        }
+
         if (this.shouldTakeFallDamage(player)) {
             player.setAllowFlight(false);
         }

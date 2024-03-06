@@ -5,12 +5,13 @@ import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.notification.NotificationSender;
-import dev.rollczi.litecommands.command.execute.Execute;
-import dev.rollczi.litecommands.command.permission.Permission;
-import dev.rollczi.litecommands.command.route.Route;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.entity.Player;
 
-@Route(name = "doublejump")
+@Command(name = "doublejump")
 @Permission("command.doublejump")
 public class DoubleJumpCommand {
 
@@ -28,8 +29,8 @@ public class DoubleJumpCommand {
         this.jumpRestrictionService = jumpRestrictionService;
     }
 
-    @Execute(required = 0)
-    void execute(Player player) {
+    @Execute
+    void execute(@Context Player player) {
         if (this.jumpRestrictionService.isPassedRestrictions(player, true)) {
             return;
         }

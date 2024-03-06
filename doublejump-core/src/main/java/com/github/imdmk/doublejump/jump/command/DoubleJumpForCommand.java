@@ -5,14 +5,14 @@ import com.github.imdmk.doublejump.jump.JumpSettings;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.text.Formatter;
-import dev.rollczi.litecommands.argument.Arg;
-import dev.rollczi.litecommands.argument.Name;
-import dev.rollczi.litecommands.command.execute.Execute;
-import dev.rollczi.litecommands.command.permission.Permission;
-import dev.rollczi.litecommands.command.route.Route;
+import dev.rollczi.litecommands.annotations.argument.Arg;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.entity.Player;
 
-@Route(name = "doublejump")
+@Command(name = "doublejump for")
 @Permission("command.doublejump.for")
 public class DoubleJumpForCommand {
 
@@ -28,8 +28,8 @@ public class DoubleJumpForCommand {
         this.jumpRestrictionService = jumpRestrictionService;
     }
 
-    @Execute(route = "enable-for", required = 1)
-    void enableFor(Player player, @Arg @Name("target") Player target) {
+    @Execute(name = "enable")
+    void enableFor(@Context Player player, @Arg("target") Player target) {
         if (this.jumpRestrictionService.isPassedRestrictions(player, target, true)) {
             return;
         }
@@ -42,8 +42,8 @@ public class DoubleJumpForCommand {
         this.notificationSender.send(player, this.jumpSettings.notificationSettings.jumpModeEnabledFor, formatter);
     }
 
-    @Execute(route = "disable-for", required = 1)
-    void disableFor(Player player, @Arg @Name("target") Player target) {
+    @Execute(name = "disable")
+    void disableFor(@Context Player player, @Arg("target") Player target) {
         this.jumpPlayerService.disable(target);
 
         Formatter formatter = new Formatter()
