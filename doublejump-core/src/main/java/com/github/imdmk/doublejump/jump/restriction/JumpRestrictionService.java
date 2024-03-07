@@ -8,6 +8,7 @@ import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.text.Formatter;
 import com.github.imdmk.doublejump.util.DurationUtil;
 import org.bukkit.GameMode;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class JumpRestrictionService {
@@ -87,36 +88,36 @@ public class JumpRestrictionService {
         return false;
     }
 
-    public boolean isPassedRestrictions(Player player, Player target, boolean sendNotification) {
+    public boolean isPassedRestrictions(CommandSender sender, Player target, boolean sendNotification) {
         if (this.regionProvider.isInRegion(target)) {
-            this.sendNotification(player, this.restrictionSettings.notificationSettings.targetInDisabledRegion, sendNotification);
+            this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetInDisabledRegion, sendNotification);
             return true;
         }
 
         GameMode targetGameMode = target.getGameMode();
         if (this.restrictionSettings.disabledGameModes.contains(targetGameMode)) {
-            this.sendNotification(player, this.restrictionSettings.notificationSettings.targetHasDisabledGameMode, sendNotification);
+            this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetHasDisabledGameMode, sendNotification);
             return true;
         }
 
         String targetWorldName = target.getWorld().getName();
         if (this.restrictionSettings.disabledWorlds.contains(targetWorldName)) {
-            this.sendNotification(player, this.restrictionSettings.notificationSettings.targetInDisabledWorld, sendNotification);
+            this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetInDisabledWorld, sendNotification);
             return true;
         }
 
         return false;
     }
 
-    private void sendNotification(Player player, Notification notification, boolean send) {
+    private void sendNotification(CommandSender sender, Notification notification, boolean send) {
         if (send) {
-            this.notificationSender.send(player, notification);
+            this.notificationSender.send(sender, notification);
         }
     }
 
-    private void sendNotification(Player player, Notification notification, Formatter formatter, boolean send) {
+    private void sendNotification(CommandSender sender, Notification notification, Formatter formatter, boolean send) {
         if (send) {
-            this.notificationSender.send(player, notification, formatter);
+            this.notificationSender.send(sender, notification, formatter);
         }
     }
 }
