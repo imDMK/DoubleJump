@@ -196,7 +196,7 @@ public class DoubleJump implements DoubleJumpApi {
 
                 .commands(
                         new DoubleJumpCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerManager, this.jumpPlayerService, this.jumpRestrictionService),
-                        new DoubleJumpForCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerService, this.jumpRestrictionService),
+                        new DoubleJumpForCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerService),
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpSettings.itemSettings, this.notificationSender)
                 )
 
