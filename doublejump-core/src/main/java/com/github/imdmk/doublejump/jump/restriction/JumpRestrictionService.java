@@ -73,7 +73,7 @@ public class JumpRestrictionService {
         }
 
         GameMode playerGameMode = player.getGameMode();
-        if (!this.restrictionSettings.gameModeRestriction.isAllowed(playerGameMode)) {
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(playerGameMode.name())) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledGameMode, sendNotification);
             return true;
         }
@@ -94,7 +94,7 @@ public class JumpRestrictionService {
         }
 
         GameMode targetGameMode = target.getGameMode();
-        if (!this.restrictionSettings.gameModeRestriction.isAllowed(targetGameMode)) {
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(targetGameMode.name())) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.targetHasDisabledGameMode, sendNotification);
             return true;
         }

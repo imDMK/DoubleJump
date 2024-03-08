@@ -15,15 +15,15 @@ public class JumpPlayerService {
     private final RegionProvider regionProvider;
     private final JumpPlayerManager playerManager;
 
-    private final JumpRestriction<String> worldRestriction;
-    private final JumpRestriction<GameMode> gameModeRestriction;
+    private final JumpRestriction worldRestriction;
+    private final JumpRestriction gameModeRestriction;
     private final String doubleJumpUsePermission;
 
     private final boolean jumpsLimitEnabled;
     private final int jumpsLimit;
     private final Map<String, Integer> jumpsLimitByPermissions;
 
-    public JumpPlayerService(RegionProvider regionProvider, JumpPlayerManager playerManager, JumpRestriction<String> worldRestriction, JumpRestriction<GameMode> gameModeRestriction, String doubleJumpUsePermission, boolean jumpsLimitEnabled, int jumpsLimit, Map<String, Integer> jumpsLimitByPermissions) {
+    public JumpPlayerService(RegionProvider regionProvider, JumpPlayerManager playerManager, JumpRestriction worldRestriction, JumpRestriction gameModeRestriction, String doubleJumpUsePermission, boolean jumpsLimitEnabled, int jumpsLimit, Map<String, Integer> jumpsLimitByPermissions) {
         this.regionProvider = regionProvider;
         this.playerManager = playerManager;
         this.worldRestriction = worldRestriction;
@@ -122,7 +122,7 @@ public class JumpPlayerService {
         }
 
         GameMode playerGameMode = player.getGameMode();
-        if (!this.gameModeRestriction.isAllowed(playerGameMode)) {
+        if (!this.gameModeRestriction.isAllowed(playerGameMode.name())) {
             return false;
         }
 

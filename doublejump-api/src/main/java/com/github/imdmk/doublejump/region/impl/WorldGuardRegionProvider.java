@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
 
 public class WorldGuardRegionProvider implements RegionProvider {
 
-    private final JumpRestriction<String> regionRestriction;
+    private final JumpRestriction regionRestriction;
 
-    public WorldGuardRegionProvider(JumpRestriction<String> regionRestriction) {
+    public WorldGuardRegionProvider(JumpRestriction regionRestriction) {
         this.regionRestriction = regionRestriction;
     }
 

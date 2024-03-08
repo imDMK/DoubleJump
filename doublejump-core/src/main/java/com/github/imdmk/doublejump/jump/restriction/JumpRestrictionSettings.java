@@ -16,13 +16,13 @@ public class JumpRestrictionSettings extends OkaeriConfig {
             "# Restriction of regions where the player will not be able to double-jump",
             "# The WorldGuard plugin is required for this feature to work"
     })
-    public JumpRestriction<String> regionRestriction = new JumpRestriction<>(JumpRestrictionType.WHITELIST, List.of("example-region"));
+    public JumpRestriction regionRestriction = new JumpRestriction(JumpRestrictionType.WHITELIST, List.of("example-region"));
 
     @Comment("# Restriction of worlds where the player will not be able to double-jump")
-    public JumpRestriction<String> worldRestriction = new JumpRestriction<>(JumpRestrictionType.BLACKLIST, List.of("example-world"));
+    public JumpRestriction worldRestriction = new JumpRestriction(JumpRestrictionType.BLACKLIST, List.of("example-world"));
 
     @Comment("# The restriction of the game modes during which the player will not be able to double-jump")
-    public JumpRestriction<GameMode> gameModeRestriction = new JumpRestriction<>(JumpRestrictionType.BLACKLIST, List.of(GameMode.CREATIVE));
+    public JumpRestriction gameModeRestriction = new JumpRestriction(JumpRestrictionType.BLACKLIST, List.of(GameMode.CREATIVE.name()));
 
     @Comment({"#", "# Jump restriction notification settings", "#"})
     public JumpRestrictionNotificationSettings notificationSettings = new JumpRestrictionNotificationSettings();
