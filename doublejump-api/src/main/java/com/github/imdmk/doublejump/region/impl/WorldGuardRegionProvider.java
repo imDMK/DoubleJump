@@ -10,6 +10,8 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.entity.Player;
 
+import java.util.stream.Stream;
+
 public class WorldGuardRegionProvider implements RegionProvider {
 
     private final JumpRestriction regionRestriction;
@@ -20,9 +22,11 @@ public class WorldGuardRegionProvider implements RegionProvider {
 
     @Override
     public boolean isInAllowedRegion(Player player) {
+        Stream<String> regions = this.regionRestriction.list().stream();
+
         return switch (this.regionRestriction.type()) {
-            case BLACKLIST -> this.regionRestriction.list().stream().anyMatch(region -> !this.isInRegion(player, region));
-            case WHITELIST -> this.regionRestriction.list().stream().anyMatch(region -> this.isInRegion(player, region));
+            case BLACKLIST -> regions.anyMatch(region -> !this.isInRegion(player, region));
+            case WHITELIST -> regions.anyMatch(region -> this.isInRegion(player, region));
         };
     }
 

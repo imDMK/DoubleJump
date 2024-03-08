@@ -40,12 +40,11 @@ This is a plugin that allows you to double-jump on the server.
 ![gif](assets/delay-streak.gif)
 
 ### Command permissions
-| Command                  | Permission                       |
-|:-------------------------|:---------------------------------|
-| `doublejump`             | command.doublejump               |
-| `doublejump -for`        | command.doublejump.for           |
-| `doublejump item give`   | command.doublejump.item.give     |          
-| `doublejump item remove` | command.doublejump.item.remove   |
+| Command            | Permission              |
+|:-------------------|:------------------------|
+| `doublejump`       | command.doublejump      |
+| `doublejump for`   | command.doublejump.for  |
+| `doublejump item`  | command.doublejump.item |
 
 ### Placeholder API formats
 * `jump-player-delay` - Displays the remaining delay time until the next double jump can be used.

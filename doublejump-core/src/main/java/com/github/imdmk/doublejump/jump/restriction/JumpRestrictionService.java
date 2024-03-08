@@ -89,19 +89,19 @@ public class JumpRestrictionService {
     }
 
     public boolean isPassedRestrictions(CommandSender sender, Player target, boolean sendNotification) {
-        if (this.regionProvider.isInRegion(target)) {
+        if (this.regionProvider.isInAllowedRegion(target)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetInDisabledRegion, sendNotification);
             return true;
         }
 
-        GameMode targetGameMode = target.getGameMode();
-        if (this.restrictionSettings.disabledGameModes.contains(targetGameMode)) {
+        String targetGameMode = target.getGameMode().name();
+        if (this.restrictionSettings.gameModeRestriction.isAllowed(targetGameMode)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetHasDisabledGameMode, sendNotification);
             return true;
         }
 
-        String targetWorldName = target.getWorld().getName();
-        if (this.restrictionSettings.disabledWorlds.contains(targetWorldName)) {
+        String targetWorld = target.getWorld().getName();
+        if (this.restrictionSettings.worldRestriction.isAllowed(targetWorld)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetInDisabledWorld, sendNotification);
             return true;
         }
