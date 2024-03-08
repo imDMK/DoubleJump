@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 public class EmptyRegionProvider implements RegionProvider {
 
     @Override
-    public boolean isInRegion(Player player) {
-        return false;
+    public boolean isInAllowedRegion(Player player) {
+        return true;
     }
 }

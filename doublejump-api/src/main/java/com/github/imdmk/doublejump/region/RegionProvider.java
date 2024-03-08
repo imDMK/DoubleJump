@@ -6,8 +6,10 @@ import org.bukkit.entity.Player;
 public interface RegionProvider {
 
     /**
+     * Checks whether the player is within an area covered by the region restriction.
      *
-     * @return true if the player is in disabled area
+     * @param player The player whose location is being checked.
+     * @return true if the player is within an area covered by the restriction, otherwise false.
      */
-    boolean isInRegion(Player player);
+    boolean isInAllowedRegion(Player player);
 }

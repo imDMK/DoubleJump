@@ -68,19 +68,19 @@ public class JumpRestrictionService {
     }
 
     public boolean isPassedRestrictions(Player player, boolean sendNotification) {
-        if (this.regionProvider.isInRegion(player)) {
+        if (!this.regionProvider.isInAllowedRegion(player)) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledRegion, sendNotification);
             return true;
         }
 
         GameMode playerGameMode = player.getGameMode();
-        if (this.restrictionSettings.disabledGameModes.contains(playerGameMode)) {
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(playerGameMode.name())) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledGameMode, sendNotification);
             return true;
         }
 
         String playerWorldName = player.getWorld().getName();
-        if (this.restrictionSettings.disabledWorlds.contains(playerWorldName)) {
+        if (!this.restrictionSettings.worldRestriction.isAllowed(playerWorldName)) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledWorld, sendNotification);
             return true;
         }

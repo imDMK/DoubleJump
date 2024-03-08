@@ -112,7 +112,7 @@ public class DoubleJump implements DoubleJumpApi {
         this.jumpPlayerManager = new JumpPlayerManager();
 
         /* Services */
-        this.jumpPlayerService = new JumpPlayerService(this.regionProvider, this.jumpPlayerManager, this.pluginConfiguration.jumpSettings.restrictionSettings.disabledWorlds, this.pluginConfiguration.jumpSettings.restrictionSettings.disabledGameModes, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpSettings.limitSettings.enabled, this.pluginConfiguration.jumpSettings.limitSettings.limit, this.pluginConfiguration.jumpSettings.limitSettings.limitsByPermissions);
+        this.jumpPlayerService = new JumpPlayerService(this.regionProvider, this.jumpPlayerManager, this.pluginConfiguration.jumpSettings.restrictionSettings.worldRestriction, this.pluginConfiguration.jumpSettings.restrictionSettings.gameModeRestriction, this.pluginConfiguration.doubleJumpUsePermission, this.pluginConfiguration.jumpSettings.limitSettings.enabled, this.pluginConfiguration.jumpSettings.limitSettings.limit, this.pluginConfiguration.jumpSettings.limitSettings.limitsByPermissions);
 
         this.jumpRestrictionService = new JumpRestrictionService(this.pluginConfiguration.jumpSettings, this.pluginConfiguration.jumpSettings.restrictionSettings, this.regionProvider, this.notificationSender);
 
@@ -217,7 +217,7 @@ public class DoubleJump implements DoubleJumpApi {
 
     private RegionProvider hookRegionProvider() {
         if (this.server.getPluginManager().isPluginEnabled("WorldGuard")) {
-            return new WorldGuardRegionProvider(this.pluginConfiguration.jumpSettings.restrictionSettings.disabledRegions);
+            return new WorldGuardRegionProvider(this.pluginConfiguration.jumpSettings.restrictionSettings.regionRestriction);
         }
 
         return new EmptyRegionProvider();
