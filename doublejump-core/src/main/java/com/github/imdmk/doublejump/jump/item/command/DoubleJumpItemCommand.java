@@ -3,17 +3,18 @@ package com.github.imdmk.doublejump.jump.item.command;
 import com.github.imdmk.doublejump.jump.item.JumpItemSettings;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.text.Formatter;
-import dev.rollczi.litecommands.argument.Arg;
-import dev.rollczi.litecommands.argument.Name;
-import dev.rollczi.litecommands.command.execute.Execute;
-import dev.rollczi.litecommands.command.permission.Permission;
-import dev.rollczi.litecommands.command.route.Route;
+import dev.rollczi.litecommands.annotations.argument.Arg;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-@Route(name = "doublejump item")
+@Command(name = "doublejump item")
+@Permission("command.doublejump.item")
 public class DoubleJumpItemCommand {
 
     private final JumpItemSettings jumpItemSettings;
@@ -24,9 +25,8 @@ public class DoubleJumpItemCommand {
         this.notificationSender = notificationSender;
     }
 
-    @Execute(route = "give", required = 1)
-    @Permission("command.doublejump.item.give")
-    void giveItem(CommandSender sender, @Arg @Name("target") Player target) {
+    @Execute(name = "give")
+    void giveItem(@Context CommandSender sender, @Arg("target") Player target) {
         if (!this.jumpItemSettings.enabled) {
             this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.jumpItemDisabled);
             return;
@@ -48,9 +48,8 @@ public class DoubleJumpItemCommand {
         this.notificationSender.send(sender, this.jumpItemSettings.notificationSettings.jumpItemAdded, formatter);
     }
 
-    @Execute(route = "remove", required = 1)
-    @Permission("command.doublejump.item.remove")
-    void removeItem(CommandSender sender, @Arg @Name("target") Player target) {
+    @Execute(name = "remove")
+    void removeItem(@Context CommandSender sender, @Arg("target") Player target) {
         ItemStack jumpItem = this.jumpItemSettings.item;
 
         Inventory targetInventory = target.getInventory();

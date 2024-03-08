@@ -1,8 +1,9 @@
 package com.github.imdmk.doublejump;
 
 import com.github.imdmk.doublejump.command.argument.PlayerArgument;
-import com.github.imdmk.doublejump.command.handler.MissingPermissionHandler;
+import com.github.imdmk.doublejump.command.context.PlayerContext;
 import com.github.imdmk.doublejump.command.handler.NotificationHandler;
+import com.github.imdmk.doublejump.command.handler.PermissionHandler;
 import com.github.imdmk.doublejump.command.handler.UsageHandler;
 import com.github.imdmk.doublejump.configuration.ConfigurationFactory;
 import com.github.imdmk.doublejump.configuration.implementation.PluginConfiguration;
@@ -45,8 +46,7 @@ import com.github.imdmk.doublejump.update.UpdateListener;
 import com.github.imdmk.doublejump.update.UpdateService;
 import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
-import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
+import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
@@ -65,6 +65,7 @@ import java.util.stream.Stream;
 
 public class DoubleJump implements DoubleJumpApi {
 
+    private final Plugin plugin;
     private final Server server;
 
     private final PluginConfiguration pluginConfiguration;
@@ -92,6 +93,7 @@ public class DoubleJump implements DoubleJumpApi {
         Logger logger = plugin.getLogger();
         PluginDescriptionFile pluginDescriptionFile = plugin.getDescription();
 
+        this.plugin = plugin;
         this.server = plugin.getServer();
 
         /* Configuration */
@@ -168,7 +170,7 @@ public class DoubleJump implements DoubleJumpApi {
         DoubleJumpApiProvider.unregister();
 
         if (this.liteCommands != null) {
-            this.liteCommands.getPlatform().unregisterAll();
+            this.liteCommands.unregister();
         }
 
         if (this.placeholderRegistry != null) {
@@ -182,22 +184,23 @@ public class DoubleJump implements DoubleJumpApi {
     }
 
     private LiteCommands<CommandSender> registerLiteCommands() {
-        return LiteBukkitAdventurePlatformFactory.builder(this.server, "DoubleJump", false, this.bukkitAudiences, true)
-                .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Only player can use this command."))
+        return LiteCommandsBukkit.builder("DoubleJump", this.plugin, this.server)
+                .settings(settings -> settings.nativePermissions(true))
 
+                .context(Player.class, new PlayerContext())
                 .argument(Player.class, new PlayerArgument(this.server, this.pluginConfiguration.notificationSettings))
 
-                .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration.notificationSettings, this.notificationSender))
-                .resultHandler(Notification.class, new NotificationHandler(this.notificationSender))
-                .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.notificationSettings, this.notificationSender))
+                .missingPermission(new PermissionHandler(this.pluginConfiguration.notificationSettings, this.notificationSender))
+                .result(Notification.class, new NotificationHandler(this.notificationSender))
+                .invalidUsage(new UsageHandler(this.pluginConfiguration.notificationSettings, this.notificationSender))
 
-                .commandInstance(
+                .commands(
                         new DoubleJumpCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerManager, this.jumpPlayerService, this.jumpRestrictionService),
-                        new DoubleJumpForCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerService, this.jumpRestrictionService),
+                        new DoubleJumpForCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerService),
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpSettings.itemSettings, this.notificationSender)
                 )
 
-                .register();
+                .build();
     }
 
     private void disableAllowFlightForOnlinePlayers() {

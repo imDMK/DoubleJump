@@ -3,8 +3,10 @@ package com.github.imdmk.doublejump.command.handler;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.notification.configuration.NotificationSettings;
 import com.github.imdmk.doublejump.text.Formatter;
-import dev.rollczi.litecommands.command.LiteInvocation;
-import dev.rollczi.litecommands.handle.InvalidUsageHandler;
+import dev.rollczi.litecommands.handler.result.ResultHandlerChain;
+import dev.rollczi.litecommands.invalidusage.InvalidUsage;
+import dev.rollczi.litecommands.invalidusage.InvalidUsageHandler;
+import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.schematic.Schematic;
 import org.bukkit.command.CommandSender;
 
@@ -19,7 +21,10 @@ public class UsageHandler implements InvalidUsageHandler<CommandSender> {
     }
 
     @Override
-    public void handle(CommandSender sender, LiteInvocation invocation, Schematic schematic) {
+    public void handle(Invocation<CommandSender> invocation, InvalidUsage<CommandSender> commandSenderInvalidUsage, ResultHandlerChain<CommandSender> resultHandlerChain) {
+        CommandSender sender = invocation.sender();
+        Schematic schematic = commandSenderInvalidUsage.getSchematic();
+
         if (schematic.isOnlyFirst()) {
             Formatter formatter = new Formatter()
                     .placeholder("{USAGE}", schematic.first());
@@ -30,7 +35,7 @@ public class UsageHandler implements InvalidUsageHandler<CommandSender> {
 
         this.notificationSender.send(sender, this.notificationSettings.invalidUsageListFirst);
 
-        for (String schema : schematic.getSchematics()) {
+        for (String schema : schematic.all()) {
             Formatter formatter = new Formatter()
                     .placeholder("{USAGE}", schema);
 
