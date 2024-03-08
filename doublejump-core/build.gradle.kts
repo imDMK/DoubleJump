@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.github.imdmk"
-version = "2.1.2"
+version = "2.1.3"
 
 repositories {
     mavenCentral()
@@ -24,17 +24,17 @@ repositories {
 dependencies {
     implementation(project(":doublejump-api"))
 
-    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
-    compileOnly("me.clip:placeholderapi:2.11.3")
+    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("me.clip:placeholderapi:2.11.5")
 
-    implementation("dev.triumphteam:triumph-gui:3.1.5")
+    implementation("dev.triumphteam:triumph-gui:3.1.7")
 
-    implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.0-beta.5")
-    implementation("eu.okaeri:okaeri-configs-serdes-commons:5.0.0-beta.5")
-    implementation("eu.okaeri:okaeri-configs-serdes-bukkit:5.0.0-beta.5")
+    implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.1")
+    implementation("eu.okaeri:okaeri-configs-serdes-commons:5.0.1")
+    implementation("eu.okaeri:okaeri-configs-serdes-bukkit:5.0.1")
 
-    implementation("net.kyori:adventure-platform-bukkit:4.3.1")
-    implementation("net.kyori:adventure-text-minimessage:4.14.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.2")
+    implementation("net.kyori:adventure-text-minimessage:4.16.0")
 
     implementation("dev.rollczi:litecommands-bukkit:3.4.0")
 
