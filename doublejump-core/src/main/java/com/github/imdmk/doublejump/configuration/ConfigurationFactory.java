@@ -7,6 +7,7 @@ import com.github.imdmk.doublejump.configuration.transformer.ColorTransformer;
 import com.github.imdmk.doublejump.configuration.transformer.ComponentTransformer;
 import com.github.imdmk.doublejump.configuration.transformer.EnchantmentTransformer;
 import com.github.imdmk.doublejump.jump.particle.JumpParticleSerializer;
+import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionSerializer;
 import com.github.imdmk.doublejump.jump.sound.JumpSoundSerializer;
 import com.github.imdmk.doublejump.notification.configuration.NotificationTransformer;
 import eu.okaeri.configs.ConfigManager;
@@ -41,6 +42,7 @@ public class ConfigurationFactory {
             registry.register(new ItemStackSerializer());
             registry.register(new ItemMetaSerializer());
             registry.register(new NotificationTransformer());
+            registry.register(new JumpRestrictionSerializer());
             registry.register(new JumpParticleSerializer());
             registry.register(new JumpSoundSerializer());
         });

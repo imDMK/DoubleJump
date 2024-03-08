@@ -1,6 +1,7 @@
 package com.github.imdmk.doublejump.region.impl;
 
 import com.github.imdmk.doublejump.region.RegionProvider;
+import com.github.imdmk.doublejump.restriction.JumpRestriction;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldguard.WorldGuard;
@@ -9,20 +10,20 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
 public class WorldGuardRegionProvider implements RegionProvider {
 
-    private final List<String> disabledRegions;
+    private final JumpRestriction regionRestriction;
 
-    public WorldGuardRegionProvider(List<String> disabledRegions) {
-        this.disabledRegions = disabledRegions;
+    public WorldGuardRegionProvider(JumpRestriction regionRestriction) {
+        this.regionRestriction = regionRestriction;
     }
 
     @Override
-    public boolean isInRegion(Player player) {
-        return this.disabledRegions.stream()
-                .anyMatch(region -> this.isInRegion(player, region));
+    public boolean isInAllowedRegion(Player player) {
+        return switch (this.regionRestriction.type()) {
+            case BLACKLIST -> this.regionRestriction.list().stream().anyMatch(region -> !this.isInRegion(player, region));
+            case WHITELIST -> this.regionRestriction.list().stream().anyMatch(region -> this.isInRegion(player, region));
+        };
     }
 
     public boolean isInRegion(Player player, String regionId) {

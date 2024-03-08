@@ -67,19 +67,19 @@ public class JumpRestrictionService {
     }
 
     public boolean isPassedRestrictions(Player player, boolean sendNotification) {
-        if (this.regionProvider.isInRegion(player)) {
+        if (!this.regionProvider.isInAllowedRegion(player)) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledRegion, sendNotification);
             return true;
         }
 
         GameMode playerGameMode = player.getGameMode();
-        if (this.restrictionSettings.disabledGameModes.contains(playerGameMode)) {
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(playerGameMode.name())) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledGameMode, sendNotification);
             return true;
         }
 
         String playerWorldName = player.getWorld().getName();
-        if (this.restrictionSettings.disabledWorlds.contains(playerWorldName)) {
+        if (!this.restrictionSettings.worldRestriction.isAllowed(playerWorldName)) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledWorld, sendNotification);
             return true;
         }
@@ -88,19 +88,19 @@ public class JumpRestrictionService {
     }
 
     public boolean isPassedRestrictions(Player player, Player target, boolean sendNotification) {
-        if (this.regionProvider.isInRegion(target)) {
+        if (!this.regionProvider.isInAllowedRegion(target)) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.targetInDisabledRegion, sendNotification);
             return true;
         }
 
         GameMode targetGameMode = target.getGameMode();
-        if (this.restrictionSettings.disabledGameModes.contains(targetGameMode)) {
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(targetGameMode.name())) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.targetHasDisabledGameMode, sendNotification);
             return true;
         }
 
         String targetWorldName = target.getWorld().getName();
-        if (this.restrictionSettings.disabledWorlds.contains(targetWorldName)) {
+        if (!this.restrictionSettings.worldRestriction.isAllowed(targetWorldName)) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.targetInDisabledWorld, sendNotification);
             return true;
         }
