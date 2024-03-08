@@ -32,6 +32,7 @@ import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerHasJumpsPlac
 import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerJumpsLimitPlaceholder;
 import com.github.imdmk.doublejump.jump.placeholder.jumps.JumpPlayerJumpsPlaceholder;
 import com.github.imdmk.doublejump.jump.restriction.JumpRestrictionService;
+import com.github.imdmk.doublejump.jump.sound.JumpSoundService;
 import com.github.imdmk.doublejump.notification.Notification;
 import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.placeholder.PlaceholderRegistry;
@@ -114,6 +115,7 @@ public class DoubleJump implements DoubleJumpApi {
         this.jumpRestrictionService = new JumpRestrictionService(this.pluginConfiguration.jumpSettings, this.pluginConfiguration.jumpSettings.restrictionSettings, this.regionProvider, this.notificationSender);
 
         JumpItemService jumpItemService = new JumpItemService(this.pluginConfiguration.jumpSettings.itemSettings);
+        JumpSoundService jumpSoundService = new JumpSoundService(this.pluginConfiguration);
         UpdateService updateService = new UpdateService(pluginDescriptionFile);
 
         /* Task Scheduler */
@@ -126,7 +128,7 @@ public class DoubleJump implements DoubleJumpApi {
                 new JumpItemDropListener(this.pluginConfiguration.jumpSettings.itemSettings, jumpItemService, this.jumpPlayerService),
                 new JumpItemEnableListener(this.pluginConfiguration.jumpSettings.itemSettings, this.jumpPlayerManager, this.jumpPlayerService, jumpItemService),
                 new JumpItemInteractListener(this.server, this.pluginConfiguration.jumpSettings, this.pluginConfiguration.jumpSettings.itemSettings, this.notificationSender, this.jumpPlayerManager, this.jumpPlayerService, jumpItemService, this.jumpRestrictionService),
-                new DoubleJumpListener(this.pluginConfiguration.jumpSettings, this.notificationSender),
+                new DoubleJumpListener(this.pluginConfiguration.jumpSettings, jumpSoundService, this.notificationSender),
                 new JumpDisableListener(this.jumpPlayerManager, this.jumpPlayerService, this.jumpRestrictionService, taskScheduler),
                 new JumpEnableListener(this.server, this.pluginConfiguration.jumpSettings, this.jumpPlayerManager, this.jumpPlayerService, this.jumpRestrictionService, taskScheduler),
                 new JumpFallDamageListener(this.pluginConfiguration.jumpSettings, this.jumpPlayerManager),
@@ -147,9 +149,9 @@ public class DoubleJump implements DoubleJumpApi {
 
             Stream.of(
                     new JumpPlayerDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
-                    new JumpPlayerIsDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerIsDelayPlaceholder(pluginDescriptionFile, this.pluginConfiguration.placeholderSettings, this.jumpPlayerManager),
                     new JumpPlayerRegenerationDelayPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
-                    new JumpPlayerHasJumpsPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
+                    new JumpPlayerHasJumpsPlaceholder(pluginDescriptionFile, this.pluginConfiguration.placeholderSettings, this.jumpPlayerManager),
                     new JumpPlayerJumpsLimitPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
                     new JumpPlayerJumpsPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
                     new JumpPlayerStreakPlaceholder(pluginDescriptionFile, this.jumpPlayerManager)
