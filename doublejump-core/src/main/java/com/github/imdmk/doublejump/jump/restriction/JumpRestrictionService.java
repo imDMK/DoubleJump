@@ -95,13 +95,13 @@ public class JumpRestrictionService {
         }
 
         String targetGameMode = target.getGameMode().name();
-        if (this.restrictionSettings.gameModeRestriction.isAllowed(targetGameMode)) {
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(targetGameMode)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetHasDisabledGameMode, sendNotification);
             return true;
         }
 
         String targetWorld = target.getWorld().getName();
-        if (this.restrictionSettings.worldRestriction.isAllowed(targetWorld)) {
+        if (!this.restrictionSettings.worldRestriction.isAllowed(targetWorld)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetInDisabledWorld, sendNotification);
             return true;
         }
