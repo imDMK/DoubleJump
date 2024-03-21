@@ -89,7 +89,7 @@ public class JumpRestrictionService {
     }
 
     public boolean isPassedRestrictions(CommandSender sender, Player target, boolean sendNotification) {
-        if (this.regionProvider.isInAllowedRegion(target)) {
+        if (!this.regionProvider.isInAllowedRegion(target)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetInDisabledRegion, sendNotification);
             return true;
         }

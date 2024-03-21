@@ -7,6 +7,6 @@ public class EmptyRegionProvider implements RegionProvider {
 
     @Override
     public boolean isInAllowedRegion(Player player) {
-        return true;
+        return false;
     }
 }
