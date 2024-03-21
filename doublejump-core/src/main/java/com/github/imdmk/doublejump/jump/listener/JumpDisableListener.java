@@ -61,6 +61,6 @@ public class JumpDisableListener implements Listener {
             if (this.jumpRestrictionService.isPassedRestrictions(player, true)) {
                 this.jumpPlayerService.disable(player);
             }
-        }, 10L);
+        }, 20L);
     }
 }

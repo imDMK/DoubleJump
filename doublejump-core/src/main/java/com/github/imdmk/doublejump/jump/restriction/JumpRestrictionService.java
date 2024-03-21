@@ -7,7 +7,6 @@ import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.text.Formatter;
 import com.github.imdmk.doublejump.util.DurationUtil;
-import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -73,8 +72,8 @@ public class JumpRestrictionService {
             return true;
         }
 
-        GameMode playerGameMode = player.getGameMode();
-        if (!this.restrictionSettings.gameModeRestriction.isAllowed(playerGameMode.name())) {
+        String playerGameModeName = player.getGameMode().name();
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(playerGameModeName)) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledGameMode, sendNotification);
             return true;
         }
