@@ -66,6 +66,7 @@ import java.util.stream.Stream;
 public class DoubleJump implements DoubleJumpApi {
 
     private final Plugin plugin;
+    private final Logger logger;
     private final Server server;
 
     private final PluginConfiguration pluginConfiguration;
@@ -90,10 +91,10 @@ public class DoubleJump implements DoubleJumpApi {
         DoubleJumpApiProvider.register(this);
 
         Stopwatch stopwatch = Stopwatch.createStarted();
-        Logger logger = plugin.getLogger();
         PluginDescriptionFile pluginDescriptionFile = plugin.getDescription();
 
         this.plugin = plugin;
+        this.logger = plugin.getLogger();
         this.server = plugin.getServer();
 
         /* Configuration */
@@ -137,7 +138,7 @@ public class DoubleJump implements DoubleJumpApi {
                 new JumpRefreshListener(this.jumpPlayerService, taskScheduler),
                 new JumpRegenerationListener(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerManager),
                 new JumpStreakResetListener(this.server, this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerManager),
-                new UpdateListener(logger, this.pluginConfiguration, this.notificationSender, updateService, taskScheduler)
+                new UpdateListener(this.logger, this.pluginConfiguration, this.notificationSender, updateService, taskScheduler)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* Lite Commands */
@@ -158,12 +159,14 @@ public class DoubleJump implements DoubleJumpApi {
                     new JumpPlayerJumpsPlaceholder(pluginDescriptionFile, this.jumpPlayerManager),
                     new JumpPlayerStreakPlaceholder(pluginDescriptionFile, this.jumpPlayerManager)
             ).forEach(this.placeholderRegistry::register);
+
+            this.logger.info("Hooked PlaceholderAPI!");
         }
 
         /* Metrics */
         this.metrics = new Metrics((JavaPlugin) plugin, 19387);
 
-        logger.info("Enabled plugin in " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms.");
+        this.logger.info("Enabled plugin in " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms.");
     }
 
     public void disable() {
@@ -217,6 +220,7 @@ public class DoubleJump implements DoubleJumpApi {
 
     private RegionProvider hookRegionProvider() {
         if (this.server.getPluginManager().isPluginEnabled("WorldGuard")) {
+            this.logger.info("Hooked WorldGuard!");
             return new WorldGuardRegionProvider(this.pluginConfiguration.jumpSettings.restrictionSettings.regionRestriction);
         }
 

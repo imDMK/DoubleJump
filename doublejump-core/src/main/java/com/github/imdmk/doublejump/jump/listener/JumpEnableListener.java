@@ -52,7 +52,7 @@ public class JumpEnableListener implements Listener {
         player.setAllowFlight(false);
 
         if (this.jumpRestrictionService.isPassedRestrictions(player, true)) {
-            this.jumpPlayerManager.remove(player.getUniqueId());
+            this.jumpPlayerService.disable(player);
             return;
         }
 
@@ -76,8 +76,8 @@ public class JumpEnableListener implements Listener {
 
         JumpPlayer jumpPlayer = jumpPlayerOptional.get();
 
-        if (this.jumpRestrictionService.isPassedRestrictions(player, player, true)) {
-            this.jumpPlayerManager.remove(player.getUniqueId());
+        if (this.jumpRestrictionService.isPassedRestrictions(player, true)) {
+            this.jumpPlayerService.disable(player);
             return;
         }
 
