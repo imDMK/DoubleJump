@@ -5,12 +5,15 @@ import com.github.imdmk.doublejump.restriction.JumpRestriction;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.entity.Player;
 
-import java.util.stream.Stream;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class WorldGuardRegionProvider implements RegionProvider {
 
@@ -22,22 +25,21 @@ public class WorldGuardRegionProvider implements RegionProvider {
 
     @Override
     public boolean isInAllowedRegion(Player player) {
-        Stream<String> regions = this.regionRestriction.list().stream();
+        Set<String> playerRegions = this.getPlayerRegions(player).getRegions().stream()
+                .map(ProtectedRegion::getId)
+                .collect(Collectors.toSet());
 
-        return switch (this.regionRestriction.type()) {
-            case BLACKLIST -> regions.anyMatch(region -> !this.isInRegion(player, region));
-            case WHITELIST -> regions.anyMatch(region -> this.isInRegion(player, region));
-        };
+        return this.regionRestriction.isAllowed(playerRegions);
     }
 
-    public boolean isInRegion(Player player, String regionId) {
+    public ApplicableRegionSet getPlayerRegions(Player player) {
         Location playerLocation = BukkitAdapter.adapt(player.getLocation());
 
-        RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionQuery regionQuery = regionContainer.createQuery();
-        ApplicableRegionSet applicableRegionSet = regionQuery.getApplicableRegions(playerLocation);
+        WorldGuardPlatform worldGuardPlatform = WorldGuard.getInstance().getPlatform();
 
-        return applicableRegionSet.getRegions().stream()
-                .anyMatch(region -> region.getId().equals(regionId));
+        RegionContainer regionContainer = worldGuardPlatform.getRegionContainer();
+        RegionQuery regionQuery = regionContainer.createQuery();
+
+        return regionQuery.getApplicableRegions(playerLocation);
     }
 }

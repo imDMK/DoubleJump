@@ -7,7 +7,6 @@ import com.github.imdmk.doublejump.notification.NotificationSender;
 import com.github.imdmk.doublejump.region.RegionProvider;
 import com.github.imdmk.doublejump.text.Formatter;
 import com.github.imdmk.doublejump.util.DurationUtil;
-import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -73,8 +72,8 @@ public class JumpRestrictionService {
             return true;
         }
 
-        GameMode playerGameMode = player.getGameMode();
-        if (!this.restrictionSettings.gameModeRestriction.isAllowed(playerGameMode.name())) {
+        String playerGameModeName = player.getGameMode().name();
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(playerGameModeName)) {
             this.sendNotification(player, this.restrictionSettings.notificationSettings.jumpDisabledGameMode, sendNotification);
             return true;
         }
@@ -89,19 +88,19 @@ public class JumpRestrictionService {
     }
 
     public boolean isPassedRestrictions(CommandSender sender, Player target, boolean sendNotification) {
-        if (this.regionProvider.isInAllowedRegion(target)) {
+        if (!this.regionProvider.isInAllowedRegion(target)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetInDisabledRegion, sendNotification);
             return true;
         }
 
         String targetGameMode = target.getGameMode().name();
-        if (this.restrictionSettings.gameModeRestriction.isAllowed(targetGameMode)) {
+        if (!this.restrictionSettings.gameModeRestriction.isAllowed(targetGameMode)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetHasDisabledGameMode, sendNotification);
             return true;
         }
 
         String targetWorld = target.getWorld().getName();
-        if (this.restrictionSettings.worldRestriction.isAllowed(targetWorld)) {
+        if (!this.restrictionSettings.worldRestriction.isAllowed(targetWorld)) {
             this.sendNotification(sender, this.restrictionSettings.notificationSettings.targetInDisabledWorld, sendNotification);
             return true;
         }
