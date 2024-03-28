@@ -160,3 +160,6 @@ Example usage:
 ```
 ### Reporting issues
 If you have any suggestions or find a bug, please report it using [this](https://github.com/imDMK/DoubleJump/issues/new/choose) site.
+
+### Support project 
+If you would like to appreciate this project you can do so [here](https://www.buymeacoffee.com/imdmk)
