@@ -100,4 +100,22 @@ public class JumpEnableListener implements Listener {
             this.taskScheduler.runLaterAsync(() -> this.jumpPlayerService.enable(player, true), 40L);
         }
     }
+
+    @EventHandler
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        
+        if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
+            return;
+        }
+
+        if (this.jumpRestrictionService.isPassedRestrictions(player, false)) {
+            return;
+        }
+
+        if (this.jumpSettings.enableJumpModeOnJoinForPlayers || this.jumpSettings.enableJumpModeOnJoinForAdmins && player.isOp()) {
+            this.taskScheduler.runLaterAsync(() -> this.jumpPlayerService.enable(player, true), 40L);
+        }
+    }
+
 }
