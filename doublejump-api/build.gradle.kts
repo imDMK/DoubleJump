@@ -13,6 +13,8 @@ repositories {
     mavenLocal()
 
     maven("https://oss.sonatype.org/content/repositories/central")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    
     maven("https://maven.enginehub.org/repo/")
 }
 
