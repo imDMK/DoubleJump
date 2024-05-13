@@ -12,14 +12,13 @@ repositories {
     mavenCentral()
     mavenLocal()
 
-    maven("https://oss.sonatype.org/content/repositories/central")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
-    
     maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
