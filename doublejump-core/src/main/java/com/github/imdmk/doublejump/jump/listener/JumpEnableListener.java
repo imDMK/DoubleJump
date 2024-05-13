@@ -11,6 +11,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -100,4 +101,22 @@ public class JumpEnableListener implements Listener {
             this.taskScheduler.runLaterAsync(() -> this.jumpPlayerService.enable(player, true), 40L);
         }
     }
+
+    @EventHandler
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        
+        if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
+            return;
+        }
+
+        if (this.jumpRestrictionService.isPassedRestrictions(player, false)) {
+            return;
+        }
+
+        if (this.jumpSettings.enableJumpModeOnJoinForPlayers || this.jumpSettings.enableJumpModeOnJoinForAdmins && player.isOp()) {
+            this.taskScheduler.runLaterAsync(() -> this.jumpPlayerService.enable(player, true), 40L);
+        }
+    }
+
 }
