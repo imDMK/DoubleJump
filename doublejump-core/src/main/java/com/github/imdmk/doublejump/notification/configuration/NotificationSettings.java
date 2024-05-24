@@ -7,6 +7,7 @@ import eu.okaeri.configs.annotation.Comment;
 
 public class NotificationSettings extends OkaeriConfig {
 
+    public Notification configurationReloaded = new Notification(NotificationType.CHAT, "<green>The plugin configuration has been reloaded.");
     public Notification playerNotFound = new Notification(NotificationType.CHAT, "<red>No player found with the given name");
 
     @Comment("# {PERMISSIONS} - Required permissions to use the command")
