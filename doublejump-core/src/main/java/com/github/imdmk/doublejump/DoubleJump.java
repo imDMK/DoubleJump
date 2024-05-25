@@ -5,12 +5,13 @@ import com.github.imdmk.doublejump.command.context.PlayerContext;
 import com.github.imdmk.doublejump.command.handler.NotificationHandler;
 import com.github.imdmk.doublejump.command.handler.PermissionHandler;
 import com.github.imdmk.doublejump.command.handler.UsageHandler;
-import com.github.imdmk.doublejump.configuration.ConfigurationFactory;
+import com.github.imdmk.doublejump.configuration.ConfigurationService;
 import com.github.imdmk.doublejump.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayerManager;
 import com.github.imdmk.doublejump.jump.JumpPlayerService;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpCommand;
 import com.github.imdmk.doublejump.jump.command.DoubleJumpForCommand;
+import com.github.imdmk.doublejump.jump.command.DoubleJumpReloadCommand;
 import com.github.imdmk.doublejump.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.jump.item.command.DoubleJumpItemCommand;
 import com.github.imdmk.doublejump.jump.item.listener.JumpItemActionBlockListener;
@@ -78,6 +79,7 @@ public class DoubleJump implements DoubleJumpApi {
 
     private final JumpPlayerManager jumpPlayerManager;
 
+    private final ConfigurationService configurationService;
     private final JumpPlayerService jumpPlayerService;
     private final JumpRestrictionService jumpRestrictionService;
 
@@ -99,8 +101,8 @@ public class DoubleJump implements DoubleJumpApi {
 
         /* Configuration */
         File dataFolder = plugin.getDataFolder();
-
-        this.pluginConfiguration = ConfigurationFactory.create(PluginConfiguration.class, new File(dataFolder, "configuration.yml"));
+        this.configurationService = new ConfigurationService();
+        this.pluginConfiguration = this.configurationService.create(PluginConfiguration.class, new File(dataFolder, "configuration.yml"));
 
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
@@ -199,6 +201,7 @@ public class DoubleJump implements DoubleJumpApi {
 
                 .commands(
                         new DoubleJumpCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerManager, this.jumpPlayerService, this.jumpRestrictionService),
+                        new DoubleJumpReloadCommand(this.pluginConfiguration.notificationSettings, this.notificationSender, this.configurationService),
                         new DoubleJumpForCommand(this.pluginConfiguration.jumpSettings, this.notificationSender, this.jumpPlayerService),
                         new DoubleJumpItemCommand(this.pluginConfiguration.jumpSettings.itemSettings, this.notificationSender)
                 )
