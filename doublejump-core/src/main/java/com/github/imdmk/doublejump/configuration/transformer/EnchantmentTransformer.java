@@ -4,6 +4,7 @@ import eu.okaeri.configs.schema.GenericsPair;
 import eu.okaeri.configs.serdes.BidirectionalTransformer;
 import eu.okaeri.configs.serdes.SerdesContext;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -16,7 +17,7 @@ public class EnchantmentTransformer extends BidirectionalTransformer<String, Enc
 
     @Override
     public Enchantment leftToRight(@NonNull String key, @NonNull SerdesContext serdesContext) {
-        return Enchantment.getByKey(NamespacedKey.minecraft(key));
+        return Registry.ENCHANTMENT.get(NamespacedKey.minecraft(key));
     }
 
     @Override

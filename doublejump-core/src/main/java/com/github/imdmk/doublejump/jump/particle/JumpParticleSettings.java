@@ -19,7 +19,7 @@ public class JumpParticleSettings extends OkaeriConfig {
     })
     public List<JumpParticle> particles = List.of(
             new JumpParticle(Particle.NOTE, Color.WHITE, 20, 3, 2, 0, 0, 0),
-            new JumpParticle(Particle.REDSTONE, Color.WHITE, 40, 3, 2, 0, 0, 0)
+            new JumpParticle(Particle.BUBBLE, Color.WHITE, 40, 3, 2, 0, 0, 0)
     );
 
 }

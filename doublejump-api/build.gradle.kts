@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
@@ -26,8 +26,7 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 checkstyle {
@@ -41,6 +40,7 @@ tasks.test {
 }
 
 tasks.withType<JavaCompile> {
+    options.compilerArgs = listOf("-Xlint:deprecation", "-parameters")
     options.encoding = "UTF-8"
-    options.compilerArgs.add("-parameters")
+    options.release = 17
 }
