@@ -33,7 +33,7 @@ public class JumpItemSettings extends OkaeriConfig {
             .name(Component.text("<red>DOUBLE JUMP"))
             .lore(Component.empty(), Component.text("<red>This is double jump item!"), Component.empty())
             .flags(ItemFlag.HIDE_ATTRIBUTES)
-            .enchant(Enchantment.DURABILITY, 10)
+            .enchant(Enchantment.INFINITY, 10)
             .build();
 
     @Comment({"# ", "# Jump item usage settings", "# "})
