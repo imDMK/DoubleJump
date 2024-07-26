@@ -100,7 +100,6 @@ tasks.withType<ShadowJar> {
         "net.kyori",
         "eu.okaeri",
         "com.eternalcode",
-        "com.google.gson",
         "panda.std"
     ).forEach { lib ->
         relocate(lib, "$libPrefix.$lib")
