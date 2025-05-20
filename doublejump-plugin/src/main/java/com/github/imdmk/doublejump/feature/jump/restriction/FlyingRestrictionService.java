@@ -69,20 +69,17 @@ public class FlyingRestrictionService {
     private List<RestrictionChecker> createDefaultCheckers(@NotNull JumpConfiguration.JumpRestrictionConfiguration configuration) {
         return List.of(
                 new SetRestrictionChecker<>(
-                        configuration.worldWhitelist,
-                        configuration.worldBlacklist,
+                        configuration.disabledWorlds,
                         p -> p.getWorld().getName(),
                         RestrictionDenyReason.WORLD_DISABLED
                 ),
                 new SetRestrictionChecker<>(
-                        configuration.gameModeWhitelist,
-                        configuration.gameModeBlacklist,
+                        configuration.disabledGameModes,
                         Player::getGameMode,
                         RestrictionDenyReason.GAME_MODE_BLOCKED
                 ),
                 new PermissionRestrictionChecker(
-                        configuration.permissionWhitelist,
-                        configuration.permissionBlacklist
+                        configuration.allowedPermissions
                 )
         );
     }

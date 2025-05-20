@@ -2,6 +2,7 @@ package com.github.imdmk.doublejump.feature.jump;
 
 import com.github.imdmk.doublejump.task.TaskScheduler;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;
 
 /**
@@ -17,7 +18,7 @@ public class PlayerFlyingService {
      *
      * @param player The player to modify.
      */
-    public void enable(final Player player) {
+    public void enable(@NotNull final Player player) {
         this.taskScheduler.run(() -> player.setAllowFlight(true));
     }
 
@@ -26,22 +27,21 @@ public class PlayerFlyingService {
      *
      * @param player The player to modify.
      */
-    public void disable(final Player player) {
+    public void disable(@NotNull final Player player) {
         this.disable(player, false);
     }
 
     /**
-     * Disables flying for the player. Optional keeps allowFlight enabled.
+     * Disables the player's current flying state.
+     * The player's permission to fly in the future is set according to the provided flag.
      *
-     * @param player           The player to modify.
-     * @param keepAllowFlight  If true, allowFlight will not be changed.
+     * @param player      the player whose flying state will be disabled; must not be null
+     * @param allowFlight true to allow the player to start flying later, false to revoke flight permission
      */
-    public void disable(final Player player, final boolean keepAllowFlight) {
+    public void disable(@NotNull final Player player, final boolean allowFlight) {
         this.taskScheduler.run(() -> {
             player.setFlying(false);
-            if (!keepAllowFlight) {
-                player.setAllowFlight(false);
-            }
+            player.setAllowFlight(allowFlight);
         });
     }
 }

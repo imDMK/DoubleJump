@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class UpdateService {
 
-    private static final GitRepository GIT_REPOSITORY = GitRepository.of("imDMK", "SpentTime");
+    private static final GitRepository GIT_REPOSITORY = GitRepository.of("imDMK", "DoubleJump");
     private static final GitCheck GIT_CHECK = new GitCheck();
 
     private final PluginConfiguration pluginConfiguration;

@@ -68,12 +68,12 @@ public class FlyingRestrictionController extends PluginListener {
             return false;
         }
 
-        if (player.isOp() && !this.jumpConfiguration.enableDoubleJumpOnJoinForAdmins) {
+        if (player.isOp() && !this.jumpConfiguration.autoEnableForAdmins) {
             return false;
         }
 
-        boolean hasPermission = player.hasPermission(this.jumpConfiguration.enableDoubleJumpOnJoinForPermission);
-        boolean globallyEnabled = this.jumpConfiguration.enableDoubleJumpOnJoin;
+        boolean hasPermission = player.hasPermission(this.jumpConfiguration.autoEnablePermission);
+        boolean globallyEnabled = this.jumpConfiguration.autoEnableOnJoin;
 
         return hasPermission || globallyEnabled;
     }

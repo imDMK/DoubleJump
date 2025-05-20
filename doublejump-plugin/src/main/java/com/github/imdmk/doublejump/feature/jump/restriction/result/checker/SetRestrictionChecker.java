@@ -11,19 +11,16 @@ import java.util.function.Function;
 
 public class SetRestrictionChecker<T> implements RestrictionChecker {
 
-    private final Set<T> whitelist;
-    private final Set<T> blacklist;
+    private final Set<T> disabled;
     private final Function<Player, T> valueExtractor;
     private final RestrictionDenyReason denyReason;
 
     public SetRestrictionChecker(
-            @NotNull Set<T> whitelist,
-            @NotNull Set<T> blacklist,
+            @NotNull Set<T> disabled,
             @NotNull Function<Player, T> valueExtractor,
             @NotNull RestrictionDenyReason denyReason
     ) {
-        this.whitelist = Objects.requireNonNull(whitelist, "whitelist cannot be null");
-        this.blacklist = Objects.requireNonNull(blacklist, "blacklist cannot be null");
+        this.disabled = Objects.requireNonNull(disabled, "required cannot be null");
         this.valueExtractor = Objects.requireNonNull(valueExtractor, "valueExtractor cannot be null");
         this.denyReason = Objects.requireNonNull(denyReason, "denyReason cannot be null");
     }
@@ -32,11 +29,7 @@ public class SetRestrictionChecker<T> implements RestrictionChecker {
     public @NotNull RestrictionResult check(@NotNull Player player) {
         T value = this.valueExtractor.apply(player);
 
-        if (!this.whitelist.isEmpty() && !this.whitelist.contains(value)) {
-            return RestrictionResult.failed(this.denyReason);
-        }
-
-        if (this.blacklist.contains(value)) {
+        if (!this.disabled.isEmpty() && this.disabled.contains(value)) {
             return RestrictionResult.failed(this.denyReason);
         }
 

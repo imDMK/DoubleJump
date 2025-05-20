@@ -10,28 +10,17 @@ import java.util.Set;
 
 public class PermissionRestrictionChecker implements RestrictionChecker {
 
-    private final Set<String> whitelist;
-    private final Set<String> blacklist;
+    private final Set<String> allowedPermissions;
 
-    public PermissionRestrictionChecker(
-            @NotNull Set<String> whitelist,
-            @NotNull Set<String> blacklist
-    ) {
-        this.whitelist = Objects.requireNonNull(whitelist, "whitelist cannot be null");
-        this.blacklist = Objects.requireNonNull(blacklist, "blacklist cannot be null");
+    public PermissionRestrictionChecker(@NotNull Set<String> allowedPermissions) {
+        this.allowedPermissions = Objects.requireNonNull(allowedPermissions, "required cannot be null");
     }
 
     @Override
     public @NotNull RestrictionResult check(@NotNull Player player) {
-        for (String deniedPerm : this.blacklist) {
-            if (player.hasPermission(deniedPerm)) {
-                return RestrictionResult.failed(RestrictionDenyReason.PERMISSION_REQUIRED);
-            }
-        }
-
-        if (!this.whitelist.isEmpty()) {
-            for (String allowedPerm : this.whitelist) {
-                if (player.hasPermission(allowedPerm)) {
+        if (!this.allowedPermissions.isEmpty()) {
+            for (String permission : this.allowedPermissions) {
+                if (player.hasPermission(permission)) {
                     return RestrictionResult.passed();
                 }
             }

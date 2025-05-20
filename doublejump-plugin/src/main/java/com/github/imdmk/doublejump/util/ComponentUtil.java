@@ -21,14 +21,6 @@ public final class ComponentUtil {
                 .decoration(TextDecoration.ITALIC, false);
     }
 
-    public static List<Component> notItalic(String... text) {
-        return Arrays.stream(text).map(ComponentUtil::notItalic).toList();
-    }
-
-    public static List<Component> notItalic(List<String> texts) {
-        return texts.stream().map(ComponentUtil::notItalic).toList();
-    }
-
     public static String serialize(Component component) {
         return MINI_MESSAGE.serialize(component);
     }

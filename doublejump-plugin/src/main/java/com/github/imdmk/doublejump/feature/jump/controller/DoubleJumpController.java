@@ -27,8 +27,8 @@ public class DoubleJumpController extends PluginListener {
         final Player player = event.getPlayer();
 
         final Vector vector = player.getLocation().getDirection()
-                .multiply(this.jumpConfiguration.doubleJumpMultiplier)
-                .setY(this.jumpConfiguration.doubleJumpUp);
+                .multiply(this.jumpConfiguration.horizontalBoost)
+                .setY(this.jumpConfiguration.verticalBoost);
 
         this.flyingService.disable(player);
         player.setVelocity(vector);

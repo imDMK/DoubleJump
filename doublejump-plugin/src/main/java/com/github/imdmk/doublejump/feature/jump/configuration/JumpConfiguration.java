@@ -2,6 +2,7 @@ package com.github.imdmk.doublejump.feature.jump.configuration;
 
 import com.github.imdmk.doublejump.configuration.ConfigSection;
 import eu.okaeri.configs.OkaeriConfig;
+import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import org.bukkit.GameMode;
 import org.jetbrains.annotations.NotNull;
@@ -10,30 +11,37 @@ import java.util.Set;
 
 public class JumpConfiguration extends ConfigSection {
 
-    public boolean enableDoubleJumpOnJoin = true;
+    @Comment("Enables double jump automatically for players when they join the server.")
+    public boolean autoEnableOnJoin = true;
 
-    public String enableDoubleJumpOnJoinForPermission = "doublejump.join";
+    @Comment("Permission required to auto-enable double jump on join.")
+    public String autoEnablePermission = "doublejump.join";
 
-    public boolean enableDoubleJumpOnJoinForAdmins = false;
+    @Comment("Auto-enables double jump for players with OP or high permission level.")
+    public boolean autoEnableForAdmins = false;
 
-    public boolean fallDamage = true;
+    @Comment("Determines whether players will receive fall damage after double jumping.")
+    public boolean applyFallDamage = true;
 
-    public double doubleJumpMultiplier = 0.3;
+    @Comment("Horizontal boost multiplier applied during a double jump.")
+    public double horizontalBoost = 0.3;
 
-    public double doubleJumpUp = 0.6;
+    @Comment("Vertical boost height applied during a double jump.")
+    public double verticalBoost = 0.6;
 
+    @Comment("Restrictions that limit or conditionally disable double jumping.")
     public JumpRestrictionConfiguration restrictions = new JumpRestrictionConfiguration();
 
     public static class JumpRestrictionConfiguration extends OkaeriConfig {
 
-        public Set<String> worldWhitelist = Set.of();
-        public Set<String> worldBlacklist = Set.of("world1");
+        @Comment("List of worlds where double jumping is disabled. Leave empty if disable this feature.")
+        public Set<String> disabledWorlds = Set.of("world1");
 
-        public Set<GameMode> gameModeWhitelist = Set.of();
-        public Set<GameMode> gameModeBlacklist = Set.of(GameMode.CREATIVE, GameMode.ADVENTURE);
+        @Comment("List of game modes where double jumping is disabled. Leave empty if disable this feature.")
+        public Set<GameMode> disabledGameModes = Set.of(GameMode.CREATIVE, GameMode.ADVENTURE);
 
-        public Set<String> permissionWhitelist = Set.of();
-        public Set<String> permissionBlacklist = Set.of("unallowed-permission");
+        @Comment("List of permissions that allow double jumping. Players must have at least one. Leave empty if disable this feature.")
+        public Set<String> allowedPermissions = Set.of();
     }
 
     @Override
@@ -46,3 +54,4 @@ public class JumpConfiguration extends ConfigSection {
         return "jumpConfiguration.yml";
     }
 }
+
