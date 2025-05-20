@@ -1,4 +1,4 @@
 rootProject.name = "DoubleJump"
 
-include(":doublejump-api")
-include(":doublejump-core")
+include(":doublejump-bukkit-api")
+include(":doublejump-plugin")
