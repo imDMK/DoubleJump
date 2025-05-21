@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.feature.jump.restriction.result;
+package com.github.imdmk.doublejump.feature.jump.restriction.checker.result;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
  * If the result is a failure, an optional reason is provided to indicate why it was denied.
  *
  * @param success {@code true} if all restrictions passed, {@code false} otherwise
- * @param reason  optional reason describing why the restrictions failed, present only if {@code success == false}
+ * @param reason  Optional reason describing why the restrictions failed, present only if {@code success == false}
  */
 public record RestrictionResult(boolean success, @NotNull Optional<RestrictionDenyReason> reason) {
 

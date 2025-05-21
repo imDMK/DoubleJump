@@ -10,33 +10,45 @@ import org.jetbrains.annotations.NotNull;
 
 public class MessageConfiguration extends ConfigSection {
 
+    @Comment("# Sent when successfully reloaded all plugin configuration files")
+    public Notice reload = Notice.chat("<green>The plugin configuration files has been reloaded. May note that not all functions are reloaded.");
+
+    @Comment("# Sent when there an error occurred while trying to load plugin configuration file")
+    public Notice reloadError = Notice.chat("<red>Failed to reload plugin configuration files. Please see the console.");
+
     @Comment("Sent when double jump is successfully enabled.")
-    public Notice jumpEnabled = Notice.chat("<green>Enable double jump mode!</green>");
+    public Notice jumpEnabled = Notice.chat("<green>Enabled double jump mode!</green>");
 
-    @Comment("Sent when double jump is successfully disabled.")
-    public Notice jumpDisabled = Notice.chat("<red>Disable double jump mode!</red>");
+    @Comment("# Sent when double jump is successfully disabled.")
+    public Notice jumpDisabled = Notice.chat("<red>Disabled double jump mode!</red>");
 
-    @Comment("Sent when double jump is blocked due to a restricted world.")
+    @Comment("# Sent when double jump is blocked due to a restricted world.")
     public Notice worldRestricted = Notice.chat("<red>You are in disabled world!</red>");
 
-    @Comment("Sent when double jump is blocked due to the current game mode.")
+    @Comment("# Sent when double jump is blocked due to the current game mode.")
     public Notice gameModeRestricted = Notice.chat("<red>You have disabled gamemode!</red>");
 
-    @Comment("Sent when double jump is blocked due to restricted permissions.")
+    @Comment("# Sent when double jump is blocked due to delay")
+    public Notice jumpDelay = Notice.actionbar("<red>You must wait {TIME} before next jump!");
+
+    @Comment("# Sent when double jump is blocked due to player high ping")
+    public Notice playerLagging = Notice.chat("<red>We detected, that your ping is too high to use double jump!");
+
+    @Comment("# Sent when double jump is blocked due to restricted permissions.")
     public Notice jumpPermissionRequired = Notice.chat("<red>You don't have permission to activate double jump!</red>");
 
-    @Comment("Generic error message when an unexpected issue occurs.")
+    @Comment("# Generic error message when an unexpected issue occurs.")
     public Notice errorOccurred = Notice.chat("<red>An error occurred while trying to perform this action. Please join on server again!</red>");
 
     @Comment({
-            "Sent when a command is executed without the required permissions.",
-            "{PERMISSIONS} - Displays the required permission nodes."
+            "# Sent when a command is executed without the required permissions.",
+            "# {PERMISSIONS} - Displays the required permission nodes."
     })
     public Notice commandNoPermission = Notice.chat("<red>Missing permissions: <dark_red>{PERMISSIONS}<dark_gray>.");
 
     @Comment({
-            "Sent when a command is executed with incorrect arguments.",
-            "{USAGE} - Displays the correct command usage."
+            "# Sent when a command is executed with incorrect arguments.",
+            "# {USAGE} - Displays the correct command usage."
     })
     public Notice commandInvalidUsage = Notice.chat("<red>Invalid usage: <dark_red>{USAGE}<dark_gray>.");
 
@@ -44,8 +56,8 @@ public class MessageConfiguration extends ConfigSection {
     public Notice commandUsageHeader = Notice.chat("<red>Invalid usage:");
 
     @Comment({
-            "Entry format used when listing valid command usages.",
-            "{USAGE} - Displays the correct command usage."
+            "# Entry format used when listing valid command usages.",
+            "# {USAGE} - Displays the correct command usage."
     })
     public Notice commandUsageEntry = Notice.chat("<dark_gray>- <red>{USAGE}");
 

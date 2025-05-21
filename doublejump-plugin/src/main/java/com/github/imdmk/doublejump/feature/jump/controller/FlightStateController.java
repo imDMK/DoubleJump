@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 
 import java.util.UUID;
 
@@ -21,6 +22,15 @@ public class FlightStateController extends PluginListener {
         }
 
         this.flyingService.disable(player);
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    void onServerReload(final ServerLoadEvent event) {
+        if (event.getType() != ServerLoadEvent.LoadType.RELOAD) {
+            return;
+        }
+
+        this.server.getOnlinePlayers().forEach(this.flyingService::disable);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

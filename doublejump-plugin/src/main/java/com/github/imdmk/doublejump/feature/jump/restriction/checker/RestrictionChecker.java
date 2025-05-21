@@ -1,6 +1,6 @@
-package com.github.imdmk.doublejump.feature.jump.restriction.result.checker;
+package com.github.imdmk.doublejump.feature.jump.restriction.checker;
 
-import com.github.imdmk.doublejump.feature.jump.restriction.result.RestrictionResult;
+import com.github.imdmk.doublejump.feature.jump.restriction.checker.result.RestrictionResult;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

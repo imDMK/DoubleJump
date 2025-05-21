@@ -21,7 +21,10 @@ public class UpdateService {
 
     private Instant latestCheck;
 
-    public UpdateService(@NotNull PluginConfiguration pluginConfiguration, @NotNull PluginDescriptionFile descriptionFile) {
+    public UpdateService(
+            @NotNull PluginConfiguration pluginConfiguration,
+            @NotNull PluginDescriptionFile descriptionFile
+    ) {
         this.pluginConfiguration = Objects.requireNonNull(pluginConfiguration, "pluginConfiguration cannot be null");
         this.pluginDescriptionFile = Objects.requireNonNull(descriptionFile, "pluginDescriptionFile cannot be null");
     }

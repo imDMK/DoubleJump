@@ -2,6 +2,7 @@ package com.github.imdmk.doublejump.feature.jump.fall;
 
 import com.github.imdmk.doublejump.injector.PluginListener;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,7 +29,7 @@ public class JumpFallDamageController extends PluginListener {
      */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     void onPlayerDamage(final EntityDamageEvent event) {
-        if (!this.jumpConfiguration.applyFallDamage) {
+        if (this.jumpConfiguration.applyFallDamage) {
             return;
         }
 
@@ -42,7 +43,6 @@ public class JumpFallDamageController extends PluginListener {
             event.setDamage(0);
         }
     }
-
 
     /**
      * Re-enables fall damage by disabling flight allowance for players who have landed,
@@ -64,49 +64,40 @@ public class JumpFallDamageController extends PluginListener {
 
         if (this.shouldReenableFallDamage(player)) {
             player.setAllowFlight(false);
+            player.setFlying(false);
         }
     }
 
     /**
-     * Determines whether the player should be allowed to take fall damage again.
-     * This is typically called after a double jump to re-enable normal fall physics.
+     * Checks whether the player should have fall damage re-enabled.
+     * The player must have fallen at least the minimum required distance and be standing on a non-air block.
      *
      * @param player The player to check.
-     * @return true, if conditions suggest the player has landed and should take fall damage.
+     * @return true, if fall damage should be re-enabled.
      */
     private boolean shouldReenableFallDamage(@NotNull Player player) {
-        return this.hasFallenEnough(player) && this.isStandingOnSolid(player) && this.isLandingPredicted(player);
+        return this.hasFallenEnough(player) && this.isStandingOnSolidBlock(player);
     }
 
     /**
-     * Checks if the player has fallen a sufficient distance to incur fall damage.
+     * Checks if the player has fallen at least the minimum distance to receive fall damage.
      *
-     * @param player The player whose fall distance is being evaluated.
-     * @return true if the player's fall distance is equal to or greater than the configured minimum distance required to cause fall damage; false otherwise.
+     * @param player The player to check.
+     * @return true, if fall distance is greater than or equal to a minimum threshold.
      */
     private boolean hasFallenEnough(@NotNull Player player) {
         return player.getFallDistance() >= MIN_FALL_DISTANCE_FOR_DAMAGE;
     }
 
     /**
-     * Checks if the player is currently standing on a solid block.
+     * Checks if the block directly beneath the player is solid (not air).
      *
      * @param player The player to check.
-     * @return true if there is a non-air block directly beneath the player.
+     * @return true, if the block below the player is not air.
      */
-    private boolean isStandingOnSolid(@NotNull Player player) {
+    private boolean isStandingOnSolidBlock(@NotNull Player player) {
         Location locationBelow = player.getLocation().clone().subtract(0, 1, 0);
-        return locationBelow.getBlock().getType().isSolid();
+        return locationBelow.getBlock().getType() != Material.AIR;
     }
 
-    /**
-     * Predicts whether the player is about to land based on their current velocity.
-     *
-     * @param player The player to evaluate.
-     * @return true if the block in the direction of movement is not air.
-     */
-    private boolean isLandingPredicted(@NotNull Player player) {
-        Location projectedLocation = player.getLocation().clone().add(player.getVelocity());
-        return projectedLocation.getBlock().getType().isSolid();
-    }
 }

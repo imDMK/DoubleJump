@@ -30,7 +30,7 @@ public class DoubleJumpController extends PluginListener {
                 .multiply(this.jumpConfiguration.horizontalBoost)
                 .setY(this.jumpConfiguration.verticalBoost);
 
-        this.flyingService.disable(player);
+        this.flyingService.disable(player, false);
         player.setVelocity(vector);
     }
 

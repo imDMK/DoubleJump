@@ -6,15 +6,17 @@ import com.github.imdmk.doublejump.configuration.PluginConfiguration;
 import com.github.imdmk.doublejump.feature.command.MissingPermissionHandler;
 import com.github.imdmk.doublejump.feature.command.PlayerContextual;
 import com.github.imdmk.doublejump.feature.command.UsageHandler;
+import com.github.imdmk.doublejump.feature.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.feature.jump.PlayerFlyingService;
 import com.github.imdmk.doublejump.feature.jump.command.DoubleJumpCommand;
-import com.github.imdmk.doublejump.feature.jump.configuration.JumpConfiguration;
+import com.github.imdmk.doublejump.feature.jump.command.DoubleJumpReloadCommand;
 import com.github.imdmk.doublejump.feature.jump.controller.DoubleJumpController;
 import com.github.imdmk.doublejump.feature.jump.controller.FlightStateController;
 import com.github.imdmk.doublejump.feature.jump.controller.JumpPlayerSessionController;
 import com.github.imdmk.doublejump.feature.jump.fall.JumpFallDamageController;
-import com.github.imdmk.doublejump.feature.jump.restriction.FlyingRestrictionController;
-import com.github.imdmk.doublejump.feature.jump.restriction.FlyingRestrictionService;
+import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionController;
+import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionService;
+import com.github.imdmk.doublejump.feature.jump.restriction.delay.DelayRestrictionController;
 import com.github.imdmk.doublejump.feature.message.MessageConfiguration;
 import com.github.imdmk.doublejump.feature.message.MessageResultHandler;
 import com.github.imdmk.doublejump.feature.message.MessageService;
@@ -55,7 +57,7 @@ class DoubleJump implements DoubleJumpApi {
 
     private JumpPlayerCache jumpPlayerCache;
     private PlayerFlyingService playerFlyingService;
-    private FlyingRestrictionService flyingRestrictionService;
+    private JumpRestrictionService jumpRestrictionService;
 
     private Injector injector;
 
@@ -103,15 +105,15 @@ class DoubleJump implements DoubleJumpApi {
             resources.on(TaskScheduler.class).assignInstance(this.taskScheduler);
 
             /* Double jump */
-            resources.on(JumpPlayerCache.class).assignInstance(this.jumpPlayerCache);
-            resources.on(PlayerFlyingService.class).assignInstance(this.playerFlyingService);
-            resources.on(FlyingRestrictionService.class).assignInstance(this.flyingRestrictionService);
+            resources.on(JumpPlayerCache.class).assignInstance(() -> this.jumpPlayerCache);
+            resources.on(PlayerFlyingService.class).assignInstance(() -> this.playerFlyingService);
+            resources.on(JumpRestrictionService.class).assignInstance(() -> this.jumpRestrictionService);
         });
 
         try {
             this.jumpPlayerCache = this.createInstance(JumpPlayerCache.class);
             this.playerFlyingService = this.createInstance(PlayerFlyingService.class);
-            this.flyingRestrictionService = this.createInstance(FlyingRestrictionService.class);
+            this.jumpRestrictionService = this.createInstance(JumpRestrictionService.class);
         }
         catch (DependencyInjectionException injectionException) {
             this.logger.log(Level.SEVERE, "An error occurred while dependency injecting", injectionException);
@@ -125,7 +127,8 @@ class DoubleJump implements DoubleJumpApi {
                 FlightStateController.class,
                 JumpPlayerSessionController.class,
                 JumpFallDamageController.class,
-                FlyingRestrictionController.class
+                JumpRestrictionController.class,
+                DelayRestrictionController.class
         ).forEach(this::createInstance);
 
         /* LiteCommands */
@@ -137,7 +140,8 @@ class DoubleJump implements DoubleJumpApi {
                 .result(Notice.class, new MessageResultHandler(this.messageService))
 
                 .commands(
-                        new DoubleJumpCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService, this.flyingRestrictionService)
+                        new DoubleJumpCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService, this.jumpRestrictionService),
+                        new DoubleJumpReloadCommand(this.logger, this.configurationManager, this.messageService)
                 )
 
                 .build();

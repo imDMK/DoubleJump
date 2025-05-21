@@ -3,6 +3,7 @@ package com.github.imdmk.doublejump.feature.message;
 import com.eternalcode.multification.adventure.AudienceConverter;
 import com.eternalcode.multification.bukkit.BukkitMultification;
 import com.eternalcode.multification.notice.provider.NoticeProvider;
+import com.eternalcode.multification.shared.Formatter;
 import com.eternalcode.multification.translation.TranslationProvider;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.text.Component;
@@ -15,6 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+/**
+ * Service responsible for sending formatted messages to command senders using the configured notice system.
+ */
 public class MessageService extends BukkitMultification<MessageConfiguration> {
 
     private final Logger logger;
@@ -55,10 +59,34 @@ public class MessageService extends BukkitMultification<MessageConfiguration> {
         };
     }
 
-    public void send(CommandSender sender, NoticeProvider<MessageConfiguration> notice) {
+    /**
+     * Sends a predefined notice message to the given sender.
+     *
+     * @param sender the target recipient, must not be {@code null}
+     * @param notice the notice to send, must not be {@code null}
+     */
+    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfiguration> notice) {
         this.create().viewer(sender).notice(notice).send();
     }
 
+    /**
+     * Sends a predefined notice message to the given sender with formatting support.
+     *
+     * @param sender    the target recipient, must not be {@code null}
+     * @param notice    the notice to send, must not be {@code null}
+     * @param formatter the formatter used to replace placeholders, must not be {@code null}
+     */
+    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfiguration> notice, @NotNull Formatter formatter) {
+        this.create()
+                .viewer(sender)
+                .notice(notice)
+                .formatter(formatter)
+                .send();
+    }
+
+    /**
+     * Closes underlying resources used by this service (e.g., audiences).
+     */
     public void close() {
         this.logger.info("Closing MessageService");
         this.audienceProvider.close();
