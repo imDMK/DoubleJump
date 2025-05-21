@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
@@ -23,6 +24,11 @@ public class JumpPlayerSessionController extends PluginListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     void onPlayerQuit(final PlayerQuitEvent event) {
+        this.jumpCache.remove(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    void onPlayerKick(final PlayerKickEvent event) {
         this.jumpCache.remove(event.getPlayer().getUniqueId());
     }
 }

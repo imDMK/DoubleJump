@@ -13,18 +13,22 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class MessageService extends BukkitMultification<MessageConfiguration> {
 
+    private final Logger logger;
     private final MessageConfiguration messageConfiguration;
     private final AudienceProvider audienceProvider;
     private final MiniMessage miniMessage;
 
     public MessageService(
+            @NotNull Logger logger,
             @NotNull MessageConfiguration messageConfiguration,
             @NotNull AudienceProvider audienceProvider,
             @NotNull MiniMessage miniMessage
     ) {
+        this.logger = Objects.requireNonNull(logger, "logger cannot be null");
         this.messageConfiguration = Objects.requireNonNull(messageConfiguration, "messageConfiguration cannot be null");
         this.audienceProvider = Objects.requireNonNull(audienceProvider, "audienceProvider cannot be null");
         this.miniMessage = Objects.requireNonNull(miniMessage, "miniMessage cannot be null");
@@ -56,6 +60,7 @@ public class MessageService extends BukkitMultification<MessageConfiguration> {
     }
 
     public void close() {
+        this.logger.info("Closing MessageService");
         this.audienceProvider.close();
     }
 }

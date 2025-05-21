@@ -1,6 +1,5 @@
 package com.github.imdmk.doublejump.feature.jump.command;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.doublejump.feature.jump.PlayerFlyingService;
 import com.github.imdmk.doublejump.feature.jump.restriction.FlyingRestrictionService;
 import com.github.imdmk.doublejump.feature.jump.restriction.result.RestrictionDenyReason;
@@ -13,7 +12,6 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

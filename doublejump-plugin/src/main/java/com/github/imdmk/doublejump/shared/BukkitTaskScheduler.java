@@ -50,6 +50,7 @@ public final class BukkitTaskScheduler implements TaskScheduler {
 
     @Override
     public void shutdown() {
+        this.plugin.getLogger().info("Shutting down TaskScheduler");
         this.scheduler.cancelTasks(this.plugin);
     }
 }

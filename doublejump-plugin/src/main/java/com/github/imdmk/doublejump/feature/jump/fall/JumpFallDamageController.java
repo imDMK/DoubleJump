@@ -37,7 +37,7 @@ public class JumpFallDamageController extends PluginListener {
             return;
         }
 
-        if (this.jumpCache.hasPlayer(player.getUniqueId())) {
+        if (this.jumpCache.isActive(player.getUniqueId())) {
             event.setCancelled(true);
             event.setDamage(0);
         }
@@ -58,7 +58,7 @@ public class JumpFallDamageController extends PluginListener {
         }
 
         Player player = event.getPlayer();
-        if (player.isFlying() || !this.jumpCache.hasPlayer(player.getUniqueId())) {
+        if (player.isFlying() || !this.jumpCache.isActive(player.getUniqueId())) {
             return;
         }
 

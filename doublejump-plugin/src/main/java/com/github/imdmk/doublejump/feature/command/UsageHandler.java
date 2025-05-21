@@ -27,7 +27,7 @@ public class UsageHandler implements InvalidUsageHandler<CommandSender> {
         if (schematic.isOnlyFirst()) {
             this.messageService.create()
                     .viewer(sender)
-                    .notice(notice -> notice.invalidCommandUsage)
+                    .notice(notice -> notice.commandInvalidUsage)
                     .placeholder("{USAGE}", schematic.first())
                     .send();
             return;
@@ -35,13 +35,13 @@ public class UsageHandler implements InvalidUsageHandler<CommandSender> {
 
         this.messageService.create()
                 .viewer(sender)
-                .notice(notice -> notice.usageHeader)
+                .notice(notice -> notice.commandUsageHeader)
                 .send();
 
         for (String scheme : schematic.all()) {
             this.messageService.create()
                     .viewer(sender)
-                    .notice(notice -> notice.usageEntry)
+                    .notice(notice -> notice.commandUsageEntry)
                     .placeholder("{USAGE}", scheme)
                     .send();
         }

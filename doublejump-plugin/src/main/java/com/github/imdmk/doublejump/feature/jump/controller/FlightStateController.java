@@ -16,11 +16,11 @@ public class FlightStateController extends PluginListener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        this.jumpCache.getActive(uuid)
-                .ifPresent(jump -> {
-                    jump.setActive(false);
-                    this.flyingService.disable(player, true);
-                });
+        if (!this.jumpCache.isActive(uuid)) {
+            return;
+        }
+
+        this.flyingService.disable(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

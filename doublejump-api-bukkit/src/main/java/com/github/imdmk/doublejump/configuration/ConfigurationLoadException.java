@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.configuration;
 
-public class ConfigurationLoadException extends RuntimeException {
+public final class ConfigurationLoadException extends RuntimeException {
     public ConfigurationLoadException(Throwable cause) {
         super("Failed to load configuration", cause);
     }

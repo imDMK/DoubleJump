@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump.feature.jump.restriction;
 
-import com.github.imdmk.doublejump.jump.DoubleJumpEvent;
 import com.github.imdmk.doublejump.injector.PluginListener;
+import com.github.imdmk.doublejump.jump.DoubleJumpEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

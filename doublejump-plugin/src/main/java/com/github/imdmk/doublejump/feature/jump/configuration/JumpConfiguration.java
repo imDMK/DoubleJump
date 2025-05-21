@@ -42,6 +42,7 @@ public class JumpConfiguration extends ConfigSection {
 
         @Comment("List of permissions that allow double jumping. Players must have at least one. Leave empty if disable this feature.")
         public Set<String> allowedPermissions = Set.of();
+
     }
 
     @Override

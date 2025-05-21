@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * retrieve, and list all registered players.
  * </p>
  */
-public class JumpPlayerCache {
+public final class JumpPlayerCache {
 
     private final Map<UUID, JumpPlayer> jumpPlayers = new ConcurrentHashMap<>();
 

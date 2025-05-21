@@ -1,6 +1,7 @@
 package com.github.imdmk.doublejump.feature.jump;
 
 import com.github.imdmk.doublejump.task.TaskScheduler;
+import com.github.imdmk.doublejump.util.GameModeUtil;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;
@@ -23,12 +24,12 @@ public class PlayerFlyingService {
     }
 
     /**
-     * Disables flight for the player and sets allowFlight to false.
+     * Disables flight for the player and sets allowFlight according to player's gameMode
      *
      * @param player The player to modify.
      */
     public void disable(@NotNull final Player player) {
-        this.disable(player, false);
+        this.disable(player, GameModeUtil.isFlyingGameMode(player.getGameMode()));
     }
 
     /**
