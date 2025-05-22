@@ -37,4 +37,3 @@ public class SetRestrictionChecker<T> implements RestrictionChecker {
         return RestrictionResult.passed();
     }
 }
-

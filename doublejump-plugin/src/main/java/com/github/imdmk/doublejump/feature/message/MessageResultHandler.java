@@ -25,4 +25,3 @@ public class MessageResultHandler implements ResultHandler<CommandSender, Notice
                 .send();
     }
 }
-

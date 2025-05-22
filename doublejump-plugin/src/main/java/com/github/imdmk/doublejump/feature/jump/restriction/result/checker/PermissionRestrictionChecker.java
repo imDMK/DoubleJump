@@ -32,4 +32,3 @@ public class PermissionRestrictionChecker implements RestrictionChecker {
         return RestrictionResult.passed();
     }
 }
-

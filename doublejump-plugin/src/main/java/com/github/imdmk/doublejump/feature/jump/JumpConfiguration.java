@@ -89,4 +89,3 @@ public class JumpConfiguration extends ConfigSection {
         return "jumpConfiguration.yml";
     }
 }
-
