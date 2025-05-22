@@ -63,8 +63,7 @@ public class JumpFallDamageController extends PluginListener {
         }
 
         if (this.shouldReenableFallDamage(player)) {
-            player.setAllowFlight(false);
-            player.setFlying(false);
+            this.flyingService.disable(player, false);
         }
     }
 
