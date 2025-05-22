@@ -42,9 +42,10 @@ public class JumpPlayer {
     private RestrictionDenyReason lastNotifiedReason;
 
     /**
-     * Creates a new JumpPlayer instance for the given player UUID.
+     * Creates a new JumpPlayer instance for the given player UUID and name.
      *
      * @param uuid the unique identifier of the player
+     * @param name the player name
      */
     public JumpPlayer(@NotNull UUID uuid, @NotNull String name) {
         this.uuid = uuid;
@@ -129,7 +130,7 @@ public class JumpPlayer {
      * @param reason the reason to compare, not null
      * @return true if the reason matches the last-notified reason, false otherwise
      */
-    public boolean isSameReason(@NotNull RestrictionDenyReason reason) {
+    public boolean isSameAsLastNotifiedReason(@NotNull RestrictionDenyReason reason) {
         return Objects.equals(this.lastNotifiedReason, reason);
     }
 
@@ -139,7 +140,7 @@ public class JumpPlayer {
      * @return true if a last notified reason is set, false otherwise
      */
     public boolean hasLastNotifiedReason() {
-        return lastNotifiedReason != null;
+        return this.lastNotifiedReason != null;
     }
 
     /**

@@ -45,6 +45,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+/**
+ * The main implementation of the DoubleJump plugin.
+ * <p>
+ * Responsible for initializing all systems including configuration management,
+ * dependency injection, services, command registration, metrics, and plugin lifecycle.
+ * <p>
+ * This class implements {@link DoubleJumpApi} to expose core APIs for other parts of the plugin or external plugins.
+ */
 class DoubleJump implements DoubleJumpApi {
 
     private final Plugin plugin;
@@ -68,6 +76,11 @@ class DoubleJump implements DoubleJumpApi {
 
     private Metrics metrics;
 
+    /**
+     * Initializes the plugin, loads configurations, injects services, registers commands and listeners.
+     *
+     * @param plugin the Bukkit plugin instance
+     */
     DoubleJump(@NotNull Plugin plugin) {
         DoubleJumpApiProvider.register(this);
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -156,9 +169,12 @@ class DoubleJump implements DoubleJumpApi {
         this.metrics = new Metrics(plugin, DoubleJumpPlugin.METRICS_SERVICE_ID);
 
         this.logger.info("Enabled DoubleJump plugin in " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms.");
-        this.logger.info("Thank you for using! Best regards from imDMK!");
+        this.logger.info("Thank you for using DoubleJump! Best regards from imDMK.");
     }
 
+    /**
+     * Disables the plugin gracefully, closing open services and unregistering commands.
+     */
     void disable() {
         DoubleJumpApiProvider.unregister();
 
@@ -171,19 +187,39 @@ class DoubleJump implements DoubleJumpApi {
         this.logger.info("Successfully disabled plugin.");
     }
 
-    private <T> T createInstance(Class<T> clazz) {
+    /**
+     * Creates an instance of the specified class using the dependency injector.
+     *
+     * @param clazz the class to instantiate
+     * @param <T>   the type of the class
+     * @return an instance of the specified class
+     */
+    private <T> T createInstance(Class<T> clazz) throws DependencyInjectionException {
         return this.injector.newInstanceWithFields(clazz);
     }
 
+    /**
+     * Forces Bukkit to disable this plugin.
+     */
     private void disablePlugin() {
         this.server.getPluginManager().disablePlugin(this.plugin);
     }
 
+    /**
+     * Gets the plugin's configuration manager.
+     *
+     * @return the configuration manager
+     */
     @Override
     public @NotNull ConfigurationManager getConfigurationManager() {
         return this.configurationManager;
     }
 
+    /**
+     * Gets the runtime cache for players using the double jump feature.
+     *
+     * @return the player cache
+     */
     @Override
     public JumpPlayerCache getJumpPlayerCache() {
         return this.jumpPlayerCache;

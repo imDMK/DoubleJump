@@ -37,7 +37,7 @@ public class RestrictionResultNotifier {
         }
 
         result.reason()
-                .filter(reason -> !jump.isSameReason(reason))
+                .filter(reason -> !jump.isSameAsLastNotifiedReason(reason))
                 .ifPresent(reason -> {
                     jump.setLastNotifiedReason(reason);
                     this.notify(player, reason, this.buildFormatterForReason(reason));

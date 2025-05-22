@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * <p>This class is not meant to be instantiated.</p>
  */
-public class GameModeUtil {
+public final class GameModeUtil {
 
     private static final Set<GameMode> FLYING_GAME_MODES = EnumSet.of(GameMode.SPECTATOR, GameMode.CREATIVE);
 
