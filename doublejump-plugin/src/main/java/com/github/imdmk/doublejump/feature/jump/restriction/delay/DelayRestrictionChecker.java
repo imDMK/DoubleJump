@@ -1,11 +1,11 @@
 package com.github.imdmk.doublejump.feature.jump.restriction.delay;
 
 import com.github.imdmk.doublejump.feature.jump.JumpConfiguration;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.RestrictionChecker;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.result.RestrictionDenyReason;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.result.RestrictionResult;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.restriction.RestrictionChecker;
+import com.github.imdmk.doublejump.jump.restriction.RestrictionDenyReason;
+import com.github.imdmk.doublejump.jump.restriction.RestrictionResult;
 import com.github.imdmk.doublejump.util.DurationUtil;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

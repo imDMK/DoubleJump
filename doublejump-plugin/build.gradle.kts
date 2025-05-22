@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":doublejump-api-bukkit"))
+    implementation(project(":doublejump-api"))
 
     compileOnly("org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT")
 

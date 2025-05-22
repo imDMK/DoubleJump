@@ -17,6 +17,7 @@ import com.github.imdmk.doublejump.feature.jump.fall.JumpFallDamageController;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionController;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.feature.jump.restriction.delay.DelayRestrictionController;
+import com.github.imdmk.doublejump.feature.jump.restriction.result.RestrictionResultNotifier;
 import com.github.imdmk.doublejump.feature.message.MessageConfiguration;
 import com.github.imdmk.doublejump.feature.message.MessageResultHandler;
 import com.github.imdmk.doublejump.feature.message.MessageService;
@@ -55,11 +56,12 @@ class DoubleJump implements DoubleJumpApi {
 
     private final TaskScheduler taskScheduler;
 
+    private final Injector injector;
+
     private JumpPlayerCache jumpPlayerCache;
     private PlayerFlyingService playerFlyingService;
     private JumpRestrictionService jumpRestrictionService;
-
-    private Injector injector;
+    private RestrictionResultNotifier restrictionResultNotifier;
 
     private LiteCommands<CommandSender> liteCommands;
 
@@ -104,16 +106,18 @@ class DoubleJump implements DoubleJumpApi {
             /* Scheduler */
             resources.on(TaskScheduler.class).assignInstance(this.taskScheduler);
 
-            /* Double jump */
+            /* Double jump, lazy */
             resources.on(JumpPlayerCache.class).assignInstance(() -> this.jumpPlayerCache);
             resources.on(PlayerFlyingService.class).assignInstance(() -> this.playerFlyingService);
             resources.on(JumpRestrictionService.class).assignInstance(() -> this.jumpRestrictionService);
+            resources.on(RestrictionResultNotifier.class).assignInstance(() -> this.restrictionResultNotifier);
         });
 
         try {
             this.jumpPlayerCache = this.createInstance(JumpPlayerCache.class);
             this.playerFlyingService = this.createInstance(PlayerFlyingService.class);
             this.jumpRestrictionService = this.createInstance(JumpRestrictionService.class);
+            this.restrictionResultNotifier = this.createInstance(RestrictionResultNotifier.class);
         }
         catch (DependencyInjectionException injectionException) {
             this.logger.log(Level.SEVERE, "An error occurred while dependency injecting", injectionException);
@@ -140,7 +144,7 @@ class DoubleJump implements DoubleJumpApi {
                 .result(Notice.class, new MessageResultHandler(this.messageService))
 
                 .commands(
-                        new DoubleJumpCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService, this.jumpRestrictionService),
+                        new DoubleJumpCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService, this.jumpRestrictionService, this.restrictionResultNotifier),
                         new DoubleJumpReloadCommand(this.logger, this.configurationManager, this.messageService)
                 )
 
@@ -174,12 +178,12 @@ class DoubleJump implements DoubleJumpApi {
     }
 
     @Override
-    public JumpPlayerCache getJumpPlayerCache() {
-        return this.jumpPlayerCache;
+    public @NotNull ConfigurationManager getConfigurationManager() {
+        return this.configurationManager;
     }
 
     @Override
-    public @NotNull ConfigurationManager getConfigurationManager() {
-        return this.configurationManager;
+    public JumpPlayerCache getJumpPlayerCache() {
+        return this.jumpPlayerCache;
     }
 }

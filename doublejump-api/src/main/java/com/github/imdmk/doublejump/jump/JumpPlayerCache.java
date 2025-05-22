@@ -1,10 +1,13 @@
 package com.github.imdmk.doublejump.jump;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * Thread-safe cache storing {@link JumpPlayer} instances by their UUIDs.
@@ -24,7 +27,7 @@ public final class JumpPlayerCache {
      * @param uuid       The UUID of the player.
      * @param jumpPlayer The {@link JumpPlayer} instance to store.
      */
-    public void put(UUID uuid, JumpPlayer jumpPlayer) {
+    public void put(@NotNull UUID uuid, @NotNull JumpPlayer jumpPlayer) {
         this.jumpPlayers.put(uuid, jumpPlayer);
     }
 
@@ -34,7 +37,7 @@ public final class JumpPlayerCache {
      * @param uuid The UUID of the player.
      * @return {@code true} if a player was removed, {@code false} if none was found.
      */
-    public boolean remove(UUID uuid) {
+    public boolean remove(@NotNull UUID uuid) {
         return this.jumpPlayers.remove(uuid) != null;
     }
 
@@ -44,7 +47,7 @@ public final class JumpPlayerCache {
      * @param uuid The UUID to check.
      * @return {@code true} if a player is present, {@code false} otherwise.
      */
-    public boolean hasPlayer(UUID uuid) {
+    public boolean hasPlayer(@NotNull UUID uuid) {
         return this.jumpPlayers.containsKey(uuid);
     }
 
@@ -54,8 +57,18 @@ public final class JumpPlayerCache {
      * @param uuid The UUID of the player.
      * @return {@code true} if the player is present and active, {@code false} otherwise.
      */
-    public boolean isActive(UUID uuid) {
+    public boolean isActive(@NotNull UUID uuid) {
         return this.getActive(uuid).isPresent();
+    }
+
+    /**
+     * Executes the given action if the player is currently marked as active in the jump cache.
+     *
+     * @param uuid the unique identifier of the player
+     * @param onActive the action to perform if the player is active
+     */
+    public void ifActive(@NotNull UUID uuid, @NotNull Consumer<JumpPlayer> onActive) {
+        this.getActive(uuid).ifPresent(onActive);
     }
 
     /**
@@ -65,7 +78,7 @@ public final class JumpPlayerCache {
      * @param uuid The UUID of the player.
      * @return An {@link Optional} containing the active {@link JumpPlayer} if present, or empty otherwise.
      */
-    public Optional<JumpPlayer> getActive(UUID uuid) {
+    public Optional<JumpPlayer> getActive(@NotNull UUID uuid) {
         return this.get(uuid).filter(JumpPlayer::isActive);
     }
 
@@ -75,7 +88,7 @@ public final class JumpPlayerCache {
      * @param uuid The UUID of the player.
      * @return An {@link Optional} containing the {@link JumpPlayer} if present, or empty otherwise.
      */
-    public Optional<JumpPlayer> get(UUID uuid) {
+    public Optional<JumpPlayer> get(@NotNull UUID uuid) {
         return Optional.ofNullable(this.jumpPlayers.get(uuid));
     }
 

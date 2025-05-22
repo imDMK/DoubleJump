@@ -1,20 +1,22 @@
 package com.github.imdmk.doublejump.feature.jump.restriction;
 
 import com.github.imdmk.doublejump.feature.jump.JumpConfiguration;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.RestrictionChecker;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.impl.PermissionRestrictionChecker;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.impl.PlayerPingRestrictionChecker;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.impl.SetRestrictionChecker;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.result.RestrictionDenyReason;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.result.RestrictionResult;
 import com.github.imdmk.doublejump.feature.jump.restriction.delay.DelayRestrictionChecker;
+import com.github.imdmk.doublejump.feature.jump.restriction.result.checker.PermissionRestrictionChecker;
+import com.github.imdmk.doublejump.feature.jump.restriction.result.checker.PlayerPingRestrictionChecker;
+import com.github.imdmk.doublejump.feature.jump.restriction.result.checker.SetRestrictionChecker;
 import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.restriction.RestrictionChecker;
+import com.github.imdmk.doublejump.jump.restriction.RestrictionDenyReason;
+import com.github.imdmk.doublejump.jump.restriction.RestrictionResult;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;
 import org.panda_lang.utilities.inject.annotations.PostConstruct;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Service responsible for evaluating whether a player is restricted from using double jump.
@@ -62,6 +64,24 @@ public class JumpRestrictionService {
      */
     public boolean isRestricted(@NotNull Player player) {
         return !this.checkAllRestrictions(player).success();
+    }
+
+    /**
+     * Executes the provided action if the player is currently restricted from using double jump.
+     * <p>
+     * This is a utility method that internally runs all registered {@link RestrictionChecker}s via
+     * {@link #checkAllRestrictions(Player)}.
+     * If the result indicates failure, the specified
+     * consumer is invoked with the corresponding {@link RestrictionResult}.
+     * </p>
+     *
+     * @param player        the player to evaluate
+     * @param onRestricted  the action to execute if the player is restricted
+     */
+    public void ifRestricted(@NotNull Player player, @NotNull Consumer<RestrictionResult> onRestricted) {
+        Optional.of(this.checkAllRestrictions(player))
+                .filter(RestrictionResult::failure)
+                .ifPresent(onRestricted);
     }
 
     /**

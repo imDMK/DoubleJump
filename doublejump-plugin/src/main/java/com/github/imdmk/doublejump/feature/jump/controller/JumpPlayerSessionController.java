@@ -55,6 +55,6 @@ public class JumpPlayerSessionController extends PluginListener {
      */
     private void createJumpPlayer(@NotNull Player player) {
         UUID uuid = player.getUniqueId();
-        this.jumpCache.put(uuid, new JumpPlayer(uuid));
+        this.jumpCache.put(uuid, new JumpPlayer(uuid, player.getName()));
     }
 }

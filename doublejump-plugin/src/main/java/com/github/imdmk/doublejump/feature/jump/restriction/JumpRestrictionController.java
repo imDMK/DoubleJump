@@ -1,11 +1,11 @@
 package com.github.imdmk.doublejump.feature.jump.restriction;
 
-import com.eternalcode.multification.shared.Formatter;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.result.RestrictionDenyReason;
-import com.github.imdmk.doublejump.feature.jump.restriction.checker.result.RestrictionResult;
+import com.github.imdmk.doublejump.feature.jump.restriction.result.RestrictionResultNotifier;
 import com.github.imdmk.doublejump.injector.PluginListener;
 import com.github.imdmk.doublejump.jump.DoubleJumpEvent;
-import com.github.imdmk.doublejump.util.DurationUtil;
+import com.github.imdmk.doublejump.jump.JumpPlayer;
+import com.github.imdmk.doublejump.jump.restriction.RestrictionResult;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,52 +13,36 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.NotNull;
+import org.panda_lang.utilities.inject.annotations.Inject;
 
 /**
- * Handles world join and change events to conditionally enable double jump for players
- * based on their permissions, operator status, and configuration rules.
+ * Handles restrictions related to double jump:
+ * - Cancels jump events if restrictions are violated
+ * - Disables double jump in runtime if hard restrictions occur (e.g. world change, ping, permissions)
+ * - Enables jump on join/world change if allowed
  */
 public class JumpRestrictionController extends PluginListener {
 
+    @Inject private RestrictionResultNotifier resultNotifier;
+
     @EventHandler(priority = EventPriority.LOWEST)
     void onDoubleJump(final DoubleJumpEvent event) {
-        Player player = event.getPlayer();
-
-        this.jumpCache.getActive(player.getUniqueId()).ifPresent(jump -> {
-            RestrictionResult result = this.restrictionService.checkAllRestrictions(player);
-            if (result.success()) {
-                return;
-            }
-
-            event.setCancelled(true);
-
-            result.reason().ifPresent(reason -> {
-                if (reason == RestrictionDenyReason.JUMP_DELAY) {
-                    Formatter formatter = new Formatter()
-                            .register("{TIME}", DurationUtil.format(this.jumpConfiguration.jumpDelay));
-
-                    reason.notify(player, messageService, formatter);
-                    return;
-                }
-
-                reason.notify(player, this.messageService);
-            });
-
-            jump.setActive(false);
-            this.flyingService.disable(player);
-        });
+        this.jumpCache.getActive(event.getPlayer().getUniqueId())
+                .ifPresent(result -> this.handleRestrictions(event.getPlayer(), result));
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     void onPlayerMove(final PlayerMoveEvent event) {
-        Player player = event.getPlayer();
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        if (to == null || to.getBlockX() == from.getBlockX()
+                && to.getBlockY() == from.getBlockY()
+                && to.getBlockZ() == from.getBlockZ()) {
+            return;
+        }
 
-        this.jumpCache.getActive(player.getUniqueId())
-                .filter(jump -> this.restrictionService.isRestricted(player))
-                .ifPresent(jump -> {
-                    jump.setActive(false);
-                    this.flyingService.disable(player);
-                });
+        this.jumpCache.getActive(event.getPlayer().getUniqueId())
+                .ifPresent(result -> this.handleRestrictions(event.getPlayer(), result));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -72,6 +56,38 @@ public class JumpRestrictionController extends PluginListener {
     }
 
     /**
+     * Applies double jump restrictions to the player.
+     * Updates jump state, notifies the player if restricted, and disables flight on hard restrictions.
+     *
+     * @param player the player to evaluate
+     * @param jump the player's jump state to update
+     */
+    private void handleRestrictions(@NotNull Player player, @NotNull JumpPlayer jump) {
+        RestrictionResult result = this.restrictionService.checkAllRestrictions(player);
+
+        this.resultNotifier.notify(player, jump, result);
+
+        if (result.failure()) {
+            jump.setJumpAllowed(false);
+
+            if (result.isHardRestriction()) {
+                jump.setActive(false);
+                this.flyingService.disable(player);
+            }
+
+            return;
+        }
+
+        if (!jump.isJumpAllowed()) {
+            jump.setJumpAllowed(true);
+
+            if (!jump.hasLastNotifiedReason()) {
+                this.messageService.send(player, n -> n.jumpAvailable);
+            }
+        }
+    }
+
+    /**
      * Attempts to enable double jump for the player if they pass restrictions.
      * @param player the player to enable double jump for
      */
@@ -79,6 +95,7 @@ public class JumpRestrictionController extends PluginListener {
         this.jumpCache.get(player.getUniqueId())
                 .filter(jump -> this.shouldEnable(player))
                 .ifPresent(jump -> {
+                    jump.setJumpAllowed(true);
                     jump.setActive(true);
                     this.flyingService.enable(player);
                 });

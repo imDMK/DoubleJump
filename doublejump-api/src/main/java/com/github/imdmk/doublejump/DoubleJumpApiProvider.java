@@ -24,7 +24,7 @@ public class DoubleJumpApiProvider {
      */
     public synchronized static DoubleJumpApi get() {
         if (DOUBLE_JUMP_API == null) {
-            throw new IllegalStateException("The SpentTimeApi isn't registered.");
+            throw new IllegalStateException("The DoubleJumpApi isn't registered.");
         }
 
         return DOUBLE_JUMP_API;
@@ -33,15 +33,15 @@ public class DoubleJumpApiProvider {
     /**
      * Registers the {@link DoubleJumpApi} instance.
      *
-     * @param spentTimeApi the API instance to register
+     * @param api the API instance to register
      * @throws IllegalStateException if already registered
      */
-    static synchronized void register(@NotNull DoubleJumpApi spentTimeApi) {
+    static synchronized void register(@NotNull DoubleJumpApi api) {
         if (DOUBLE_JUMP_API != null) {
-            throw new IllegalStateException("The SpentTimeApi is already registered.");
+            throw new IllegalStateException("The DoubleJumpApi is already registered.");
         }
 
-        DOUBLE_JUMP_API = spentTimeApi;
+        DOUBLE_JUMP_API = api;
     }
 
     /**
@@ -58,7 +58,7 @@ public class DoubleJumpApiProvider {
      */
     static synchronized void unregister() {
         if (DOUBLE_JUMP_API == null) {
-            throw new IllegalStateException("The SpentTimeApi isn't registered.");
+            throw new IllegalStateException("The DoubleJumpApi isn't registered.");
         }
 
         DOUBLE_JUMP_API = null;

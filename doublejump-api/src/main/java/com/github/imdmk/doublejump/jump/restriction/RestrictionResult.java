@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.feature.jump.restriction.checker.result;
+package com.github.imdmk.doublejump.jump.restriction;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +22,16 @@ public record RestrictionResult(boolean success, @NotNull Optional<RestrictionDe
      */
     public boolean failure() {
         return !this.success;
+    }
+
+    /**
+     * Returns whether the restriction associated with this result is considered hard,
+     * which typically requires immediate disabling of the double jump feature.
+     *
+     * @return true if the restriction is hard, false otherwise
+     */
+    public boolean isHardRestriction() {
+        return this.reason().map(RestrictionDenyReason::isHardRestriction).orElse(false);
     }
 
     /**

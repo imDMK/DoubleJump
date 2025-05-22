@@ -1,6 +1,7 @@
 package com.github.imdmk.doublejump.feature.jump.controller;
 
 import com.github.imdmk.doublejump.injector.PluginListener;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -8,20 +9,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 
-import java.util.UUID;
-
 public class FlightStateController extends PluginListener {
 
     @EventHandler(priority = EventPriority.LOW)
     void onPlayerQuit(final PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-
-        if (!this.jumpCache.isActive(uuid)) {
-            return;
-        }
-
-        this.flyingService.disable(player);
+        this.jumpCache.ifActive(event.getPlayer().getUniqueId(), jump -> this.flyingService.disable(event.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -37,12 +29,18 @@ public class FlightStateController extends PluginListener {
     void onPlayerMove(final PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (!this.jumpCache.isActive(player.getUniqueId())) {
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        if (to == null || to.getBlockX() == from.getBlockX()
+                && to.getBlockY() == from.getBlockY()
+                && to.getBlockZ() == from.getBlockZ()) {
             return;
         }
 
-        if (!player.getAllowFlight()) {
-            this.flyingService.enable(player);
-        }
+        this.jumpCache.ifActive(player.getUniqueId(), jump -> {
+            if (jump.isJumpAllowed() && !player.getAllowFlight()) {
+                this.flyingService.enable(player);
+            }
+        });
     }
 }
