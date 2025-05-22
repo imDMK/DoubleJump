@@ -22,7 +22,7 @@ public class MissingPermissionHandler implements MissingPermissionsHandler<Comma
     public void handle(Invocation<CommandSender> invocation, MissingPermissions permissions, ResultHandlerChain<CommandSender> resultHandlerChain) {
         this.messageService.create()
                 .viewer(invocation.sender())
-                .notice(notice -> notice.commandNoPermission)
+                .notice(notice -> notice.noPermission)
                 .placeholder("{PERMISSIONS}", String.join(", ", permissions.getPermissions()))
                 .send();
     }

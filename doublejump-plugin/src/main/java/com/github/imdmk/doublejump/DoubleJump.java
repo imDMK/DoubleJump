@@ -14,6 +14,7 @@ import com.github.imdmk.doublejump.feature.jump.controller.DoubleJumpController;
 import com.github.imdmk.doublejump.feature.jump.controller.FlightStateController;
 import com.github.imdmk.doublejump.feature.jump.controller.JumpPlayerSessionController;
 import com.github.imdmk.doublejump.feature.jump.fall.JumpFallDamageController;
+import com.github.imdmk.doublejump.feature.jump.particle.JumpParticleController;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionController;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.feature.jump.restriction.delay.DelayRestrictionController;
@@ -132,7 +133,8 @@ class DoubleJump implements DoubleJumpApi {
                 JumpPlayerSessionController.class,
                 JumpFallDamageController.class,
                 JumpRestrictionController.class,
-                DelayRestrictionController.class
+                DelayRestrictionController.class,
+                JumpParticleController.class
         ).forEach(this::createInstance);
 
         /* LiteCommands */

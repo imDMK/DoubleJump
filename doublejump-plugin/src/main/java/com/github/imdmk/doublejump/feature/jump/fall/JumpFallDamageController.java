@@ -96,8 +96,8 @@ public class JumpFallDamageController extends PluginListener {
      * @return true, if the block below the player is not air.
      */
     private boolean isStandingOnSolidBlock(@NotNull Player player) {
-        Location locationBelow = player.getLocation().clone().subtract(0, 1, 0);
-        return locationBelow.getBlock().getType() != Material.AIR;
+        Location below = player.getLocation().clone().subtract(0, 1, 0);
+        return below.getBlock().getType() != Material.AIR;
     }
 
 }

@@ -8,8 +8,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
  * Controller responsible for handling the double jump mechanic,
  * including detecting flight toggle and executing the double jump action.
@@ -43,9 +41,8 @@ public class DoubleJumpController extends PluginListener {
     @EventHandler(ignoreCancelled = true)
     void onToggleFlight(final PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
 
-        this.jumpCache.getActive(uuid)
+        this.jumpCache.getActive(player.getUniqueId())
                 .ifPresent(jumpPlayer -> {
                     event.setCancelled(true);
                     this.server.getPluginManager().callEvent(new DoubleJumpEvent(player, jumpPlayer));

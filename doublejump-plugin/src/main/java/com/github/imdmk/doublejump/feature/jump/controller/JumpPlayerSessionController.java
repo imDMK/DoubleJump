@@ -19,7 +19,7 @@ public class JumpPlayerSessionController extends PluginListener {
      *
      * @param event Player join event.
      */
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     void onPlayerJoin(final PlayerJoinEvent event) {
         this.createJumpPlayer(event.getPlayer());
     }

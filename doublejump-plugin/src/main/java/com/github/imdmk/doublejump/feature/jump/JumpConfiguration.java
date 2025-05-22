@@ -1,11 +1,15 @@
 package com.github.imdmk.doublejump.feature.jump;
 
 import com.github.imdmk.doublejump.configuration.ConfigSection;
+import com.github.imdmk.doublejump.configuration.serializer.ColorSerializer;
+import com.github.imdmk.doublejump.feature.jump.particle.JumpParticle;
+import com.github.imdmk.doublejump.feature.jump.particle.JumpParticleSerializer;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import org.bukkit.GameMode;
+import org.bukkit.Particle;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -53,10 +57,30 @@ public class JumpConfiguration extends ConfigSection {
 
     }
 
+    @Comment("# Configuration for visual particle effects triggered by double jump.")
+    public JumpParticleConfiguration particles = new JumpParticleConfiguration();
+
+    public static class JumpParticleConfiguration extends OkaeriConfig {
+
+        @Comment("# Enables or disables the double jump particle effect.")
+        public boolean enabled = true;
+
+        @Comment("Particle effect spawned when a player uses double jump.")
+        public JumpParticle jump = JumpParticle.builder(Particle.HEART, 10)
+                .offsetX(0.5)
+                .offsetY(1)
+                .offsetZ(0.5)
+                .extra(0)
+                .build();
+    }
+
     @Override
     public @NotNull OkaeriSerdesPack getSerdesPack() {
         return registry -> {
             registry.register(new SerdesCommons());
+
+            registry.register(new ColorSerializer());
+            registry.register(new JumpParticleSerializer());
         };
     }
 
