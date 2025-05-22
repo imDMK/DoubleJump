@@ -1,34 +1,28 @@
 package com.github.imdmk.doublejump;
 
-import com.github.imdmk.doublejump.jump.JumpPlayerManager;
-import com.github.imdmk.doublejump.jump.JumpPlayerService;
-import com.github.imdmk.doublejump.region.RegionProvider;
+import com.github.imdmk.doublejump.configuration.ConfigurationManager;
+import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-
+/**
+ * Public API interface for accessing core components of the DoubleJump plugin.
+ * Provides access to configuration management and runtime player data.
+ */
 public interface DoubleJumpApi {
 
     /**
-     * <p>Gets the {@link RegionProvider}</p>
-     * The class used to check if a player is in a restricted area.
+     * Returns the configuration manager responsible for loading and accessing
+     * all plugin configuration files.
      *
-     * @return The region provider
+     * @return the active {@link ConfigurationManager} instance
      */
-    @Nonnull RegionProvider getRegionProvider();
+    @NotNull ConfigurationManager getConfigurationManager();
 
     /**
-     * <p>Gets the {@link JumpPlayerManager}</p>
-     * A class used to add or player as a jump player.
+     * Returns the player cache containing all active {@code JumpPlayer} instances.
+     * Useful for accessing and modifying player-specific double jump data at runtime.
      *
-     * @return The jump player manager
+     * @return the {@link JumpPlayerCache} instance
      */
-    @Nonnull JumpPlayerManager getJumpPlayerManager();
-
-    /**
-     * <p>Gets the {@link JumpPlayerService}</p>
-     * A class used to change the player's double jump mode or check if the player has permission to use double jump.
-     *
-     * @return The jump player service
-     */
-    @Nonnull JumpPlayerService getJumpPlayerService();
+    JumpPlayerCache getJumpPlayerCache();
 }

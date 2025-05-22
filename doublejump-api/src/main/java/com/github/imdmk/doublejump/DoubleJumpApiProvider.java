@@ -1,6 +1,14 @@
 package com.github.imdmk.doublejump;
 
-public final class DoubleJumpApiProvider {
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Static access point for the {@link DoubleJumpApi}.
+ * Acts as a global registry for the current instance.
+ * <p>
+ * Not thread-safe.
+ */
+public class DoubleJumpApiProvider {
 
     private static DoubleJumpApi DOUBLE_JUMP_API;
 
@@ -8,25 +16,49 @@ public final class DoubleJumpApiProvider {
         throw new UnsupportedOperationException("This class cannot be instantiated.");
     }
 
-    public static DoubleJumpApi get() {
+    /**
+     * Returns the registered {@link DoubleJumpApi}.
+     *
+     * @return the registered API
+     * @throws IllegalStateException if the API is not yet registered
+     */
+    public synchronized static DoubleJumpApi get() {
         if (DOUBLE_JUMP_API == null) {
-            throw new IllegalStateException("The DoubleJump API isn't registered.");
+            throw new IllegalStateException("The DoubleJumpApi isn't registered.");
         }
 
         return DOUBLE_JUMP_API;
     }
 
-    static void register(DoubleJumpApi doubleJumpApi) {
+    /**
+     * Registers the {@link DoubleJumpApi} instance.
+     *
+     * @param api the API instance to register
+     * @throws IllegalStateException if already registered
+     */
+    static synchronized void register(@NotNull DoubleJumpApi api) {
         if (DOUBLE_JUMP_API != null) {
-            throw new IllegalStateException("The DoubleJump API is already registered.");
+            throw new IllegalStateException("The DoubleJumpApi is already registered.");
         }
 
-        DOUBLE_JUMP_API = doubleJumpApi;
+        DOUBLE_JUMP_API = api;
     }
 
-    static void unregister() {
+    /**
+     * Forces to register the {@link DoubleJumpApi} instance.
+     */
+    static void forceRegister(@NotNull DoubleJumpApi api) {
+        DOUBLE_JUMP_API = api;
+    }
+
+    /**
+     * Unregisters the {@link DoubleJumpApi}.
+     *
+     * @throws IllegalStateException if no API was registered
+     */
+    static synchronized void unregister() {
         if (DOUBLE_JUMP_API == null) {
-            throw new IllegalStateException("The DoubleJump API isn't registered.");
+            throw new IllegalStateException("The DoubleJumpApi isn't registered.");
         }
 
         DOUBLE_JUMP_API = null;
