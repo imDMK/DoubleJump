@@ -26,6 +26,7 @@ dependencies {
     implementation("com.eternalcode:multification-okaeri:1.1.4")
     implementation("com.eternalcode:gitcheck:1.0.0")
 
+    implementation("dev.triumphteam:triumph-gui:3.1.11")
     implementation("org.bstats:bstats-bukkit:3.1.0")
 
     implementation("dev.rollczi:litecommands-bukkit:3.9.7")

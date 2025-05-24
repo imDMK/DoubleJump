@@ -15,13 +15,13 @@ import java.util.logging.Logger;
 
 @Command(name = "doublejump reload")
 @Permission("command.doublejump.reload")
-public class DoubleJumpReloadCommand {
+public class JumpReloadCommand {
 
     private final Logger logger;
     private final ConfigurationManager configurationManager;
     private final MessageService messageService;
 
-    public DoubleJumpReloadCommand(
+    public JumpReloadCommand(
             @NotNull Logger logger,
             @NotNull ConfigurationManager configurationManager,
             @NotNull MessageService messageService

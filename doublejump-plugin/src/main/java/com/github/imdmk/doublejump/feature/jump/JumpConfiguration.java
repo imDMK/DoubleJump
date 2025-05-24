@@ -2,17 +2,26 @@ package com.github.imdmk.doublejump.feature.jump;
 
 import com.github.imdmk.doublejump.configuration.ConfigSection;
 import com.github.imdmk.doublejump.configuration.serializer.ColorSerializer;
+import com.github.imdmk.doublejump.configuration.serializer.ComponentSerializer;
+import com.github.imdmk.doublejump.configuration.serializer.EnchantmentSerializer;
+import com.github.imdmk.doublejump.feature.jump.item.configuration.JumpItemConfiguration;
+import com.github.imdmk.doublejump.feature.jump.item.configuration.JumpItemSerializer;
 import com.github.imdmk.doublejump.feature.jump.particle.JumpParticle;
 import com.github.imdmk.doublejump.feature.jump.particle.JumpParticleSerializer;
+import com.github.imdmk.doublejump.feature.jump.sound.JumpSound;
+import com.github.imdmk.doublejump.feature.jump.sound.configuration.JumpSoundSerializer;
+import com.github.imdmk.doublejump.feature.jump.sound.configuration.SoundSerializer;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 public class JumpConfiguration extends ConfigSection {
@@ -65,22 +74,52 @@ public class JumpConfiguration extends ConfigSection {
         @Comment("# Enables or disables the double jump particle effect.")
         public boolean enabled = true;
 
-        @Comment("Particle effect spawned when a player uses double jump.")
-        public JumpParticle jump = JumpParticle.builder(Particle.HEART, 10)
-                .offsetX(0.5)
-                .offsetY(1)
-                .offsetZ(0.5)
-                .extra(0)
-                .build();
+        @Comment("List of particle effect spawned when a player uses double jump.")
+        public List<JumpParticle> jump = List.of(
+                JumpParticle.builder(Particle.HEART, 10)
+                        .offsetX(0.5)
+                        .offsetY(1)
+                        .offsetZ(0.5)
+                        .extra(0)
+                        .build()
+        );
     }
+
+    @Comment("# Configuration for sounds triggered by double jump.")
+    public JumpSoundConfiguration sounds = new JumpSoundConfiguration();
+
+    public static class JumpSoundConfiguration extends OkaeriConfig {
+
+        @Comment("# Enables or disables the double jump sounds.")
+        public boolean enabled = true;
+
+        @Comment("List of sounds played when a player uses double jump.")
+        public List<JumpSound> jump = List.of(
+                JumpSound.builder()
+                        .sound(Sound.ENTITY_PLAYER_LEVELUP)
+                        .volume(0.3F)
+                        .pitch(0.5F)
+                        .build()
+        );
+    }
+
+    @Comment("# Configuration for the item that activates the double jump ability.")
+    public JumpItemConfiguration jumpItem = new JumpItemConfiguration();
 
     @Override
     public @NotNull OkaeriSerdesPack getSerdesPack() {
         return registry -> {
             registry.register(new SerdesCommons());
+            registry.register(new ComponentSerializer());
 
             registry.register(new ColorSerializer());
             registry.register(new JumpParticleSerializer());
+
+            registry.register(new JumpSoundSerializer());
+            registry.register(new SoundSerializer());
+
+            registry.register(new JumpItemSerializer());
+            registry.register(new EnchantmentSerializer());
         };
     }
 

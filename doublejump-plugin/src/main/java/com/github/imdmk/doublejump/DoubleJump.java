@@ -8,17 +8,27 @@ import com.github.imdmk.doublejump.feature.command.PlayerContextual;
 import com.github.imdmk.doublejump.feature.command.UsageHandler;
 import com.github.imdmk.doublejump.feature.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.feature.jump.PlayerFlyingService;
-import com.github.imdmk.doublejump.feature.jump.command.DoubleJumpCommand;
-import com.github.imdmk.doublejump.feature.jump.command.DoubleJumpReloadCommand;
+import com.github.imdmk.doublejump.feature.jump.command.JumpItemCommand;
+import com.github.imdmk.doublejump.feature.jump.command.JumpReloadCommand;
+import com.github.imdmk.doublejump.feature.jump.command.JumpTargetCommand;
+import com.github.imdmk.doublejump.feature.jump.command.JumpToggleCommand;
 import com.github.imdmk.doublejump.feature.jump.controller.DoubleJumpController;
 import com.github.imdmk.doublejump.feature.jump.controller.FlightStateController;
 import com.github.imdmk.doublejump.feature.jump.controller.JumpPlayerSessionController;
 import com.github.imdmk.doublejump.feature.jump.fall.JumpFallDamageController;
+import com.github.imdmk.doublejump.feature.jump.item.JumpItemService;
+import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemDisableController;
+import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemInteractController;
+import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemResetController;
+import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemRestrictionController;
+import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsageStrategy;
+import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsageStrategyFactory;
 import com.github.imdmk.doublejump.feature.jump.particle.JumpParticleController;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionController;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.feature.jump.restriction.delay.DelayRestrictionController;
 import com.github.imdmk.doublejump.feature.jump.restriction.result.RestrictionResultNotifier;
+import com.github.imdmk.doublejump.feature.jump.sound.JumpSoundController;
 import com.github.imdmk.doublejump.feature.message.MessageConfiguration;
 import com.github.imdmk.doublejump.feature.message.MessageResultHandler;
 import com.github.imdmk.doublejump.feature.message.MessageService;
@@ -71,6 +81,9 @@ class DoubleJump implements DoubleJumpApi {
     private PlayerFlyingService playerFlyingService;
     private JumpRestrictionService jumpRestrictionService;
     private RestrictionResultNotifier restrictionResultNotifier;
+
+    private JumpItemService jumpItemService;
+    private ItemUsageStrategy itemUsageStrategy;
 
     private LiteCommands<CommandSender> liteCommands;
 
@@ -125,6 +138,9 @@ class DoubleJump implements DoubleJumpApi {
             resources.on(PlayerFlyingService.class).assignInstance(() -> this.playerFlyingService);
             resources.on(JumpRestrictionService.class).assignInstance(() -> this.jumpRestrictionService);
             resources.on(RestrictionResultNotifier.class).assignInstance(() -> this.restrictionResultNotifier);
+
+            resources.on(JumpItemService.class).assignInstance(() -> this.jumpItemService);
+            resources.on(ItemUsageStrategy.class).assignInstance(() -> this.itemUsageStrategy);
         });
 
         try {
@@ -132,6 +148,9 @@ class DoubleJump implements DoubleJumpApi {
             this.playerFlyingService = this.createInstance(PlayerFlyingService.class);
             this.jumpRestrictionService = this.createInstance(JumpRestrictionService.class);
             this.restrictionResultNotifier = this.createInstance(RestrictionResultNotifier.class);
+
+            this.jumpItemService = this.createInstance(JumpItemService.class);
+            this.itemUsageStrategy = ItemUsageStrategyFactory.create(jumpConfiguration.jumpItem.usageMode, this.injector);
         }
         catch (DependencyInjectionException injectionException) {
             this.logger.log(Level.SEVERE, "An error occurred while dependency injecting", injectionException);
@@ -144,10 +163,19 @@ class DoubleJump implements DoubleJumpApi {
                 DoubleJumpController.class,
                 FlightStateController.class,
                 JumpPlayerSessionController.class,
+
                 JumpFallDamageController.class,
+
                 JumpRestrictionController.class,
                 DelayRestrictionController.class,
-                JumpParticleController.class
+
+                JumpParticleController.class,
+                JumpSoundController.class,
+
+                JumpItemDisableController.class,
+                JumpItemInteractController.class,
+                JumpItemResetController.class,
+                JumpItemRestrictionController.class
         ).forEach(this::createInstance);
 
         /* LiteCommands */
@@ -159,8 +187,10 @@ class DoubleJump implements DoubleJumpApi {
                 .result(Notice.class, new MessageResultHandler(this.messageService))
 
                 .commands(
-                        new DoubleJumpCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService, this.jumpRestrictionService, this.restrictionResultNotifier),
-                        new DoubleJumpReloadCommand(this.logger, this.configurationManager, this.messageService)
+                        new JumpItemCommand(this.messageService, this.jumpItemService),
+                        new JumpToggleCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService),
+                        new JumpReloadCommand(this.logger, this.configurationManager, this.messageService),
+                        new JumpTargetCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService)
                 )
 
                 .build();

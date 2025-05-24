@@ -16,14 +16,20 @@ public class MessageConfiguration extends ConfigSection {
     @Comment("# Sent when an error occurs during plugin configuration reload.")
     public Notice reloadError = Notice.chat("<red>Failed to reload plugin configuration files. Please check the console.");
 
-    @Comment("# Sent when double jump is successfully enabled.")
+    @Comment("Message sent when double jump mode is successfully enabled for the executing player")
     public Notice jumpEnabled = Notice.chat("<green>Double jump mode enabled!");
 
-    @Comment("# Sent when all restrictions are lifted and the player can now double jump again.")
-    public Notice jumpAvailable = Notice.actionbar("<green>You can now double jump!");
+    @Comment("Message sent when double jump mode is successfully enabled for the target player")
+    public Notice jumpEnabledTarget = Notice.chat("<green>Double jump mode enabled for the player!");
 
-    @Comment("# Sent when double jump is successfully disabled.")
+    @Comment("Message sent when double jump mode is successfully disabled for the executing player")
     public Notice jumpDisabled = Notice.chat("<red>Double jump mode disabled!");
+
+    @Comment("Message sent when double jump mode is successfully disabled for the target player")
+    public Notice jumpDisabledTarget = Notice.chat("<red>Double jump mode disabled for the player!");
+
+    @Comment("Message sent when all restrictions are lifted and the player can double jump again")
+    public Notice jumpAvailable = Notice.actionbar("<green>You can now double jump!");
 
     @Comment("# Sent when double jump is blocked due to the player being in a restricted world.")
     public Notice worldRestricted = Notice.chat("<red>You are in a disabled world!");
@@ -39,6 +45,18 @@ public class MessageConfiguration extends ConfigSection {
 
     @Comment("# Sent when double jump is blocked due to insufficient permissions.")
     public Notice jumpPermissionRequired = Notice.chat("<red>You don't have permission to activate double jump!");
+
+    @Comment("# Sent when double jump item is succefully added to player target inventory")
+    public Notice jumpItemAdded = Notice.chat("<green>Added double jump item to player!");
+
+    @Comment("Message sent when a single double jump item is successfully removed from the player's inventory")
+    public Notice jumpItemRemovedSingle = Notice.chat("<green>Removed a double jump item from the player's inventory.");
+
+    @Comment("Message sent when all double jump items are successfully removed from the player's inventory")
+    public Notice jumpItemRemovedAll = Notice.chat("<green>Removed all double jump items from the player's inventory.");
+
+    @Comment("Message sent when no double jump item is found in the player's inventory")
+    public Notice jumpItemNotFound = Notice.chat("<red>No double jump items found in the player's inventory.");
 
     @Comment("# Generic error message when an unexpected issue occurs.")
     public Notice errorOccurred = Notice.chat("<red>An error occurred while performing this action. Please rejoin the server!");

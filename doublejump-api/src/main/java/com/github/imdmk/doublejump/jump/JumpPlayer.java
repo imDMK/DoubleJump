@@ -17,12 +17,18 @@ public class JumpPlayer {
 
     private final UUID uuid;
     private final String name;
+    /**
+     * Defines how the double jump ability was activated for the player.
+     * This can be used to differentiate between manual activation (e.g. via command)
+     * and item-based activation (e.g. special boots).
+     */
+    private JumpActivationType activationType = JumpActivationType.NONE;
 
     /**
      * Indicates whether double jump is currently active for this player (toggled on).
      * Does not necessarily mean the player is allowed to jump (see {@link #jumpAllowed}).
      */
-    private boolean active;
+    private boolean active = false;
     /**
      * Indicates whether the player is currently allowed to perform a double jump.
      * This is affected by runtime restrictions such as cooldowns or conditions.
@@ -68,6 +74,37 @@ public class JumpPlayer {
      */
     public @NotNull String getName() {
         return this.name;
+    }
+
+    /**
+     * Gets the current jump activation type for the player.
+     * This indicates how the double jump was initially enabled (e.g. by command or item).
+     *
+     * @return the activation type of the double jump
+     */
+    public JumpActivationType getActivationType() {
+        return this.activationType;
+    }
+
+    /**
+     * Checks whether the player's current activation type matches the given type.
+     * This can be used to determine how the double jump was enabled (e.g. via item or manually).
+     *
+     * @param type the activation type to compare against, must not be null
+     * @return true if the activation type matches and is not null, false otherwise
+     */
+    public boolean isActivationType(@NotNull JumpActivationType type) {
+        return this.activationType.equals(type);
+    }
+
+    /**
+     * Sets the activation type for the double jump.
+     * Should be updated if the source of jump permission changes during gameplay.
+     *
+     * @param activationType the new activation type
+     */
+    public void setActivationType(@Nullable JumpActivationType activationType) {
+        this.activationType = activationType;
     }
 
     /**
@@ -120,7 +157,7 @@ public class JumpPlayer {
      *
      * @param lastJump the time the last jump occurred
      */
-    public void setLastJump(@NotNull Instant lastJump) {
+    public void setLastJump(@Nullable Instant lastJump) {
         this.lastJump = lastJump;
     }
 

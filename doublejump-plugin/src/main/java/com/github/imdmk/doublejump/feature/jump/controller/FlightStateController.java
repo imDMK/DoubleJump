@@ -1,10 +1,12 @@
 package com.github.imdmk.doublejump.feature.jump.controller;
 
 import com.github.imdmk.doublejump.injector.PluginListener;
+import com.github.imdmk.doublejump.jump.JumpActivationType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerLoadEvent;
@@ -42,5 +44,19 @@ public class FlightStateController extends PluginListener {
                 this.flyingService.enable(player);
             }
         });
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    void onPlayerDeath(final PlayerDeathEvent event) {
+        Player player = event.getEntity();
+
+        this.jumpCache.getActive(player.getUniqueId())
+                .filter(jump -> jump.isActivationType(JumpActivationType.MANUAL))
+                .ifPresent(jump -> {
+                    jump.setJumpAllowed(true);
+                    jump.setLastJump(null);
+
+                    this.flyingService.enable(player);
+                });
     }
 }
