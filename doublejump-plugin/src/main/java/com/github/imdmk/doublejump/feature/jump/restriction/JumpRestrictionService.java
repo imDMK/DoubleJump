@@ -63,7 +63,7 @@ public class JumpRestrictionService {
      * @return {@code true} if any restriction applies; {@code false} otherwise
      */
     public boolean isRestricted(@NotNull Player player) {
-        return !this.checkAllRestrictions(player).success();
+        return this.checkAllRestrictions(player).failure();
     }
 
     /**

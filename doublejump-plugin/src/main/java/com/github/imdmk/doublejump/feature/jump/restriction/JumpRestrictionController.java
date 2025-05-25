@@ -37,12 +37,12 @@ public class JumpRestrictionController extends PluginListener {
                 .ifPresent(result -> this.handleRestrictions(event.getPlayer(), result));
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     void onPlayerJoin(final PlayerJoinEvent event) {
         this.attemptEnableDoubleJump(event.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
         this.attemptEnableDoubleJump(event.getPlayer());
     }
