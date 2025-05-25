@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump;
 
 import com.github.imdmk.doublejump.configuration.ConfigurationManager;
-import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import org.jetbrains.annotations.NotNull;
 
 /**

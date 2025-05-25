@@ -47,6 +47,8 @@ public class JumpPlayer {
      */
     private RestrictionDenyReason lastNotifiedReason;
 
+    private JumpVelocity jumpVelocity;
+
     /**
      * Creates a new JumpPlayer instance for the given player UUID and name.
      *
@@ -189,6 +191,30 @@ public class JumpPlayer {
         this.lastNotifiedReason = lastNotifiedReason;
     }
 
+    /**
+     * Returns the jump properties assigned to this player.
+     *
+     * @return the player's jump properties
+     */
+    public @NotNull JumpVelocity getJumpVelocity() {
+        return this.jumpVelocity;
+    }
+
+    /**
+     * Sets the jump properties to use for this player.
+     *
+     * @param jumpVelocity the new jump properties
+     */
+    public void setJumpVelocity(@NotNull JumpVelocity jumpVelocity) {
+        this.jumpVelocity = jumpVelocity;
+    }
+
+    /**
+     * Checks if this {@code JumpPlayer} represents the same player as another instance.
+     *
+     * @param o the object to compare
+     * @return true if UUIDs are equal; false otherwise
+     */
     @Override
     public final boolean equals(Object o) {
         if (!(o instanceof JumpPlayer that)) {
@@ -198,20 +224,32 @@ public class JumpPlayer {
         return this.getUuid().equals(that.getUuid());
     }
 
+    /**
+     * Returns the hash code based on the player's UUID.
+     *
+     * @return the hash code
+     */
     @Override
     public int hashCode() {
         return this.getUuid().hashCode();
     }
 
+    /**
+     * Returns a string representation of this {@code JumpPlayer}.
+     *
+     * @return string with player state details
+     */
     @Override
     public String toString() {
         return "JumpPlayer{" +
                 "uuid=" + this.uuid +
                 ", name='" + this.name + '\'' +
+                ", activationType=" + this.activationType +
                 ", active=" + this.active +
                 ", jumpAllowed=" + this.jumpAllowed +
                 ", lastJump=" + this.lastJump +
                 ", lastNotifiedReason=" + this.lastNotifiedReason +
+                ", jumpProperties=" + this.jumpVelocity +
                 '}';
     }
 }

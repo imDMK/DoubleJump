@@ -2,6 +2,7 @@ package com.github.imdmk.doublejump.feature.jump.item.configuration;
 
 import com.github.imdmk.doublejump.feature.jump.item.JumpItem;
 import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsage;
+import com.github.imdmk.doublejump.jump.JumpVelocity;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import org.bukkit.Material;
@@ -44,6 +45,7 @@ public class JumpItemConfiguration extends OkaeriConfig {
                     " <dark_gray>configure jump item usage in config",
                     " "
             )
+            .jumpProperties(JumpVelocity.of(0.6, 0.9))
             .itemFlags(List.of(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES))
             .enchantment(Enchantment.LOYALTY, 3)
             .build();

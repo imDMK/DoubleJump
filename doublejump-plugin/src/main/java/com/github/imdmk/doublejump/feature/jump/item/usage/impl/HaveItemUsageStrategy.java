@@ -16,6 +16,6 @@ public class HaveItemUsageStrategy implements ItemUsageStrategy {
             return false;
         }
 
-        return player.getInventory().contains(this.jumpItemService.getJumpItem());
+        return player.getInventory().contains(this.jumpItemService.getJumpItem().asItemStack());
     }
 }

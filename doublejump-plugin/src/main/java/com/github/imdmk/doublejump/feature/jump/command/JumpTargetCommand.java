@@ -1,58 +1,54 @@
 package com.github.imdmk.doublejump.feature.jump.command;
 
 import com.github.imdmk.doublejump.feature.jump.PlayerFlyingService;
+import com.github.imdmk.doublejump.feature.jump.properties.JumpVelocityService;
 import com.github.imdmk.doublejump.feature.message.MessageService;
 import com.github.imdmk.doublejump.jump.JumpActivationType;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
-import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.panda_lang.utilities.inject.annotations.Inject;
+import org.panda_lang.utilities.inject.annotations.PostConstruct;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @Command(name = "doublejump")
+@Permission("command.doublejump.target")
 public class JumpTargetCommand {
 
-    private final MessageService messageService;
-    private final JumpPlayerCache jumpCache;
-    private final PlayerFlyingService flyingService;
+    @Inject private MessageService messageService;
+    @Inject private JumpPlayerCache jumpCache;
+    @Inject private JumpVelocityService jumpVelocityService;
+    @Inject private PlayerFlyingService flyingService;
 
-    private final Map<Boolean, Consumer<CommandSender>> toggleNotifiers;
+    private Map<Boolean, Consumer<CommandSender>> toggleNotifiers;
 
-    public JumpTargetCommand(
-            @NotNull MessageService messageService,
-            @NotNull JumpPlayerCache jumpCache,
-            @NotNull PlayerFlyingService flyingService
-    ) {
-        this.messageService = Objects.requireNonNull(messageService, "messageService cannot be null");
-        this.jumpCache = Objects.requireNonNull(jumpCache, "jumpCache cannot be null");
-        this.flyingService = Objects.requireNonNull(flyingService, "flyingService cannot be null");
-
+    @PostConstruct
+    public void postConstruct() {
         this.toggleNotifiers = Map.of(
-                true,  sender -> messageService.send(sender, notice -> notice.jumpEnabledTarget),
-                false, sender -> messageService.send(sender, notice -> notice.jumpDisabledTarget)
+                true,  sender -> this.messageService.send(sender, notice -> notice.jumpEnabledTarget),
+                false, sender -> this.messageService.send(sender, notice -> notice.jumpDisabledTarget)
         );
     }
 
     @Execute(name = "enable-for")
     void enableFor(@Context CommandSender sender, @Arg Player target) {
-        this.jumpCache.get(target.getUniqueId()).ifPresentOrElse(jump ->
-                        this.setDoubleJump(sender, target, jump, true),
-                () -> this.messageService.send(sender, notice -> notice.errorOccurred));
+        JumpPlayer jump = this.jumpCache.getOrThrow(target.getUniqueId());
+        this.setDoubleJump(sender, target, jump, true);
     }
 
     @Execute(name = "disable-for")
     void disableFor(@Context CommandSender sender, @Arg Player target) {
-        this.jumpCache.get(target.getUniqueId()).ifPresentOrElse(jump ->
-                        this.setDoubleJump(sender, target, jump, false),
-                () -> this.messageService.send(sender, notice -> notice.errorOccurred));
+        JumpPlayer jump = this.jumpCache.getOrThrow(target.getUniqueId());
+        this.setDoubleJump(sender, target, jump, false);
     }
 
     /**
@@ -64,9 +60,12 @@ public class JumpTargetCommand {
      */
     private void setDoubleJump(@NotNull CommandSender sender, @NotNull Player target, @NotNull JumpPlayer jump, boolean newState) {
         jump.setActive(newState);
+        jump.setJumpAllowed(true);
 
         if (newState) {
-            jump.setActivationType(JumpActivationType.MANUAL);
+            jump.setActivationType(JumpActivationType.COMMAND);
+            jump.setJumpVelocity(this.jumpVelocityService.forPlayer(target));
+
             this.flyingService.enable(target);
         }
         else {

@@ -1,6 +1,9 @@
 package com.github.imdmk.doublejump.injector;
 
+import org.bukkit.Location;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.panda_lang.utilities.inject.annotations.PostConstruct;
 
 /**
@@ -19,6 +22,16 @@ public abstract class PluginListener extends DefaultInjectable implements Listen
     @PostConstruct
     public void postConstruct() {
         this.server.getPluginManager().registerEvents(this, this.plugin);
+    }
+
+    protected boolean isSameBlockPosition(@NotNull final Location from, @Nullable final Location to) {
+        if (to == null) {
+            return true;
+        }
+
+        return from.getBlockX() == to.getBlockX()
+                && from.getBlockY() == to.getBlockY()
+                && from.getBlockZ() == to.getBlockZ();
     }
 
 }

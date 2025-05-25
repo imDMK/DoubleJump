@@ -1,5 +1,6 @@
 package com.github.imdmk.doublejump.feature.jump.item;
 
+import com.github.imdmk.doublejump.jump.JumpVelocity;
 import com.github.imdmk.doublejump.util.ComponentUtil;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import net.kyori.adventure.text.Component;
@@ -15,23 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record JumpItem(@NotNull Material material, @NotNull Component name, List<Component> lore,
-                       List<ItemFlag> flags,
-                       Map<Enchantment, Integer> enchantments) {
-
-    public JumpItem(
-            @NotNull Material material,
-            @NotNull Component name,
-            List<Component> lore,
-            List<ItemFlag> flags,
-            Map<Enchantment, Integer> enchantments
-    ) {
-        this.material = material;
-        this.name = name;
-        this.lore = lore;
-        this.flags = flags;
-        this.enchantments = enchantments;
-    }
+public record JumpItem(@NotNull Material material,
+                       @NotNull Component name, List<Component> lore,
+                       @NotNull JumpVelocity jumpVelocity,
+                       List<ItemFlag> flags, Map<Enchantment, Integer> enchantments) {
 
     @Override
     public @NotNull Material material() {
@@ -50,6 +38,10 @@ public record JumpItem(@NotNull Material material, @NotNull Component name, List
         }
 
         return Collections.unmodifiableList(this.lore);
+    }
+
+    public @NotNull JumpVelocity jumpVelocity() {
+        return this.jumpVelocity;
     }
 
     @Override
@@ -89,11 +81,12 @@ public record JumpItem(@NotNull Material material, @NotNull Component name, List
         private Component name;
         private List<Component> lore;
 
+        private JumpVelocity jumpVelocity;
+
         private List<ItemFlag> itemFlags;
         private Map<Enchantment, Integer> enchantments = new HashMap<>();
 
-        private Builder() {
-        }
+        private Builder() {}
 
         @Contract("_ -> this")
         public Builder material(@NotNull Material material) {
@@ -132,6 +125,12 @@ public record JumpItem(@NotNull Material material, @NotNull Component name, List
         }
 
         @Contract("_ -> this")
+        public Builder jumpProperties(@NotNull JumpVelocity jumpVelocity) {
+            this.jumpVelocity = jumpVelocity;
+            return this;
+        }
+
+        @Contract("_ -> this")
         public Builder itemFlags(@NotNull List<ItemFlag> itemFlags) {
             this.itemFlags = itemFlags;
             return this;
@@ -150,7 +149,7 @@ public record JumpItem(@NotNull Material material, @NotNull Component name, List
         }
 
         public JumpItem build() {
-            return new JumpItem(this.material, this.name, this.lore, this.itemFlags, this.enchantments);
+            return new JumpItem(this.material, this.name, this.lore, this.jumpVelocity, this.itemFlags, this.enchantments);
         }
     }
 }

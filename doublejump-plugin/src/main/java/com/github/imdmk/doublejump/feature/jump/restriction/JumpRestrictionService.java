@@ -5,7 +5,7 @@ import com.github.imdmk.doublejump.feature.jump.restriction.delay.DelayRestricti
 import com.github.imdmk.doublejump.feature.jump.restriction.result.checker.PermissionRestrictionChecker;
 import com.github.imdmk.doublejump.feature.jump.restriction.result.checker.PlayerPingRestrictionChecker;
 import com.github.imdmk.doublejump.feature.jump.restriction.result.checker.SetRestrictionChecker;
-import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import com.github.imdmk.doublejump.jump.restriction.RestrictionChecker;
 import com.github.imdmk.doublejump.jump.restriction.RestrictionDenyReason;
 import com.github.imdmk.doublejump.jump.restriction.RestrictionResult;
@@ -90,7 +90,7 @@ public class JumpRestrictionService {
      * @param configuration the configuration containing restriction sets
      * @return list of initialized restriction checkers
      */
-    private List<RestrictionChecker> createDefaultCheckers(@NotNull JumpConfiguration.JumpRestrictionConfiguration configuration) {
+    private List<RestrictionChecker> createDefaultCheckers(@NotNull JumpRestrictionConfiguration configuration) {
         return List.of(
                 new DelayRestrictionChecker(this.jumpConfiguration, this.jumpCache),
                 new PlayerPingRestrictionChecker(configuration.disableIfPlayerLagging),

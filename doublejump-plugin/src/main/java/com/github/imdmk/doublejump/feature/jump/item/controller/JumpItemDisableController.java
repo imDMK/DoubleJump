@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;
 
 public class JumpItemDisableController extends PluginListener {
@@ -25,7 +25,7 @@ public class JumpItemDisableController extends PluginListener {
      * @param event the inventory close event
      */
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
+    public void onInventoryClose(final InventoryCloseEvent event) {
         if (!this.jumpItemService.isEnabled(ItemUsage.WEAR_ITEM)) {
             return;
         }
@@ -46,21 +46,15 @@ public class JumpItemDisableController extends PluginListener {
      * @param event the item held event
      */
     @EventHandler
-    public void onPlayerItemHeld(PlayerItemHeldEvent event) {
+    public void onPlayerItemHeld(final PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
 
         if (!this.jumpItemService.isEnabled(ItemUsage.HOLD_ITEM)) {
             return;
         }
 
-        Inventory playerInventory = player.getInventory();
-
-        ItemStack previousItem = playerInventory.getItem(event.getPreviousSlot());
-        if (previousItem == null) {
-            return;
-        }
-
-        if (!this.jumpItemService.isJumpItem(previousItem)) {
+        ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
+        if (previousItem != null && !this.jumpItemService.isJumpItem(previousItem)) {
             this.disableJump(player);
         }
     }
@@ -71,7 +65,7 @@ public class JumpItemDisableController extends PluginListener {
      *
      * @param player the player whose jump state should be disabled
      */
-    private void disableJump(Player player) {
+    private void disableJump(@NotNull Player player) {
         this.jumpCache.getActive(player.getUniqueId())
                 .ifPresent(jump -> {
                     jump.setActive(false);

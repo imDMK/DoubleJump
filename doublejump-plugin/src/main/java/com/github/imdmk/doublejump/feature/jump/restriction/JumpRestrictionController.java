@@ -2,10 +2,10 @@ package com.github.imdmk.doublejump.feature.jump.restriction;
 
 import com.github.imdmk.doublejump.feature.jump.restriction.result.RestrictionResultNotifier;
 import com.github.imdmk.doublejump.injector.PluginListener;
-import com.github.imdmk.doublejump.jump.DoubleJumpEvent;
+import com.github.imdmk.doublejump.jump.JumpActivationType;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
+import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.jump.restriction.RestrictionResult;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,7 +25,7 @@ public class JumpRestrictionController extends PluginListener {
 
     @Inject private RestrictionResultNotifier resultNotifier;
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     void onDoubleJump(final DoubleJumpEvent event) {
         this.jumpCache.getActive(event.getPlayer().getUniqueId())
                 .ifPresent(result -> this.handleRestrictions(event.getPlayer(), result));
@@ -33,24 +33,16 @@ public class JumpRestrictionController extends PluginListener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     void onPlayerMove(final PlayerMoveEvent event) {
-        Location from = event.getFrom();
-        Location to = event.getTo();
-        if (to == null || to.getBlockX() == from.getBlockX()
-                && to.getBlockY() == from.getBlockY()
-                && to.getBlockZ() == from.getBlockZ()) {
-            return;
-        }
-
         this.jumpCache.getActive(event.getPlayer().getUniqueId())
                 .ifPresent(result -> this.handleRestrictions(event.getPlayer(), result));
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     void onPlayerJoin(final PlayerJoinEvent event) {
         this.attemptEnableDoubleJump(event.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
         this.attemptEnableDoubleJump(event.getPlayer());
     }
@@ -72,6 +64,9 @@ public class JumpRestrictionController extends PluginListener {
 
             if (result.isHardRestriction()) {
                 jump.setActive(false);
+                // Restore default jump allow so the player can re-enable jump
+                // (e.g., when stepping on a jump block)
+                jump.setJumpAllowed(true);
                 this.flyingService.disable(player);
             }
 
@@ -97,6 +92,11 @@ public class JumpRestrictionController extends PluginListener {
                 .ifPresent(jump -> {
                     jump.setJumpAllowed(true);
                     jump.setActive(true);
+                    jump.setActivationType(JumpActivationType.JOIN);
+                    jump.setJumpVelocity(this.jumpVelocityService.forPlayer(player));
+
+                    this.messageService.send(player, n -> n.autoJumpEnabled);
+
                     this.flyingService.enable(player);
                 });
     }
@@ -111,13 +111,10 @@ public class JumpRestrictionController extends PluginListener {
             return false;
         }
 
-        if (player.isOp() && !this.jumpConfiguration.autoEnableForAdmins) {
-            return false;
+        if (player.isOp() && this.jumpConfiguration.autoEnableForAdmins) {
+            return true;
         }
 
-        boolean hasPermission = player.hasPermission(this.jumpConfiguration.autoEnablePermission);
-        boolean globallyEnabled = this.jumpConfiguration.autoEnableOnJoin;
-
-        return hasPermission || globallyEnabled;
+        return this.jumpConfiguration.autoEnableOnJoin;
     }
 }

@@ -19,6 +19,7 @@ public class JumpItemResetController extends PluginListener {
                     jump.setJumpAllowed(true);
                     jump.setActive(false);
                     jump.setActivationType(JumpActivationType.NONE);
+
                     this.flyingService.disable(player);
                 });
     }

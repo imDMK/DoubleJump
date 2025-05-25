@@ -7,9 +7,8 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.panda_lang.utilities.inject.annotations.Inject;
 
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,19 +16,9 @@ import java.util.logging.Logger;
 @Permission("command.doublejump.reload")
 public class JumpReloadCommand {
 
-    private final Logger logger;
-    private final ConfigurationManager configurationManager;
-    private final MessageService messageService;
-
-    public JumpReloadCommand(
-            @NotNull Logger logger,
-            @NotNull ConfigurationManager configurationManager,
-            @NotNull MessageService messageService
-    ) {
-        this.logger = Objects.requireNonNull(logger, "logger cannot be null");
-        this.configurationManager = Objects.requireNonNull(configurationManager, "configurationManager cannot be null");
-        this.messageService = Objects.requireNonNull(messageService, "messageService cannot be null");
-    }
+    @Inject private Logger logger;
+    @Inject private ConfigurationManager configurationManager;
+    @Inject private MessageService messageService;
 
     @Execute
     void reload(@Context CommandSender sender) {

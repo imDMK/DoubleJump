@@ -3,9 +3,10 @@ package com.github.imdmk.doublejump.injector;
 import com.github.imdmk.doublejump.configuration.PluginConfiguration;
 import com.github.imdmk.doublejump.feature.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.feature.jump.PlayerFlyingService;
+import com.github.imdmk.doublejump.feature.jump.properties.JumpVelocityService;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.feature.message.MessageService;
-import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import com.github.imdmk.doublejump.task.TaskScheduler;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
@@ -31,6 +32,8 @@ public abstract class DefaultInjectable {
     @Inject protected MessageService messageService;
 
     @Inject protected JumpPlayerCache jumpCache;
+
+    @Inject protected JumpVelocityService jumpVelocityService;
 
     @Inject protected PlayerFlyingService flyingService;
 

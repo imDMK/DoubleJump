@@ -1,51 +1,45 @@
 package com.github.imdmk.doublejump.feature.jump.command;
 
 import com.github.imdmk.doublejump.feature.jump.PlayerFlyingService;
+import com.github.imdmk.doublejump.feature.jump.properties.JumpVelocityService;
 import com.github.imdmk.doublejump.feature.message.MessageService;
 import com.github.imdmk.doublejump.jump.JumpActivationType;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
-import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.panda_lang.utilities.inject.annotations.Inject;
+import org.panda_lang.utilities.inject.annotations.PostConstruct;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @Command(name = "doublejump")
 @Permission("command.doublejump")
 public class JumpToggleCommand {
 
-    private final MessageService messageService;
-    private final JumpPlayerCache jumpCache;
-    private final PlayerFlyingService flyingService;
+    @Inject private MessageService messageService;
+    @Inject private JumpPlayerCache jumpCache;
+    @Inject private JumpVelocityService jumpVelocityService;
+    @Inject private PlayerFlyingService flyingService;
 
-    private final Map<Boolean, Consumer<Player>> toggleNotifiers;
+    private Map<Boolean, Consumer<Player>> toggleNotifiers;
 
-    public JumpToggleCommand(
-            @NotNull MessageService messageService,
-            @NotNull JumpPlayerCache jumpCache,
-            @NotNull PlayerFlyingService flyingService
-    ) {
-        this.messageService = Objects.requireNonNull(messageService, "messageService cannot be null");
-        this.jumpCache = Objects.requireNonNull(jumpCache, "jumpCache cannot be null");
-        this.flyingService = Objects.requireNonNull(flyingService, "flyingService cannot be null");
-
+    @PostConstruct
+    public void postConstruct() {
         this.toggleNotifiers = Map.of(
-                true,  player -> messageService.send(player, notice -> notice.jumpEnabled),
-                false, player -> messageService.send(player, notice -> notice.jumpDisabled)
+                true,  player -> this.messageService.send(player, notice -> notice.jumpEnabled),
+                false, player -> this.messageService.send(player, notice -> notice.jumpDisabled)
         );
     }
 
     @Execute
     void toggle(@Context Player player) {
-        this.jumpCache.get(player.getUniqueId()).ifPresentOrElse(jump ->
-                        this.toggleJump(player, jump),
-                () -> this.messageService.send(player, notice -> notice.errorOccurred));
+        this.toggleJump(player, this.jumpCache.getOrThrow(player.getUniqueId()));
     }
 
     /**
@@ -67,7 +61,9 @@ public class JumpToggleCommand {
             this.flyingService.disable(player);
         }
         else {
-            jump.setActivationType(JumpActivationType.MANUAL);
+            jump.setActivationType(JumpActivationType.COMMAND);
+            jump.setJumpVelocity(this.jumpVelocityService.forPlayer(player));
+
             this.flyingService.enable(player);
         }
 

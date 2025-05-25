@@ -1,5 +1,6 @@
-package com.github.imdmk.doublejump.jump;
+package com.github.imdmk.doublejump.jump.cache;
 
+import com.github.imdmk.doublejump.jump.JumpPlayer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -90,6 +91,17 @@ public final class JumpPlayerCache {
      */
     public Optional<JumpPlayer> get(@NotNull UUID uuid) {
         return Optional.ofNullable(this.jumpPlayers.get(uuid));
+    }
+
+    /**
+     * Retrieves the {@link JumpPlayer} associated with the given UUID, or throws an exception if not found.
+     *
+     * @param uuid The UUID of the player.
+     * @return The associated {@link JumpPlayer}.
+     * @throws IllegalStateException if no player is found for the given UUID.
+     */
+    public @NotNull JumpPlayer getOrThrow(UUID uuid) {
+        return this.get(uuid).orElseThrow(() -> new IllegalStateException("Jump player not found"));
     }
 
     /**

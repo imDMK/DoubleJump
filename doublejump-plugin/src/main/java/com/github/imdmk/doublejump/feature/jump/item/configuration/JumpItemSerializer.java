@@ -1,6 +1,7 @@
 package com.github.imdmk.doublejump.feature.jump.item.configuration;
 
 import com.github.imdmk.doublejump.feature.jump.item.JumpItem;
+import com.github.imdmk.doublejump.jump.JumpVelocity;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
@@ -28,6 +29,8 @@ public class JumpItemSerializer implements ObjectSerializer<JumpItem> {
         data.add("material", item.material(), Material.class);
         data.add("name", item.name(), Component.class);
 
+        data.add("jumpProperties", item.jumpVelocity(), JumpVelocity.class);
+
         if (!item.lore().isEmpty()) {
             data.addCollection("lore", item.lore(), Component.class);
         }
@@ -47,6 +50,8 @@ public class JumpItemSerializer implements ObjectSerializer<JumpItem> {
         Component name = data.get("name", Component.class);
         List<Component> lore = data.getAsList("lore", Component.class);
 
+        JumpVelocity jumpVelocity = data.get("jumpProperties", JumpVelocity.class);
+
         List<ItemFlag> flags = data.containsKey("flags") ?
                 data.getAsList("flags", ItemFlag.class) : Collections.emptyList();
 
@@ -57,6 +62,7 @@ public class JumpItemSerializer implements ObjectSerializer<JumpItem> {
                 .material(material)
                 .nameComponent(name)
                 .loreComponent(lore)
+                .jumpProperties(jumpVelocity)
                 .itemFlags(flags)
                 .enchantment(enchantments)
                 .build();

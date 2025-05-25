@@ -6,30 +6,23 @@ import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
+import org.panda_lang.utilities.inject.annotations.Inject;
 
 @Command(name = "doublejump item")
+@Permission("command.doublejump.item")
 public class JumpItemCommand {
 
-    private final MessageService messageService;
-    private final JumpItemService jumpItemService;
-
-    public JumpItemCommand(
-            @NotNull MessageService messageService,
-            @NotNull JumpItemService jumpItemService
-    ) {
-        this.messageService = Objects.requireNonNull(messageService, "messageService cannot be null");
-        this.jumpItemService = Objects.requireNonNull(jumpItemService, "jumpItemService cannot be null");
-    }
+    @Inject private MessageService messageService;
+    @Inject private JumpItemService jumpItemService;
 
     @Execute(name = "give")
     void give(@Context CommandSender sender, @Arg Player target) {
-        target.getInventory().addItem(this.jumpItemService.getJumpItem());
+        target.getInventory().addItem(this.jumpItemService.getJumpItem().asItemStack());
         this.messageService.send(sender, notice -> notice.jumpItemAdded);
     }
 
@@ -40,8 +33,7 @@ public class JumpItemCommand {
             return;
         }
 
-        target.getInventory().removeItem(this.jumpItemService.getJumpItem());
-
+        target.getInventory().removeItem(this.jumpItemService.getJumpItem().asItemStack());
         this.messageService.send(sender, notice -> notice.jumpItemRemovedSingle);
     }
 
@@ -62,6 +54,6 @@ public class JumpItemCommand {
     }
 
     private boolean hasJumpItem(@NotNull Player player) {
-        return player.getInventory().contains(this.jumpItemService.getJumpItem());
+        return player.getInventory().contains(this.jumpItemService.getJumpItem().asItemStack());
     }
 }

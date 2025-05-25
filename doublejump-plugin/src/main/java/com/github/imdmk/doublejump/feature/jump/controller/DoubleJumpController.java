@@ -1,7 +1,8 @@
 package com.github.imdmk.doublejump.feature.jump.controller;
 
 import com.github.imdmk.doublejump.injector.PluginListener;
-import com.github.imdmk.doublejump.jump.DoubleJumpEvent;
+import com.github.imdmk.doublejump.jump.JumpVelocity;
+import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,10 +24,11 @@ public class DoubleJumpController extends PluginListener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     void onDoubleJump(final DoubleJumpEvent event) {
         final Player player = event.getPlayer();
+        final JumpVelocity properties = event.getJumpProperties();
 
         final Vector vector = player.getLocation().getDirection()
-                .multiply(this.jumpConfiguration.horizontalBoost)
-                .setY(this.jumpConfiguration.verticalBoost);
+                .multiply(properties.horizontalBoost())
+                .setY(properties.verticalBoost());
 
         this.flyingService.disable(player, false);
         player.setVelocity(vector);
@@ -38,14 +40,14 @@ public class DoubleJumpController extends PluginListener {
      *
      * @param event PlayerToggleFlightEvent from Bukkit API.
      */
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     void onToggleFlight(final PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
 
         this.jumpCache.getActive(player.getUniqueId())
-                .ifPresent(jumpPlayer -> {
+                .ifPresent(jump -> {
                     event.setCancelled(true);
-                    this.server.getPluginManager().callEvent(new DoubleJumpEvent(player, jumpPlayer));
+                    this.server.getPluginManager().callEvent(new DoubleJumpEvent(player, jump, jump.getJumpVelocity()));
                 });
     }
 }

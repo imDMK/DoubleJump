@@ -35,7 +35,7 @@ public class JumpItemService {
             return false;
         }
 
-        ItemStack jumpItem = this.getJumpItem();
+        ItemStack jumpItem = this.getJumpItem().asItemStack();
         if (jumpItem.getType() != compare.getType()) {
             return false;
         }
@@ -84,8 +84,8 @@ public class JumpItemService {
      *
      * @return the jump {@link ItemStack}
      */
-    public ItemStack getJumpItem() {
-        return this.jumpConfiguration.jumpItem.item.asItemStack();
+    public JumpItem getJumpItem() {
+        return this.jumpConfiguration.jumpItem.item;
     }
 
     /**

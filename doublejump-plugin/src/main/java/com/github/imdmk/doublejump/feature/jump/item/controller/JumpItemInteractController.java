@@ -1,12 +1,13 @@
 package com.github.imdmk.doublejump.feature.jump.item.controller;
 
+import com.github.imdmk.doublejump.feature.jump.item.JumpItem;
 import com.github.imdmk.doublejump.feature.jump.item.JumpItemService;
 import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsage;
 import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsageStrategy;
 import com.github.imdmk.doublejump.injector.PluginListener;
-import com.github.imdmk.doublejump.jump.DoubleJumpEvent;
 import com.github.imdmk.doublejump.jump.JumpActivationType;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
+import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,6 +46,10 @@ public class JumpItemInteractController extends PluginListener {
             return;
         }
 
+        if (this.isSameBlockPosition(event.getFrom(), event.getTo())) {
+            return;
+        }
+
         this.jumpCache.get(player.getUniqueId())
                 .filter(JumpPlayer::isJumpAllowed)
                 .filter(jump -> !jump.isActive())
@@ -52,7 +57,11 @@ public class JumpItemInteractController extends PluginListener {
                 .ifPresent(jump -> {
                     jump.setActive(true);
                     jump.setJumpAllowed(true);
+
+                    JumpItem jumpItem = this.jumpItemService.getJumpItem();
                     jump.setActivationType(JumpActivationType.ITEM);
+                    jump.setJumpVelocity(jumpItem.jumpVelocity());
+
                     this.flyingService.enable(player);
                 });
     }
@@ -73,8 +82,10 @@ public class JumpItemInteractController extends PluginListener {
         if (clicked != null && this.jumpItemService.isJumpItem(clicked)) {
             event.setCancelled(true);
 
-            this.jumpCache.get(player.getUniqueId())
-                    .ifPresent(jump -> this.useDoubleJump(player, jump));
+            JumpItem jumpItem = this.jumpItemService.getJumpItem();
+            JumpPlayer jumpPlayer = this.jumpCache.getOrThrow(player.getUniqueId());
+
+            this.useDoubleJump(player, jumpPlayer, jumpItem);
         }
     }
 
@@ -87,8 +98,8 @@ public class JumpItemInteractController extends PluginListener {
      * @param player the player performing the jump
      * @param jump the {@link JumpPlayer} instance associated with the player
      */
-    private void useDoubleJump(@NotNull Player player, @NotNull JumpPlayer jump) {
-        DoubleJumpEvent jumpEvent = new DoubleJumpEvent(player, jump);
+    private void useDoubleJump(@NotNull Player player, @NotNull JumpPlayer jump, JumpItem jumpItem) {
+        DoubleJumpEvent jumpEvent = new DoubleJumpEvent(player, jump, jumpItem.jumpVelocity());
         this.server.getPluginManager().callEvent(jumpEvent);
     }
 

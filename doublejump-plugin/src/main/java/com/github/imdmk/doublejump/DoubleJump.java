@@ -8,6 +8,7 @@ import com.github.imdmk.doublejump.feature.command.PlayerContextual;
 import com.github.imdmk.doublejump.feature.command.UsageHandler;
 import com.github.imdmk.doublejump.feature.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.feature.jump.PlayerFlyingService;
+import com.github.imdmk.doublejump.feature.jump.block.JumpBlockController;
 import com.github.imdmk.doublejump.feature.jump.command.JumpItemCommand;
 import com.github.imdmk.doublejump.feature.jump.command.JumpReloadCommand;
 import com.github.imdmk.doublejump.feature.jump.command.JumpTargetCommand;
@@ -24,6 +25,7 @@ import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemRestrict
 import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsageStrategy;
 import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsageStrategyFactory;
 import com.github.imdmk.doublejump.feature.jump.particle.JumpParticleController;
+import com.github.imdmk.doublejump.feature.jump.properties.JumpVelocityService;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionController;
 import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.feature.jump.restriction.delay.DelayRestrictionController;
@@ -32,7 +34,7 @@ import com.github.imdmk.doublejump.feature.jump.sound.JumpSoundController;
 import com.github.imdmk.doublejump.feature.message.MessageConfiguration;
 import com.github.imdmk.doublejump.feature.message.MessageResultHandler;
 import com.github.imdmk.doublejump.feature.message.MessageService;
-import com.github.imdmk.doublejump.jump.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import com.github.imdmk.doublejump.shared.BukkitTaskScheduler;
 import com.github.imdmk.doublejump.task.TaskScheduler;
 import com.google.common.base.Stopwatch;
@@ -78,7 +80,9 @@ class DoubleJump implements DoubleJumpApi {
     private final Injector injector;
 
     private JumpPlayerCache jumpPlayerCache;
+    private JumpVelocityService jumpVelocityService;
     private PlayerFlyingService playerFlyingService;
+
     private JumpRestrictionService jumpRestrictionService;
     private RestrictionResultNotifier restrictionResultNotifier;
 
@@ -135,7 +139,9 @@ class DoubleJump implements DoubleJumpApi {
 
             /* Double jump, lazy */
             resources.on(JumpPlayerCache.class).assignInstance(() -> this.jumpPlayerCache);
+            resources.on(JumpVelocityService.class).assignInstance(() -> this.jumpVelocityService);
             resources.on(PlayerFlyingService.class).assignInstance(() -> this.playerFlyingService);
+
             resources.on(JumpRestrictionService.class).assignInstance(() -> this.jumpRestrictionService);
             resources.on(RestrictionResultNotifier.class).assignInstance(() -> this.restrictionResultNotifier);
 
@@ -145,7 +151,9 @@ class DoubleJump implements DoubleJumpApi {
 
         try {
             this.jumpPlayerCache = this.createInstance(JumpPlayerCache.class);
+            this.jumpVelocityService = this.createInstance(JumpVelocityService.class);
             this.playerFlyingService = this.createInstance(PlayerFlyingService.class);
+
             this.jumpRestrictionService = this.createInstance(JumpRestrictionService.class);
             this.restrictionResultNotifier = this.createInstance(RestrictionResultNotifier.class);
 
@@ -160,22 +168,32 @@ class DoubleJump implements DoubleJumpApi {
 
         /* Controllers */
         Stream.of(
+                /* General */
                 DoubleJumpController.class,
                 FlightStateController.class,
                 JumpPlayerSessionController.class,
 
+                /* Fall damage */
                 JumpFallDamageController.class,
 
+                /* Restrictions */
                 JumpRestrictionController.class,
                 DelayRestrictionController.class,
 
+                /* Jump particles */
                 JumpParticleController.class,
+
+                /* Jump sounds */
                 JumpSoundController.class,
 
+                /* Jump item */
                 JumpItemDisableController.class,
                 JumpItemInteractController.class,
                 JumpItemResetController.class,
-                JumpItemRestrictionController.class
+                JumpItemRestrictionController.class,
+
+                /* Jump blocks */
+                JumpBlockController.class
         ).forEach(this::createInstance);
 
         /* LiteCommands */
@@ -187,10 +205,10 @@ class DoubleJump implements DoubleJumpApi {
                 .result(Notice.class, new MessageResultHandler(this.messageService))
 
                 .commands(
-                        new JumpItemCommand(this.messageService, this.jumpItemService),
-                        new JumpToggleCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService),
-                        new JumpReloadCommand(this.logger, this.configurationManager, this.messageService),
-                        new JumpTargetCommand(this.messageService, this.jumpPlayerCache, this.playerFlyingService)
+                        this.createInstance(JumpToggleCommand.class),
+                        this.createInstance(JumpTargetCommand.class),
+                        this.createInstance(JumpItemCommand.class),
+                        this.createInstance(JumpReloadCommand.class)
                 )
 
                 .build();

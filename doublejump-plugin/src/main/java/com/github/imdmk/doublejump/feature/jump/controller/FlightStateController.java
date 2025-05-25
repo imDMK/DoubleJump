@@ -51,9 +51,10 @@ public class FlightStateController extends PluginListener {
         Player player = event.getEntity();
 
         this.jumpCache.getActive(player.getUniqueId())
-                .filter(jump -> jump.isActivationType(JumpActivationType.MANUAL))
+                .filter(jump -> jump.isActivationType(JumpActivationType.JOIN) || jump.isActivationType(JumpActivationType.COMMAND))
                 .ifPresent(jump -> {
                     jump.setJumpAllowed(true);
+                    jump.setLastNotifiedReason(null);
                     jump.setLastJump(null);
 
                     this.flyingService.enable(player);
