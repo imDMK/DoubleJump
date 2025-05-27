@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.jump.feature.restriction.result.checker;
+package com.github.imdmk.doublejump.jump.feature.restriction.checker;
 
 import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionDenyReason;

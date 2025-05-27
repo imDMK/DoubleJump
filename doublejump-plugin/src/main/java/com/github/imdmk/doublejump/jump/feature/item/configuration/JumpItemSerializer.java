@@ -29,7 +29,7 @@ public class JumpItemSerializer implements ObjectSerializer<JumpItem> {
         data.add("material", item.material(), Material.class);
         data.add("name", item.name(), Component.class);
 
-        data.add("jumpProperties", item.jumpVelocity(), JumpVelocity.class);
+        data.add("jumpVelocity", item.jumpVelocity(), JumpVelocity.class);
 
         if (!item.lore().isEmpty()) {
             data.addCollection("lore", item.lore(), Component.class);
@@ -50,7 +50,7 @@ public class JumpItemSerializer implements ObjectSerializer<JumpItem> {
         Component name = data.get("name", Component.class);
         List<Component> lore = data.getAsList("lore", Component.class);
 
-        JumpVelocity jumpVelocity = data.get("jumpProperties", JumpVelocity.class);
+        JumpVelocity jumpVelocity = data.get("jumpVelocity", JumpVelocity.class);
 
         List<ItemFlag> flags = data.containsKey("flags") ?
                 data.getAsList("flags", ItemFlag.class) : Collections.emptyList();

@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.jump.feature.restriction.result;
+package com.github.imdmk.doublejump.jump.feature.restriction;
 
 import com.eternalcode.multification.notice.provider.NoticeProvider;
 import com.eternalcode.multification.shared.Formatter;
@@ -6,8 +6,6 @@ import com.github.imdmk.doublejump.infrastructure.message.MessageConfiguration;
 import com.github.imdmk.doublejump.infrastructure.message.MessageService;
 import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
-import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionDenyReason;
-import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionResult;
 import com.github.imdmk.doublejump.util.DurationUtil;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +15,7 @@ import org.panda_lang.utilities.inject.annotations.Inject;
  * Handles notifying players about why their double jump was restricted.
  * Sends appropriate messages with formatting based on the restriction reason.
  */
-public class RestrictionResultNotifier {
+public class JumpRestrictionNotifier {
 
     @Inject private MessageService messageService;
     @Inject private JumpConfiguration jumpConfiguration;

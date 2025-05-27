@@ -4,7 +4,6 @@ import com.github.imdmk.doublejump.infrastructure.injector.PluginListener;
 import com.github.imdmk.doublejump.jump.JumpActivationType;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
-import com.github.imdmk.doublejump.jump.feature.restriction.result.RestrictionResultNotifier;
 import com.github.imdmk.doublejump.jump.feature.velocity.JumpVelocityService;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +23,7 @@ import org.panda_lang.utilities.inject.annotations.Inject;
 public class JumpRestrictionController extends PluginListener {
 
     @Inject private JumpRestrictionService restrictionService;
-    @Inject private RestrictionResultNotifier resultNotifier;
+    @Inject private JumpRestrictionNotifier resultNotifier;
     @Inject private JumpVelocityService velocityService;
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
