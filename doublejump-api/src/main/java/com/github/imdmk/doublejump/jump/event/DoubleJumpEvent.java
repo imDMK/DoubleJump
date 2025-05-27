@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump.jump.event;
 
 import com.github.imdmk.doublejump.jump.JumpPlayer;
-import com.github.imdmk.doublejump.jump.JumpVelocity;
+import com.github.imdmk.doublejump.jump.feature.velocity.JumpVelocity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

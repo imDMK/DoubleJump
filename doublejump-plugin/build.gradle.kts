@@ -17,6 +17,9 @@ dependencies {
 
     compileOnly("org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT")
 
+    implementation("com.zaxxer:HikariCP:6.2.1")
+    implementation("com.j256.ormlite:ormlite-jdbc:6.1")
+
     implementation("org.panda-lang.utilities:di:1.8.0")
 
     implementation("net.kyori:adventure-platform-bukkit:4.4.0")

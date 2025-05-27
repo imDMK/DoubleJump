@@ -54,7 +54,8 @@ public abstract class ConfigSection extends OkaeriConfig {
         this.loadProcessedProperties();
         try {
             this.loadNestedConfigSections(this.getClass());
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             Logger.getLogger(this.getClass().getName())
                     .severe("Could not load nested config sections: " + e.getMessage());
         }

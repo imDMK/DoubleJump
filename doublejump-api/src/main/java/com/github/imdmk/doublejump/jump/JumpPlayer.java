@@ -1,6 +1,7 @@
 package com.github.imdmk.doublejump.jump;
 
-import com.github.imdmk.doublejump.jump.restriction.RestrictionDenyReason;
+import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionDenyReason;
+import com.github.imdmk.doublejump.jump.feature.velocity.JumpVelocity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,7 @@ public class JumpPlayer {
 
     private final UUID uuid;
     private final String name;
+
     /**
      * Defines how the double jump ability was activated for the player.
      * This can be used to differentiate between manual activation (e.g. via command)
@@ -29,6 +31,7 @@ public class JumpPlayer {
      * Does not necessarily mean the player is allowed to jump (see {@link #jumpAllowed}).
      */
     private boolean active = false;
+
     /**
      * Indicates whether the player is currently allowed to perform a double jump.
      * This is affected by runtime restrictions such as cooldowns or conditions.
@@ -41,12 +44,17 @@ public class JumpPlayer {
      * Used for applying cooldowns and delay-based restrictions.
      */
     private Instant lastJump;
+
     /**
      * The last restriction reason that was notified to the player.
      * Used to prevent sending duplicate restriction messages.
      */
     private RestrictionDenyReason lastNotifiedReason;
 
+    /**
+     * The velocity configuration applied when the player performs a double jump.
+     * Defines movement parameters such as vertical and horizontal force.
+     */
     private JumpVelocity jumpVelocity;
 
     /**

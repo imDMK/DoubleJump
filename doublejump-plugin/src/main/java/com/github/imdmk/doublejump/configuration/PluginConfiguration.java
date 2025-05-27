@@ -9,16 +9,23 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 @Header({
-        "#",
-        "# Configuration file for the DoubleJump (free version) plugin.",
-        "#",
-        "# If you have a problem with plugin configuration, please create an issue on the project's github.",
-        "# However, if you like the plugin, leave a star for the project on GitHub.",
         "# ",
-        "# Support site: https://github.com/imDMK/DoubleJump/issues/new/choose",
-        "# GitHub: https://github.com/imDMK/DoubleJump",
+        "# DoubleJump Premium",
+        "# Thanks for purchasing this plugin!",
+        "#",
+        "# If you encounter any issues or need assistance,",
+        "# feel free to contact me:",
+        "# ",
+        "# Discord: imdmk",
+        "# Email: dominiks8318@gmail.com",
+        "#",
+        "# If you enjoy the plugin, please leave a review on",
+        "# SpigotMC — your support means a lot!",
+        "#",
+        "# Support development: https://github.com/sponsors/imDMK",
         "#",
 })
+
 public class PluginConfiguration extends ConfigSection {
 
     @Comment("# Check for plugin update and send notification after administrator join to server?")

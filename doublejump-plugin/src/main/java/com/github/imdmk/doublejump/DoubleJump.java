@@ -1,41 +1,59 @@
 package com.github.imdmk.doublejump;
 
 import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.doublejump.command.MissingPermissionHandler;
+import com.github.imdmk.doublejump.command.PlayerContextual;
+import com.github.imdmk.doublejump.command.UsageHandler;
+import com.github.imdmk.doublejump.command.configurator.CommandConfiguration;
+import com.github.imdmk.doublejump.command.configurator.CommandConfigurator;
 import com.github.imdmk.doublejump.configuration.ConfigurationManager;
 import com.github.imdmk.doublejump.configuration.PluginConfiguration;
-import com.github.imdmk.doublejump.feature.command.MissingPermissionHandler;
-import com.github.imdmk.doublejump.feature.command.PlayerContextual;
-import com.github.imdmk.doublejump.feature.command.UsageHandler;
-import com.github.imdmk.doublejump.feature.jump.JumpConfiguration;
-import com.github.imdmk.doublejump.feature.jump.PlayerFlyingService;
-import com.github.imdmk.doublejump.feature.jump.block.JumpBlockController;
-import com.github.imdmk.doublejump.feature.jump.command.JumpItemCommand;
-import com.github.imdmk.doublejump.feature.jump.command.JumpReloadCommand;
-import com.github.imdmk.doublejump.feature.jump.command.JumpTargetCommand;
-import com.github.imdmk.doublejump.feature.jump.command.JumpToggleCommand;
-import com.github.imdmk.doublejump.feature.jump.controller.DoubleJumpController;
-import com.github.imdmk.doublejump.feature.jump.controller.FlightStateController;
-import com.github.imdmk.doublejump.feature.jump.controller.JumpPlayerSessionController;
-import com.github.imdmk.doublejump.feature.jump.fall.JumpFallDamageController;
-import com.github.imdmk.doublejump.feature.jump.item.JumpItemService;
-import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemDisableController;
-import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemInteractController;
-import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemResetController;
-import com.github.imdmk.doublejump.feature.jump.item.controller.JumpItemRestrictionController;
-import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsageStrategy;
-import com.github.imdmk.doublejump.feature.jump.item.usage.ItemUsageStrategyFactory;
-import com.github.imdmk.doublejump.feature.jump.particle.JumpParticleController;
-import com.github.imdmk.doublejump.feature.jump.properties.JumpVelocityService;
-import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionController;
-import com.github.imdmk.doublejump.feature.jump.restriction.JumpRestrictionService;
-import com.github.imdmk.doublejump.feature.jump.restriction.delay.DelayRestrictionController;
-import com.github.imdmk.doublejump.feature.jump.restriction.result.RestrictionResultNotifier;
-import com.github.imdmk.doublejump.feature.jump.sound.JumpSoundController;
-import com.github.imdmk.doublejump.feature.message.MessageConfiguration;
-import com.github.imdmk.doublejump.feature.message.MessageResultHandler;
-import com.github.imdmk.doublejump.feature.message.MessageService;
+import com.github.imdmk.doublejump.database.DatabaseConfiguration;
+import com.github.imdmk.doublejump.database.DatabaseService;
+import com.github.imdmk.doublejump.infrastructure.gui.GuiManager;
+import com.github.imdmk.doublejump.infrastructure.gui.configuration.GuiConfiguration;
+import com.github.imdmk.doublejump.infrastructure.message.MessageConfiguration;
+import com.github.imdmk.doublejump.infrastructure.message.MessageResultHandler;
+import com.github.imdmk.doublejump.infrastructure.message.MessageService;
+import com.github.imdmk.doublejump.infrastructure.scheduler.BukkitTaskScheduler;
+import com.github.imdmk.doublejump.jump.JumpConfiguration;
+import com.github.imdmk.doublejump.jump.PlayerFlyingService;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
-import com.github.imdmk.doublejump.shared.BukkitTaskScheduler;
+import com.github.imdmk.doublejump.jump.controller.DoubleJumpController;
+import com.github.imdmk.doublejump.jump.controller.FlightStateController;
+import com.github.imdmk.doublejump.jump.controller.JumpPlayerSessionController;
+import com.github.imdmk.doublejump.jump.feature.block.JumpBlockController;
+import com.github.imdmk.doublejump.jump.feature.command.JumpItemCommand;
+import com.github.imdmk.doublejump.jump.feature.command.JumpReloadCommand;
+import com.github.imdmk.doublejump.jump.feature.command.JumpTargetCommand;
+import com.github.imdmk.doublejump.jump.feature.command.JumpToggleCommand;
+import com.github.imdmk.doublejump.jump.feature.command.JumpVisualCommand;
+import com.github.imdmk.doublejump.jump.feature.fall.JumpFallDamageController;
+import com.github.imdmk.doublejump.jump.feature.item.JumpItemService;
+import com.github.imdmk.doublejump.jump.feature.item.controller.JumpItemDisableController;
+import com.github.imdmk.doublejump.jump.feature.item.controller.JumpItemInteractController;
+import com.github.imdmk.doublejump.jump.feature.item.controller.JumpItemResetController;
+import com.github.imdmk.doublejump.jump.feature.item.controller.JumpItemRestrictionController;
+import com.github.imdmk.doublejump.jump.feature.item.usage.ItemUsageStrategy;
+import com.github.imdmk.doublejump.jump.feature.item.usage.ItemUsageStrategyFactory;
+import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionController;
+import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionService;
+import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.delay.DelayRestrictionController;
+import com.github.imdmk.doublejump.jump.feature.restriction.result.RestrictionResultNotifier;
+import com.github.imdmk.doublejump.jump.feature.velocity.JumpVelocityService;
+import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualService;
+import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
+import com.github.imdmk.doublejump.jump.feature.visual.controller.JumpVisualSessionController;
+import com.github.imdmk.doublejump.jump.feature.visual.gui.JumpVisualGui;
+import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticleController;
+import com.github.imdmk.doublejump.jump.feature.visual.particle.gui.JumpParticleGui;
+import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualCache;
+import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualRepository;
+import com.github.imdmk.doublejump.jump.feature.visual.repository.impl.DaoJumpVisualRepository;
+import com.github.imdmk.doublejump.jump.feature.visual.repository.impl.EmptyJumpVisualRepository;
+import com.github.imdmk.doublejump.jump.feature.visual.sound.JumpSoundController;
+import com.github.imdmk.doublejump.jump.feature.visual.sound.gui.JumpSoundGui;
 import com.github.imdmk.doublejump.task.TaskScheduler;
 import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
@@ -52,6 +70,7 @@ import org.panda_lang.utilities.inject.DependencyInjection;
 import org.panda_lang.utilities.inject.DependencyInjectionException;
 import org.panda_lang.utilities.inject.Injector;
 
+import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,14 +93,18 @@ class DoubleJump implements DoubleJumpApi {
     private final ConfigurationManager configurationManager;
 
     private final MessageService messageService;
+    private final DatabaseService databaseService;
 
     private final TaskScheduler taskScheduler;
-
     private final Injector injector;
 
     private JumpPlayerCache jumpPlayerCache;
     private JumpVelocityService jumpVelocityService;
     private PlayerFlyingService playerFlyingService;
+
+    private JumpVisualCache jumpVisualCache;
+    private JumpVisualRepository jumpVisualRepository;
+    private JumpVisualService jumpVisualService;
 
     private JumpRestrictionService jumpRestrictionService;
     private RestrictionResultNotifier restrictionResultNotifier;
@@ -110,26 +133,50 @@ class DoubleJump implements DoubleJumpApi {
         this.configurationManager = new ConfigurationManager(this.logger, plugin.getDataFolder());
 
         PluginConfiguration pluginConfiguration = this.configurationManager.create(PluginConfiguration.class);
+        DatabaseConfiguration databaseConfiguration = this.configurationManager.create(DatabaseConfiguration.class);
         MessageConfiguration messageConfiguration = this.configurationManager.create(MessageConfiguration.class);
+        CommandConfiguration commandConfiguration = this.configurationManager.create(CommandConfiguration.class);
+
         JumpConfiguration jumpConfiguration = this.configurationManager.create(JumpConfiguration.class);
+        JumpVisualConfiguration jumpVisualConfiguration = this.configurationManager.create(JumpVisualConfiguration.class);
+
+        GuiConfiguration guiConfiguration = this.configurationManager.create(GuiConfiguration.class);
 
         /* Services */
         this.messageService = new MessageService(this.logger, messageConfiguration, BukkitAudiences.create(plugin), MiniMessage.miniMessage());
+        this.databaseService = new DatabaseService(this.logger, plugin.getDataFolder(), databaseConfiguration);
+
+        /* Database connection, jump visual */
+        this.jumpVisualCache = new JumpVisualCache();
+
+        try {
+            this.databaseService.connect();
+            this.jumpVisualRepository = new DaoJumpVisualRepository(this.logger, this.databaseService.getConnectionSource(), this.jumpVisualCache);
+        }
+        catch (SQLException sqlException) {
+            this.jumpVisualRepository = new EmptyJumpVisualRepository();
+
+            this.logger.log(Level.SEVERE, "An error occurred while initializing the JumpVisual repository. The plugin will run, but the functions will not work as expected.", sqlException);
+        }
 
         /* Scheduler */
         this.taskScheduler = new BukkitTaskScheduler(plugin, this.server);
 
+        GuiManager guiManager = new GuiManager(this.taskScheduler);
+
         /* Injector */
         this.injector = DependencyInjection.createInjector(resources -> {
             resources.on(Plugin.class).assignInstance(plugin);
-            resources.on(Logger.class).assignInstance(this.logger);
             resources.on(Server.class).assignInstance(this.server);
+            resources.on(Logger.class).assignInstance(this.logger);
 
             /* Configuration */
             resources.on(ConfigurationManager.class).assignInstance(this.configurationManager);
             resources.on(PluginConfiguration.class).assignInstance(pluginConfiguration);
             resources.on(MessageConfiguration.class).assignInstance(messageConfiguration);
             resources.on(JumpConfiguration.class).assignInstance(jumpConfiguration);
+            resources.on(JumpVisualConfiguration.class).assignInstance(jumpVisualConfiguration);
+            resources.on(GuiConfiguration.class).assignInstance(guiConfiguration);
 
             /* Services */
             resources.on(MessageService.class).assignInstance(this.messageService);
@@ -137,14 +184,24 @@ class DoubleJump implements DoubleJumpApi {
             /* Scheduler */
             resources.on(TaskScheduler.class).assignInstance(this.taskScheduler);
 
-            /* Double jump, lazy */
+            /* GuiManager */
+            resources.on(GuiManager.class).assignInstance(guiManager);
+
+            /* Jump, lazy */
             resources.on(JumpPlayerCache.class).assignInstance(() -> this.jumpPlayerCache);
             resources.on(JumpVelocityService.class).assignInstance(() -> this.jumpVelocityService);
             resources.on(PlayerFlyingService.class).assignInstance(() -> this.playerFlyingService);
 
+            /* JumpVisual */
+            resources.on(JumpVisualCache.class).assignInstance(this.jumpVisualCache);
+            resources.on(JumpVisualRepository.class).assignInstance(this.jumpVisualRepository);
+            resources.on(JumpVisualService.class).assignInstance(() -> this.jumpVisualService); // Lazy
+
+            /* Jump restrictions, lazy */
             resources.on(JumpRestrictionService.class).assignInstance(() -> this.jumpRestrictionService);
             resources.on(RestrictionResultNotifier.class).assignInstance(() -> this.restrictionResultNotifier);
 
+            /* Jump items, lazy */
             resources.on(JumpItemService.class).assignInstance(() -> this.jumpItemService);
             resources.on(ItemUsageStrategy.class).assignInstance(() -> this.itemUsageStrategy);
         });
@@ -153,6 +210,8 @@ class DoubleJump implements DoubleJumpApi {
             this.jumpPlayerCache = this.createInstance(JumpPlayerCache.class);
             this.jumpVelocityService = this.createInstance(JumpVelocityService.class);
             this.playerFlyingService = this.createInstance(PlayerFlyingService.class);
+
+            this.jumpVisualService = this.createInstance(JumpVisualService.class);
 
             this.jumpRestrictionService = this.createInstance(JumpRestrictionService.class);
             this.restrictionResultNotifier = this.createInstance(RestrictionResultNotifier.class);
@@ -193,7 +252,10 @@ class DoubleJump implements DoubleJumpApi {
                 JumpItemRestrictionController.class,
 
                 /* Jump blocks */
-                JumpBlockController.class
+                JumpBlockController.class,
+
+                /* Jump visuals */
+                JumpVisualSessionController.class
         ).forEach(this::createInstance);
 
         /* LiteCommands */
@@ -208,10 +270,20 @@ class DoubleJump implements DoubleJumpApi {
                         this.createInstance(JumpToggleCommand.class),
                         this.createInstance(JumpTargetCommand.class),
                         this.createInstance(JumpItemCommand.class),
+                        this.createInstance(JumpVisualCommand.class),
                         this.createInstance(JumpReloadCommand.class)
                 )
 
+                .editorGlobal(new CommandConfigurator(this.logger, commandConfiguration))
+
                 .build();
+
+        /* Guis */
+        Stream.of(
+                JumpVisualGui.class,
+                JumpParticleGui.class,
+                JumpSoundGui.class
+        ).forEach(gui -> guiManager.registerGui(this.createInstance(gui)));
 
         /* Metrics */
         this.metrics = new Metrics(plugin, DoubleJumpPlugin.METRICS_SERVICE_ID);
@@ -227,6 +299,7 @@ class DoubleJump implements DoubleJumpApi {
         DoubleJumpApiProvider.unregister();
 
         this.configurationManager.shutdown();
+        this.databaseService.close();
         this.messageService.close();
         this.taskScheduler.shutdown();
         this.liteCommands.unregister();
@@ -253,23 +326,28 @@ class DoubleJump implements DoubleJumpApi {
         this.server.getPluginManager().disablePlugin(this.plugin);
     }
 
-    /**
-     * Gets the plugin's configuration manager.
-     *
-     * @return the configuration manager
-     */
     @Override
     public @NotNull ConfigurationManager getConfigurationManager() {
         return this.configurationManager;
     }
 
-    /**
-     * Gets the runtime cache for players using the double jump feature.
-     *
-     * @return the player cache
-     */
     @Override
-    public JumpPlayerCache getJumpPlayerCache() {
+    public @NotNull JumpPlayerCache getJumpPlayerCache() {
         return this.jumpPlayerCache;
+    }
+
+    @Override
+    public @NotNull RestrictionChecker getRestrictionChecker() {
+        return this.jumpRestrictionService;
+    }
+
+    @Override
+    public @NotNull JumpVisualCache getJumpVisualCache() {
+        return this.jumpVisualCache;
+    }
+
+    @Override
+    public @NotNull JumpVisualRepository getJumpVisualRepository() {
+        return this.jumpVisualRepository;
     }
 }

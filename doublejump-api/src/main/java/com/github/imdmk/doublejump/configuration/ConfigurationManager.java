@@ -55,7 +55,13 @@ public final class ConfigurationManager {
      */
     public <T extends ConfigSection> T create(@NotNull Class<T> config) {
         T configFile = ConfigManager.create(config);
-        File file = new File(this.dataFolder, configFile.getFileName());
+        String fileName = configFile.getFileName();
+
+        if (fileName.isEmpty()) {
+            throw new IllegalArgumentException("config file name cannot be empty");
+        }
+
+        File file = new File(this.dataFolder, fileName);
 
         YamlSnakeYamlConfigurer yamlSnakeYamlConfigurer = this.createYamlSnakeYamlConfigurer();
 
