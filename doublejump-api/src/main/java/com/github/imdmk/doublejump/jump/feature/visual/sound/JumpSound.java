@@ -29,6 +29,6 @@ public record JumpSound(@NotNull Sound sound, float volume, float pitch) {
      * @param player the {@link Player} to play the sound for (must not be null)
      */
     public void play(@NotNull Player player) {
-        player.playSound(player, this.sound, this.volume, this.pitch);
+        player.playSound(player.getLocation(), this.sound, this.volume, this.pitch);
     }
 }

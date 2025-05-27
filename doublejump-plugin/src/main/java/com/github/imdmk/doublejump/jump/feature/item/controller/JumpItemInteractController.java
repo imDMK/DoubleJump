@@ -130,6 +130,6 @@ public class JumpItemInteractController extends PluginListener {
         }
 
         damageable.setDamage(damageable.getDamage() + reduceBy);
-        item.setItemMeta(damageable);
+        item.setDurability((short) damageable.getDamage());
     }
 }

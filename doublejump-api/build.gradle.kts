@@ -6,7 +6,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT")
 
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }

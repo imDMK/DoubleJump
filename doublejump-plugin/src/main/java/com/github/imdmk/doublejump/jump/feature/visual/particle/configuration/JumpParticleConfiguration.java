@@ -37,7 +37,6 @@ public class JumpParticleConfiguration extends OkaeriConfig {
             new JumpParticleEntry(new JumpParticle(Particle.PORTAL, 100), Material.ENDER_PEARL),
             new JumpParticleEntry(new JumpParticle(Particle.FLASH, 80), Material.GLOWSTONE),
             new JumpParticleEntry(new JumpParticle(Particle.LAVA, 80), Material.LAVA_BUCKET),
-            new JumpParticleEntry(new JumpParticle(Particle.MYCELIUM, 50), Material.MYCELIUM),
             new JumpParticleEntry(new JumpParticle(Particle.COMPOSTER, 50), Material.COMPOSTER),
             new JumpParticleEntry(new JumpParticle(Particle.DRAGON_BREATH, 100), Material.DRAGON_BREATH),
             new JumpParticleEntry(new JumpParticle(Particle.END_ROD, 100), Material.END_ROD),

@@ -16,7 +16,7 @@ repositories {
 dependencies {
     implementation(project(":doublejump-api"))
 
-    compileOnly("org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
 
     implementation("com.zaxxer:HikariCP:6.2.1")
