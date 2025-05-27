@@ -5,17 +5,19 @@ plugins {
 }
 
 group = "com.github.imdmk"
-version = "2.1.6"
+version = "1.0.0"
 
 repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // SpigotMC
     maven("https://repo.eternalcode.pl/releases") // EternalCode
+    maven("https://maven.enginehub.org/repo/") //World Guard API
 }
 
 dependencies {
     implementation(project(":doublejump-api"))
 
     compileOnly("org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
 
     implementation("com.zaxxer:HikariCP:6.2.1")
     implementation("com.j256.ormlite:ormlite-jdbc:6.1")
@@ -44,6 +46,7 @@ bukkit {
     author = "imDMK"
     description = "Efficient double jump plugin with many features and configuration possibilities"
     website = "https://github.com/imDMK/DoubleJump"
+    depend = listOf("WorldGuard")
 }
 
 tasks.withType<ShadowJar> {

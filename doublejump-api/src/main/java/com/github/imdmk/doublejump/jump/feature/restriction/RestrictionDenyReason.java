@@ -16,6 +16,12 @@ public enum RestrictionDenyReason {
     WORLD_DISABLED(true),
 
     /**
+     * The player's current region (WorldGuard) is not allowed for double jump.
+     * Hard restriction: true
+     */
+    REGION_DISABLED(true),
+
+    /**
      * The player's current game mode is not permitted for double jump.
      * Hard restriction: true
      */

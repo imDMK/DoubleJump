@@ -1,5 +1,5 @@
 group = "com.github.imdmk"
-version = "2.1.6"
+version = "1.0.0"
 
 repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")

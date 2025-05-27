@@ -77,6 +77,7 @@ public class RestrictionResultNotifier {
     private @NotNull NoticeProvider<MessageConfiguration> getNoticeProvider(@NotNull RestrictionDenyReason reason) {
         return switch (reason) {
             case WORLD_DISABLED -> n -> n.worldRestricted;
+            case REGION_DISABLED -> n -> n.regionRestricted;
             case PERMISSION_REQUIRED -> n -> n.jumpPermissionRequired;
             case GAME_MODE_BLOCKED -> n -> n.gameModeRestricted;
             case JUMP_DELAY -> n -> n.jumpDelay;

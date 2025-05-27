@@ -47,6 +47,9 @@ public class MessageConfiguration extends ConfigSection {
     @Comment("Sent when double jump is blocked because the player is in a restricted world.")
     public Notice worldRestricted = Notice.chat("<red>You are in a disabled world!");
 
+    @Comment("Sent when double jump is blocked because the player is in a restricted WorldGuard region.")
+    public Notice regionRestricted = Notice.chat("<red>You are in a disabled region!");
+
     @Comment("Sent when double jump is blocked due to the player's current game mode.")
     public Notice gameModeRestricted = Notice.chat("<red>Your current game mode disables double jump!");
 
