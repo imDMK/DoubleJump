@@ -46,7 +46,7 @@ bukkit {
     author = "imDMK"
     description = "Efficient double jump plugin with many features and configuration possibilities"
     website = "https://github.com/imDMK/DoubleJump"
-    depend = listOf("WorldGuard")
+    softDepend = listOf("WorldGuard")
 }
 
 tasks.withType<ShadowJar> {
