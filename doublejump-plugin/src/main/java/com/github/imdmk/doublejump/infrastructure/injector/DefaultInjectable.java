@@ -1,11 +1,9 @@
 package com.github.imdmk.doublejump.infrastructure.injector;
 
-import com.github.imdmk.doublejump.configuration.PluginConfiguration;
 import com.github.imdmk.doublejump.infrastructure.message.MessageService;
 import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.PlayerFlyingService;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
-import com.github.imdmk.doublejump.task.TaskScheduler;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.panda_lang.utilities.inject.annotations.Inject;
@@ -27,8 +25,6 @@ public abstract class DefaultInjectable {
 
     @Inject protected Logger logger;
 
-    @Inject protected PluginConfiguration pluginConfiguration;
-
     @Inject protected JumpConfiguration jumpConfiguration;
 
     @Inject protected MessageService messageService;
@@ -36,7 +32,5 @@ public abstract class DefaultInjectable {
     @Inject protected JumpPlayerCache jumpCache;
 
     @Inject protected PlayerFlyingService flyingService;
-
-    @Inject protected TaskScheduler taskScheduler;
 
 }

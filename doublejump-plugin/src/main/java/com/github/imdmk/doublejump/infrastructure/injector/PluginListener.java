@@ -24,6 +24,18 @@ public abstract class PluginListener extends DefaultInjectable implements Listen
         this.server.getPluginManager().registerEvents(this, this.plugin);
     }
 
+    /**
+     * Checks whether two locations refer to the same block position (ignoring exact coordinates).
+     * <p>
+     * This method compares the block coordinates (X, Y, Z) of the given locations.
+     * If the second location is {@code null}, the method returns {@code true} by design,
+     * assuming the positions are considered the same in that context.
+     * </p>
+     *
+     * @param from the first location to compare; must not be {@code null}
+     * @param to   the second location to compare; may be {@code null}
+     * @return {@code true} if {@code to} is {@code null} or both locations are in the same block; {@code false} otherwise
+     */
     protected boolean isSameBlockPosition(@NotNull final Location from, @Nullable final Location to) {
         if (to == null) {
             return true;

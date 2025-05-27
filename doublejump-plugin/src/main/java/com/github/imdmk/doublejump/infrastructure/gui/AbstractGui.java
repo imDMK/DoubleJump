@@ -72,7 +72,7 @@ public abstract class AbstractGui extends DefaultInjectable {
         });
     }
 
-    public void setExitPageItem(@NotNull BaseGui gui, @NotNull Consumer<InventoryClickEvent> exit) {
+    protected void setExitPageItem(@NotNull BaseGui gui, @NotNull Consumer<InventoryClickEvent> exit) {
         gui.setItem(this.getExitPageItemSlot(gui.getRows()), this.createExitPageItem(exit));
     }
 
