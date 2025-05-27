@@ -70,7 +70,7 @@ public class JumpParticleGui extends AbstractGui implements ParameterizedGui<Jum
         }
 
         return builder.build().asGuiItem(event -> {
-            if (event.getClick() != ClickType.RIGHT) {
+            if (event.getClick() == ClickType.LEFT) {
                 visual.setJumpParticles(Collections.emptyList());
                 this.getConfig().disableItemClickSound.play(viewer);
 
@@ -94,7 +94,7 @@ public class JumpParticleGui extends AbstractGui implements ParameterizedGui<Jum
     }
 
     private void handleParticleClick(@NotNull ClickType click, @NotNull Player viewer, @NotNull JumpVisual visual, @NotNull JumpParticleEntry entry) {
-        if (click != ClickType.RIGHT) {
+        if (click != ClickType.LEFT) {
             return;
         }
 
@@ -102,9 +102,11 @@ public class JumpParticleGui extends AbstractGui implements ParameterizedGui<Jum
 
         if (active) {
             visual.removeJumpParticle(entry.particle());
+            this.getConfig().disableItemClickSound.play(viewer);
         }
         else {
             visual.addJumpParticle(entry.particle());
+            this.getConfig().enableParticleSound.play(viewer);
         }
 
         this.open(viewer, visual);

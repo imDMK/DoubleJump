@@ -39,17 +39,20 @@ public class JumpParticleGuiConfiguration extends OkaeriConfig {
     public List<Component> activeLore = ComponentUtil.notItalic(
             " ",
             "<green>Selected",
-            "<gray>Click <green>RIGHT <gray>to <red>remove this jump particle.",
+            "<gray>Click <green>LEFT <gray>to <red>remove this jump particle.",
             " "
     );
 
     @Comment("# Lore shown on a non-selected particle option.")
     public List<Component> defaultLore = ComponentUtil.notItalic(
             " ",
-            "<gray>Click <green>RIGHT <gray>to <green>add this jump particle.",
+            "<gray>Click <green>LEFT <gray>to <green>add this jump particle.",
             " "
     );
 
     @Comment("# Sound played when the player clicks to enable particle.")
-    public JumpSound enableParticleClickSound = new JumpSound(Sound.ENTITY_VILLAGER_YES, 0.5F, 0.5F);
+    public JumpSound enableParticleSound = new JumpSound(Sound.ENTITY_VILLAGER_YES, 0.5F, 0.5F);
+
+    @Comment("# Sound played when the player clicks to disable particle.")
+    public JumpSound disableParticleSound = new JumpSound(Sound.ENTITY_VILLAGER_NO, 0.5F, 0.5F);
 }

@@ -1,8 +1,6 @@
-package com.github.imdmk.doublejump.jump.feature.visual.controller;
+package com.github.imdmk.doublejump.jump.feature.visual;
 
 import com.github.imdmk.doublejump.infrastructure.injector.PluginListener;
-import com.github.imdmk.doublejump.jump.feature.visual.JumpVisual;
-import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualService;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualCache;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualRepository;
 import org.bukkit.entity.Player;

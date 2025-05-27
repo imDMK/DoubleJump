@@ -32,6 +32,6 @@ public class JumpBlockConfiguration extends OkaeriConfig {
     public Optional<JumpBlock> getJumpBlock(@NotNull Material material) {
         return this.blocks.stream()
                 .filter(jumpBlock -> jumpBlock.type().equals(material))
-                .findAny();
+                .findFirst();
     }
 }

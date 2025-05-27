@@ -18,13 +18,13 @@ public class JumpBlockSerializer implements ObjectSerializer<JumpBlock> {
     @Override
     public void serialize(@NotNull JumpBlock block, @NotNull SerializationData data, @NotNull GenericsDeclaration generics) {
         data.add("material", block.type(), Material.class);
-        data.add("jumpProperties", block.jumpVelocity(), JumpVelocity.class);
+        data.add("jumpVelocity", block.jumpVelocity(), JumpVelocity.class);
     }
 
     @Override
     public JumpBlock deserialize(@NotNull DeserializationData data, @NotNull GenericsDeclaration generics) {
         Material material = data.get("material", Material.class);
-        JumpVelocity jumpVelocity = data.get("jumpProperties", JumpVelocity.class);
+        JumpVelocity jumpVelocity = data.get("jumpVelocity", JumpVelocity.class);
         return new JumpBlock(material, jumpVelocity);
     }
 }

@@ -44,7 +44,7 @@ import com.github.imdmk.doublejump.jump.feature.restriction.result.RestrictionRe
 import com.github.imdmk.doublejump.jump.feature.velocity.JumpVelocityService;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualService;
 import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
-import com.github.imdmk.doublejump.jump.feature.visual.controller.JumpVisualSessionController;
+import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualSessionController;
 import com.github.imdmk.doublejump.jump.feature.visual.gui.JumpVisualGui;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticleController;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.gui.JumpParticleGui;

@@ -66,6 +66,6 @@ public class JumpVisualConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "jumpVisualConfiguration.yml";
+        return "visualConfiguration.yml";
     }
 }
