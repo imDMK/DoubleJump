@@ -24,10 +24,10 @@ public abstract class AbstractGui extends DefaultInjectable {
 
     protected int getNextPageItemSlot(int rows) {
         return switch (rows) {
-            case 3 -> 16;
-            case 4 -> 25;
-            case 5 -> 34;
-            case 6 -> 43;
+            case 3 -> 25;
+            case 4 -> 34;
+            case 5 -> 43;
+            case 6 -> 52;
             default -> throw new IllegalStateException("Unexpected row size: " + rows);
         };
     }
@@ -51,10 +51,10 @@ public abstract class AbstractGui extends DefaultInjectable {
 
     protected int getPreviousPageItemSlot(int rows) {
         return switch (rows) {
-            case 3 -> 10;
-            case 4 -> 19;
-            case 5 -> 28;
-            case 6 -> 37;
+            case 3 -> 19;
+            case 4 -> 28;
+            case 5 -> 37;
+            case 6 -> 46;
             default -> throw new IllegalStateException("Unexpected row size: " + rows);
         };
     }
