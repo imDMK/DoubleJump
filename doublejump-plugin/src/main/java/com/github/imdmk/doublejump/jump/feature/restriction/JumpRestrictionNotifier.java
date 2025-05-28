@@ -79,6 +79,7 @@ public class JumpRestrictionNotifier {
             case PERMISSION_REQUIRED -> n -> n.jumpPermissionRequired;
             case GAME_MODE_BLOCKED -> n -> n.gameModeRestricted;
             case JUMP_DELAY -> n -> n.jumpDelay;
+            case PLAYER_GLIDING -> n -> n.blockedWhileGliding;
             case PLAYER_LAGGING -> n -> n.playerLagging;
         };
     }

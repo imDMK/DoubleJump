@@ -22,4 +22,7 @@ public class JumpRestrictionConfiguration extends OkaeriConfig {
 
     @Comment("# Disable double jumping if the player is lagging (e.g., high ping). Recommended to set this to true to prevent unintended flying.")
     public boolean disableIfPlayerLagging = true;
+
+    @Comment("# Block double jump usage while the player is gliding (e.g., with elytra)")
+    public boolean blockUsageWhileGliding = true;
 }

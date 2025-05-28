@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.jump.feature.restriction.checker;
+package com.github.imdmk.doublejump.jump.feature.restriction.checker.player;
 
 import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionDenyReason;
@@ -6,13 +6,11 @@ import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionResult;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerPingRestrictionChecker implements RestrictionChecker {
-
-    private static final int PING_THRESHOLD = 250;
+public class GlidingRestrictionChecker implements RestrictionChecker {
 
     private final boolean enabled;
 
-    public PlayerPingRestrictionChecker(boolean enabled) {
+    public GlidingRestrictionChecker(boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -22,9 +20,8 @@ public class PlayerPingRestrictionChecker implements RestrictionChecker {
             return RestrictionResult.passed();
         }
 
-        int ping = player.getPing();
-        if (ping > PING_THRESHOLD) {
-            return RestrictionResult.failed(RestrictionDenyReason.PLAYER_LAGGING);
+        if (player.isGliding()) {
+            return RestrictionResult.failed(RestrictionDenyReason.PLAYER_GLIDING);
         }
 
         return RestrictionResult.passed();

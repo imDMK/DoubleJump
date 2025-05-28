@@ -40,6 +40,12 @@ public enum RestrictionDenyReason {
     PLAYER_LAGGING(true),
 
     /**
+     * The player is attempting to double jump when gliding (e.x elytra)
+     * Hard restriction: false
+     */
+    PLAYER_GLIDING(false),
+
+    /**
      * The player is attempting to double jump before the configured cooldown
      * period has elapsed since the last jump.
      * Hard restriction: false

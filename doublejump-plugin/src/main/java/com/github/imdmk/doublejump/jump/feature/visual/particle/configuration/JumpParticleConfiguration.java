@@ -30,7 +30,7 @@ public class JumpParticleConfiguration extends OkaeriConfig {
 
     @Comment("# List of particles available for players to select in the GUI.")
     public List<JumpParticleEntry> supportedParticles = List.of(
-            new JumpParticleEntry(new JumpParticle(Particle.HEART, 5), Material.RED_DYE),
+            new JumpParticleEntry(new JumpParticle(Particle.HEART, 10), Material.RED_DYE),
             new JumpParticleEntry(new JumpParticle(Particle.FLAME, 100), Material.BLAZE_POWDER),
             new JumpParticleEntry(new JumpParticle(Particle.CRIT, 80), Material.DIAMOND_SWORD),
             new JumpParticleEntry(new JumpParticle(Particle.NOTE, 80), Material.NOTE_BLOCK),

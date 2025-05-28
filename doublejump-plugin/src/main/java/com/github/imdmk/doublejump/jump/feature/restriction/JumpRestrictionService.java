@@ -2,9 +2,10 @@ package com.github.imdmk.doublejump.jump.feature.restriction;
 
 import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
+import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.GlidingRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.delay.DelayRestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.checker.PermissionRestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.checker.PlayerPingRestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PermissionRestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PingRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.SetRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.WorldGuardRestrictionChecker;
 import org.bukkit.entity.Player;
@@ -91,23 +92,20 @@ public class JumpRestrictionService implements RestrictionChecker {
     private List<RestrictionChecker> createDefaultCheckers(@NotNull JumpRestrictionConfiguration configuration) {
         return List.of(
                 new DelayRestrictionChecker(this.jumpConfiguration, this.jumpCache),
-                new PlayerPingRestrictionChecker(configuration.disableIfPlayerLagging),
+                new PingRestrictionChecker(configuration.disableIfPlayerLagging),
                 new SetRestrictionChecker<>(
                         configuration.disabledWorlds,
                         p -> p.getWorld().getName(),
                         RestrictionDenyReason.WORLD_DISABLED
                 ),
-                new WorldGuardRestrictionChecker(
-                        configuration.disabledRegions
-                ),
+                new WorldGuardRestrictionChecker(configuration.disabledRegions),
                 new SetRestrictionChecker<>(
                         configuration.disabledGameModes,
                         Player::getGameMode,
                         RestrictionDenyReason.GAME_MODE_BLOCKED
                 ),
-                new PermissionRestrictionChecker(
-                        configuration.allowedPermissions
-                )
+                new PermissionRestrictionChecker(configuration.allowedPermissions),
+                new GlidingRestrictionChecker(configuration.blockUsageWhileGliding)
         );
     }
 
