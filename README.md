@@ -28,10 +28,10 @@ Require players to:
 - 🖱️ Right-click it (`CLICK_ITEM`)  
   *Every action fully configurable.*
 
-🌀 **Jump Visuals – Particles & Sounds, Player-Controlled**  
-🔱 Built-in GUI lets players pick their own particles and sounds.  
-✅ Set defaults in config  
-‍🎨 Players can override them freely
+‍🎨 **Jump Visuals – Particles & Sounds, Player-Controlled**  
+- Built-in GUI lets players pick their own particles and sounds.  
+- Set defaults in config
+- Players can override them freely
 
 💥 **Permission-Based Power**  
 Control velocity, cooldown, and access using permissions — ideal for rank systems.
