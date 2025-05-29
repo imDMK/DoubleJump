@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;
 
 import java.util.logging.Level;
@@ -55,7 +56,7 @@ public class UpdateController implements Listener {
         }
     }
 
-    private void checkForUpdate(Player player) {
+    private void checkForUpdate(@NotNull Player player) {
         try {
             GitCheckResult result = this.updateService.check();
             if (result.isUpToDate()) {
@@ -70,7 +71,7 @@ public class UpdateController implements Listener {
         }
     }
 
-    private void sendNotice(Player player, Notice notice) {
+    private void sendNotice(@NotNull Player player, @NotNull Notice notice) {
         this.messageService.create()
                 .notice(notice)
                 .placeholder("{UPDATE_CHECK_INTERVAL}", DurationUtil.format(this.pluginConfiguration.updateInterval))
