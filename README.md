@@ -8,33 +8,33 @@
 > **Fully customizable, lag-free double jumping — the way it *should* be.**  
 > Say goodbye to boring vanilla jumps and hello to pro-level aerial control.
 
-✅ **Join the elite servers using DoubleJump+ — and take your gameplay to the skies!**
+🎉 **Join the elite servers using DoubleJump+ — and take your gameplay to the skies!**
 
 ---
 
 ## ✨ Features That Go Way Beyond "Just a Double Jump"
 
 🧠 **Not native to Minecraft? No problem.**  
-✅ We *rewrote physics* to make smooth, fully customizable double jumps possible.
+We *rewrote physics* to make smooth, fully customizable double jumps possible.
 
 🧱 **Jump Blocks – Step to Launch**  
-✅ Step on a block (e.g. `DIAMOND_BLOCK`) and instantly unlock your jump.  
+Step on a block (e.g. `DIAMOND_BLOCK`) and instantly unlock your jump.  
 🔧 Fully customizable triggers, messages, and permissions.
 
 🎩 **Jump Items – Your Jump, Your Style**  
-✅ Require players to:
+Require players to:
 - 👢 Wear special boots (`WEAR_ITEM`)
 - ✋ Hold a specific item (`HOLD_ITEM`)
 - 🖱️ Right-click it (`CLICK_ITEM`)  
   *Every action fully configurable.*
 
-🎨 **Jump Visuals – Particles & Sounds, Player-Controlled**  
-✅ Built-in GUI lets players pick their own particles and sounds.  
+🌀 **Jump Visuals – Particles & Sounds, Player-Controlled**  
+🔱 Built-in GUI lets players pick their own particles and sounds.  
 ✅ Set defaults in config  
-‍✅ Players can override them freely
+‍🎨 Players can override them freely
 
 💥 **Permission-Based Power**  
-✅ Control velocity, cooldown, and access using permissions — ideal for rank systems.
+Control velocity, cooldown, and access using permissions — ideal for rank systems.
 
 ⚔️ **Fall Damage Control**  
 ✅ Turn OFF for fun parkour  
@@ -50,18 +50,18 @@ Block double jumps:
 - 👥 Or allow only via permissions
 
 ⏱️ **Jump Delay System**  
-✅ Limit jump use to every X seconds.  
-✅ No more spam-jumping across your map.
+Limit jump use to every X seconds.  
+No more spam-jumping across your map.
 
 🔄 **Auto Enable on Join**
 - For all players
 - Or only VIPs (via permission)
 
 ⚡ **Performance-First Engine**  
-✅ We bent Minecraft’s physics to our will — with **zero performance hit**.
+We bent Minecraft’s physics to our will — with **zero performance hit**.
 
 🔧 **100% Configurable**  
-✅ Messages, mechanics, behavior — everything is in your control.
+Messages, mechanics, behavior — everything is in your control.
 
 ---
 
