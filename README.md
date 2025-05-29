@@ -8,7 +8,7 @@
 > **Fully customizable, lag-free double jumping — the way it *should* be.**  
 > Say goodbye to boring vanilla jumps and hello to pro-level aerial control.
 
-🎉 **Join the elite servers using DoubleJump+ — and take your gameplay to the skies!**
+🎉 **Join the elite servers using DoubleJump — and take your gameplay to the skies!**
 
 ---
 
@@ -124,7 +124,7 @@ Refunds granted only if:
 
 ---
 
-## 🌟 Why DoubleJump+?
+## 🌟 Why our DoubleJump?
 
 Because you’re done with:
 - 🚫 Glitchy free plugins
@@ -132,20 +132,21 @@ Because you’re done with:
 - 🐌 Laggy code on big servers
 
 With **DoubleJump**, you get:
+
 ✅ Polished mechanics  
 ✅ Premium support  
 ✅ Professional code  
 ✅ Total customization  
 ✅ Constant updates
 
-> 💡 Join the servers flying high — powered by DoubleJump
+> 💡 Join the servers flying highly — powered by DoubleJump
 
 ---
 
 ## ❤️ Like What You See?
 
 ⭐ Leave a 5-star review  
-📢 Share your server setup  
-🎨 Show off your jump effects
+☕ Want to support development? [You can donate here](https://paypal.me/dominiksuliga)
 
-**Let’s elevate your server — literally. 🚀**
+**Let’s take your gameplay to the sky. 🚀**
+
