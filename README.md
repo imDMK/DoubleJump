@@ -14,18 +14,18 @@
 
 ## ✨ Features That Go Way Beyond "Just a Double Jump"
 
-🧠 **Not native to Minecraft? No problem.**  
+✅ **Not native to Minecraft? No problem.**  
 We *rewrote physics* to make smooth, fully customizable double jumps possible.
 
-🧱 **Jump Blocks – Step to Launch**  
+✅ **Jump Blocks – Step to Launch**  
 Step on a block (e.g. `DIAMOND_BLOCK`) and instantly unlock your jump.  
-🔧 Fully customizable triggers, messages, and permissions.
+Fully customizable triggers, messages, and permissions.
 
-🎩 **Jump Items – Your Jump, Your Style**  
+✅ **Jump Items – Your Jump, Your Style**  
 Require players to:
-- 👢 Wear special boots (`WEAR_ITEM`)
-- ✋ Hold a specific item (`HOLD_ITEM`)
-- 🖱️ Right-click it (`CLICK_ITEM`)  
+- Wear special boots (`WEAR_ITEM`)
+- Hold a specific item (`HOLD_ITEM`)
+- Right-click it (`CLICK_ITEM`)  
   *Every action fully configurable.*
 
 ‍🎨 **Jump Visuals – Particles & Sounds, Player-Controlled**  
@@ -33,15 +33,15 @@ Require players to:
 - Set defaults in config
 - Players can override them freely
 
-💥 **Permission-Based Power**  
+✅ **Permission-Based Power**  
 Control velocity, cooldown, and access using permissions — ideal for rank systems.
 
-⚔️ **Fall Damage Control**  
-✅ Turn OFF for fun parkour  
-✅ Turn ON for PvP challenge  
+✅ **Fall Damage Control**  
+- Turn OFF for fun parkour  
+- Turn ON for PvP challenge  
 *Your server, your rules.*
 
-🛡️ **Smart Restrictions**  
+✅ **Smart Restrictions**   
 Block double jumps:
 - ❌ For laggy players
 - 🛑 When Elytra is equipped
