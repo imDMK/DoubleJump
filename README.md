@@ -50,8 +50,7 @@ Block double jumps:
 - 👥 Or allow only via permissions
 
 ⏱️ **Jump Delay System**  
-Limit jump use to every X seconds.  
-No more spam-jumping across your map.
+Limit jump use to every X seconds. No more spam-jumping across your map.
 
 🔄 **Auto Enable on Join**
 - For all players
