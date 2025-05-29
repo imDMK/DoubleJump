@@ -44,7 +44,7 @@ bukkit {
     apiVersion = "1.17"
     main = "com.github.imdmk.doublejump.DoubleJumpPlugin"
     author = "imDMK"
-    description = ""
+    description = "Game-changing double jump mechanics. Feels native. Lag-free performance."
     website = "https://github.com/imDMK/DoubleJump"
     softDepend = listOf("WorldGuard")
 }
