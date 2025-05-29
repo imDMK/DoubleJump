@@ -2,7 +2,8 @@
 
 ![JDK](https://img.shields.io/badge/JDK-1.17-blue.svg)
 ![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.21.5-green.svg)
-[![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/SpentTime/19362)
+[![Buy on SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/spenttime.111938/)
+[![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
 
 > **Fully customizable, lag-free double jumping — the way it *should* be.**  
 > Say goodbye to boring vanilla jumps and hello to pro-level aerial control.
@@ -90,7 +91,7 @@ Messages, mechanics, behavior — everything is in your control.
 ![doublejump-tree](assets/doublejump-tree.gif)
 
 ✅ Activate with item  
-![doublejump-item](assets/doublejump-item.gif)
+![doublejump-item](assets/doublejump-item.png)
 
 ---
 
@@ -130,14 +131,14 @@ Because you’re done with:
 - 💤 Limited configs
 - 🐌 Laggy code on big servers
 
-With **DoubleJump+**, you get:
+With **DoubleJump**, you get:
 ✅ Polished mechanics  
 ✅ Premium support  
 ✅ Professional code  
 ✅ Total customization  
 ✅ Constant updates
 
-> 💡 Join the servers flying high — powered by DoubleJump+
+> 💡 Join the servers flying high — powered by DoubleJump
 
 ---
 
