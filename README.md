@@ -110,10 +110,7 @@ Messages, mechanics, behavior — everything is in your control.
 ## 🛒 Buy With Confidence
 
 💬 **Need help?**  
-Join our support Discord for:
-- Fast responses
-- Patch releases
-- Real, hands-on support
+Add me on Discord: `imdmk` — get fast, live support directly from the developer.
 
 🔁 **Refund Policy**  
 Refunds granted only if:
@@ -131,11 +128,10 @@ Because you’re done with:
 - 💤 Limited configs
 - 🐌 Laggy code on big servers
 
-With **DoubleJump**, you get:
+- With **DoubleJump**, you get:
 
 ✅ Polished mechanics  
-✅ Premium support  
-✅ Professional code  
+✅ Premium support   
 ✅ Total customization  
 ✅ Constant updates
 
