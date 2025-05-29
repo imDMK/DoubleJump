@@ -2,7 +2,7 @@ package com.github.imdmk.doublejump.jump.feature.visual.sound.gui;
 
 import com.github.imdmk.doublejump.infrastructure.gui.AbstractGui;
 import com.github.imdmk.doublejump.infrastructure.gui.ParameterizedGui;
-import com.github.imdmk.doublejump.infrastructure.gui.configuration.item.ConfigGuiItem;
+import com.github.imdmk.doublejump.infrastructure.gui.configuration.ConfigGuiItem;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisual;
 import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
 import com.github.imdmk.doublejump.jump.feature.visual.gui.JumpVisualGui;

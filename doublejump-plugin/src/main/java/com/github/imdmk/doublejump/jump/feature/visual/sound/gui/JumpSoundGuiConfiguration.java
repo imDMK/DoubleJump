@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump.feature.visual.sound.gui;
 
-import com.github.imdmk.doublejump.infrastructure.gui.configuration.item.ConfigGuiItem;
+import com.github.imdmk.doublejump.infrastructure.gui.configuration.ConfigGuiItem;
 import com.github.imdmk.doublejump.jump.feature.visual.sound.JumpSound;
 import com.github.imdmk.doublejump.util.ComponentUtil;
 import eu.okaeri.configs.OkaeriConfig;

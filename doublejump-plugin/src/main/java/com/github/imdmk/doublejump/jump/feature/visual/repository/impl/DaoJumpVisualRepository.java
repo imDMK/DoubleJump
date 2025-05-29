@@ -1,7 +1,7 @@
 package com.github.imdmk.doublejump.jump.feature.visual.repository.impl;
 
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisual;
-import com.github.imdmk.doublejump.jump.feature.visual.particle.wrapper.JumpParticleWrapper;
+import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticleWrapper;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualCache;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualRepository;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualWrapper;

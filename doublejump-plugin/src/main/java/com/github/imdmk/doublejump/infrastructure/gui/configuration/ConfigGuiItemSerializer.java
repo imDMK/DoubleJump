@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.infrastructure.gui.configuration.item;
+package com.github.imdmk.doublejump.infrastructure.gui.configuration;
 
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;

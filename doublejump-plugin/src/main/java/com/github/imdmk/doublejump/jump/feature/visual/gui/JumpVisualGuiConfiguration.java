@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump.feature.visual.gui;
 
-import com.github.imdmk.doublejump.infrastructure.gui.configuration.item.ConfigGuiItem;
+import com.github.imdmk.doublejump.infrastructure.gui.configuration.ConfigGuiItem;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.gui.JumpParticleGuiConfiguration;
 import com.github.imdmk.doublejump.jump.feature.visual.sound.gui.JumpSoundGuiConfiguration;
 import com.github.imdmk.doublejump.util.ComponentUtil;

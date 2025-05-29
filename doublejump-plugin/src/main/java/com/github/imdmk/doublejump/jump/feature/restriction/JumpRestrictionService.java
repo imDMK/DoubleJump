@@ -2,12 +2,12 @@ package com.github.imdmk.doublejump.jump.feature.restriction;
 
 import com.github.imdmk.doublejump.jump.JumpConfiguration;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
-import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.GlidingRestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.delay.DelayRestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PermissionRestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PingRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.SetRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.WorldGuardRestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.GlidingRestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PermissionRestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PingRestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.delay.DelayRestrictionChecker;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;

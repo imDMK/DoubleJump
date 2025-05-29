@@ -35,7 +35,7 @@ public class JumpVisualSessionController extends PluginListener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onServerReload(ServerLoadEvent event) {
+    void onServerReload(final ServerLoadEvent event) {
         if (event.getType() != ServerLoadEvent.LoadType.RELOAD) {
             return;
         }

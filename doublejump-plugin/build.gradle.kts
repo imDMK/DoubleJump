@@ -44,7 +44,7 @@ bukkit {
     apiVersion = "1.17"
     main = "com.github.imdmk.doublejump.DoubleJumpPlugin"
     author = "imDMK"
-    description = "Efficient double jump plugin with many features and configuration possibilities"
+    description = ""
     website = "https://github.com/imDMK/DoubleJump"
     softDepend = listOf("WorldGuard")
 }
@@ -65,11 +65,15 @@ tasks.withType<ShadowJar> {
     val libPrefix = "com.github.imdmk.doublejump.lib"
     listOf(
         "com.eternalcode",
+        "com.github.benmanes",
         "dev.rollczi",
+        "dev.triumphteam",
+        "com.j256.ormlite",
         "eu.okaeri",
         "javassist",
         "net.kyori",
         "org.bstats",
+        "org.checkerframework",
         "org.json",
         "org.panda_lang",
         "org.yaml",

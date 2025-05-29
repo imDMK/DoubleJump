@@ -1,6 +1,5 @@
-package com.github.imdmk.doublejump.jump.feature.visual.sound.wrapper;
+package com.github.imdmk.doublejump.jump.feature.visual.sound;
 
-import com.github.imdmk.doublejump.jump.feature.visual.sound.JumpSound;
 import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.field.SqlType;
 import com.j256.ormlite.field.types.BaseDataType;

@@ -1,6 +1,5 @@
-package com.github.imdmk.doublejump.jump.feature.visual.particle.wrapper;
+package com.github.imdmk.doublejump.jump.feature.visual.particle;
 
-import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticle;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualWrapper;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

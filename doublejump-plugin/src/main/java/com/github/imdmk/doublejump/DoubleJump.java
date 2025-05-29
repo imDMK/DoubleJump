@@ -37,14 +37,14 @@ import com.github.imdmk.doublejump.jump.feature.item.controller.JumpItemRestrict
 import com.github.imdmk.doublejump.jump.feature.item.usage.ItemUsageStrategy;
 import com.github.imdmk.doublejump.jump.feature.item.usage.ItemUsageStrategyFactory;
 import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionController;
+import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionNotifier;
 import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.delay.DelayRestrictionController;
-import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionNotifier;
 import com.github.imdmk.doublejump.jump.feature.velocity.JumpVelocityService;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualService;
-import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualSessionController;
+import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
 import com.github.imdmk.doublejump.jump.feature.visual.gui.JumpVisualGui;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticleController;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.gui.JumpParticleGui;

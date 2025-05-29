@@ -3,8 +3,6 @@ package com.github.imdmk.doublejump.infrastructure.gui.configuration;
 import com.github.imdmk.doublejump.configuration.ConfigSection;
 import com.github.imdmk.doublejump.configuration.serializer.ComponentSerializer;
 import com.github.imdmk.doublejump.configuration.serializer.EnchantmentSerializer;
-import com.github.imdmk.doublejump.infrastructure.gui.configuration.item.ConfigGuiItem;
-import com.github.imdmk.doublejump.infrastructure.gui.configuration.item.ConfigGuiItemSerializer;
 import com.github.imdmk.doublejump.jump.feature.visual.gui.JumpVisualGuiConfiguration;
 import com.github.imdmk.doublejump.jump.feature.visual.sound.configuration.JumpSoundSerializer;
 import com.github.imdmk.doublejump.jump.feature.visual.sound.configuration.SoundSerializer;

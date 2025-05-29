@@ -2,9 +2,9 @@ package com.github.imdmk.doublejump.jump.feature.visual.repository;
 
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisual;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticle;
-import com.github.imdmk.doublejump.jump.feature.visual.particle.wrapper.JumpParticleWrapper;
+import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticleWrapper;
 import com.github.imdmk.doublejump.jump.feature.visual.sound.JumpSound;
-import com.github.imdmk.doublejump.jump.feature.visual.sound.wrapper.JumpSoundPersister;
+import com.github.imdmk.doublejump.jump.feature.visual.sound.JumpSoundPersister;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
