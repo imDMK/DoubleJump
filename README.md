@@ -1,165 +1,150 @@
-# DoubleJump
+# 🚀 DoubleJump — The Ultimate Double Jump Plugin
 
-
-[![Build Status](https://github.com/imDMK/DoubleJump/actions/workflows/gradle.yml/badge.svg)](https://github.com/imDMK/DoubleJump/actions/workflows/gradle.yml)
 ![JDK](https://img.shields.io/badge/JDK-1.17-blue.svg)
-![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.21-green.svg)
-[![SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/doublejump-1-17-1-20-1.110632/)
-[![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://dev.bukkit.org/projects/d-doublejump)
-[![Paper](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/DoubleJump)
-[![Modrinth](https://img.shields.io/badge/Modrinth-1bd96a.svg)](https://modrinth.com/plugin/doublejump)
-[![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
+![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.21.5-green.svg)
+[![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/SpentTime/19362)
 
-### Information
-This is a plugin that allows you to double-jump on the server.
-* **Performance-focused** - Minimizes the impact on server resources, allowing you to maintain high server performance.
-* **Simplicity of configuration** - Thanks to clear documentation, even people without advanced knowledge can easily adapt the plugin to their own needs.
-* **Regularly Updated** - We update our plugin regularly, both fixing bugs and adding new features to ensure full compatibility with the latest versions of the game.
+> **Fully customizable, lag-free double jumping — the way it *should* be.**  
+> Say goodbye to boring vanilla jumps and hello to pro-level aerial control.
 
-### Features
-* Spawn particles when a player executes a double jump,
-* Play a sound when a player performs a double jump,
-* Double jump streaks,
-* Double jump item,
-* Option to customize messages (ACTIONBAR, CHAT, etc.),
-* Option to disable double jump in selected worlds,
-* Option to enable or disable double jump mode for a selected player,
-* Option to enable double jump mode upon joining the server,
-* Ability to disable double jump in selected game modes,
-* Ability to set double jump streaks to reset after death or upon touching the ground.
-* [WorldGuard](https://github.com/EngineHub/WorldGuard) support - Ability to disable double jump in selected regions,
-* [Adventure components](https://github.com/KyoriPowered/adventure) support.
-* [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support.
-* User-friendly API.
+🎉 **Join the elite servers using DoubleJump+ — and take your gameplay to the skies!**
 
-### Preview
-* #### Double jumping without delay
-![gif](assets/without-delay.gif)
+---
 
-* #### Double jumping with delay and streak
-![gif](assets/delay-streak.gif)
+## ✨ Features That Go Way Beyond "Just a Double Jump"
 
-### Command permissions
-| Command            | Permission              |
-|:-------------------|:------------------------|
-| `doublejump`       | command.doublejump      |
-| `doublejump for`   | command.doublejump.for  |
-| `doublejump item`  | command.doublejump.item |
+🧠 **Not native to Minecraft? No problem.**  
+We *rewrote physics* to make smooth, fully customizable double jumps possible.
 
-### Placeholder API formats
-* `jump-player-delay` - Displays the remaining delay time until the next double jump can be used.
-* `jump-player-is-delay` - Returns "yes" or "no" depending on whether the player has a jump delay.
-* `jump-player-regeneration-delay` - Shows the remaining time to regenerate one jump in human-readable.
-* `jump-player-has-jumps` - Returns "yes" or "no" depending on whether the player has an unused double jump available.
-* `jump-player-jumps-limit` - Returns the jump limit value for the player.
-* `jump-player-jumps` - Returns the total value of all double jumps performed.
-* `jump-player-streak` - Returns the player's current double jump streak.
+🧱 **Jump Blocks – Step to Launch**  
+Step on a block (e.g. `DIAMOND_BLOCK`) and instantly unlock your jump.  
+🔧 Fully customizable triggers, messages, and permissions.
 
-All placeholders will return null if the player does not have an active double jump (placeholder will not be applied).
-  
-### Notification types
-* `CHAT`
-* `ACTIONBAR`
-* `TITLE`
-* `SUBTITLE`
-* `DISABLED`
-* 
+🎩 **Jump Items – Your Jump, Your Style**  
+Require players to:
+- 👢 Wear special boots (`WEAR_ITEM`)
+- ✋ Hold a specific item (`HOLD_ITEM`)
+- 🖱️ Right-click it (`CLICK_ITEM`)  
+  *Every action fully configurable.*
 
-### Particle spawn error
-* The error is because the particle type needs additional data. 
-Currently, the plugin supports particle types that contain **no data** or only **DustOptions**. 
-[Here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html) you have a list of all (The description indicates the data).
+🌀 **Jump Visuals – Particles & Sounds, Player-Controlled**  
+🎆 Built-in GUI lets players pick their own particles and sounds.  
+✅ Set defaults in config  
+🧑‍🎨 Players can override them freely
 
-### API
-To start using API you have to include a double-jump-API jar to your libraries or use:
-#### Maven
-```xml
-  <repositories>
-    <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-    </repository>
-  </repositories>
+💥 **Permission-Based Power**  
+Control velocity, cooldown, and access using permissions — ideal for rank systems.
 
-  <dependencies>
-    <dependency>
-      <groupId>com.github.imDMK.DoubleJump</groupId>
-      <artifactId>doublejump-api</artifactId>
-      <version>VERSION</version>
-    </dependency>
-  </dependencies>
-```
-#### Gradle
-```groovy
-  repositories {
-    maven { url 'https://jitpack.io' }
-  }
+⚔️ **Fall Damage Control**  
+✅ Turn OFF for fun parkour  
+✅ Turn ON for PvP challenge  
+*Your server, your rules.*
 
-  dependencies {
-    implementation 'com.github.imDMK.DoubleJump:doublejump-api:VERSION'
-  }
-```
-#### Usage
-After install dependency, you can access the API using:
-```java
-DoubleJumpApiProvider.get();
-```
-Example usage:
-```java
-    @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        String message = event.getMessage();
+🛡️ **Smart Restrictions**  
+Block double jumps:
+- ❌ For laggy players
+- 🛑 When Elytra is equipped
+- 🌍 In WorldGuard regions
+- 🌐 In specific worlds
+- 👥 Or allow only via permissions
 
-        DoubleJumpApi doubleJumpApi = DoubleJumpApiProvider.get();
+⏱️ **Jump Delay System**  
+Limit jump use to every X seconds.  
+No more spam-jumping across your map.
 
-        JumpPlayerManager jumpPlayerManager = doubleJumpApi.getJumpPlayerManager();
-        JumpPlayerService jumpPlayerService = doubleJumpApi.getJumpPlayerService();
+🔄 **Auto Enable on Join**
+- For all players
+- Or only VIPs (via permission)
 
-        if (message.equalsIgnoreCase("!testdoublejump")) {
-            if (this.jumpPlayerManager.isDoubleJumpMode(player)) {
-                return;
-            }
+⚡ **Performance-First Engine**  
+We bent Minecraft’s physics to our will — with **zero performance hit**.
 
-            event.setCancelled(true);
-            
-            this.jumpPlayerService.enable(player, true); //true to skip checking if player can use double jump
+🔧 **100% Configurable**  
+Messages, mechanics, behavior — everything is in your control.
 
-            player.sendMessage("Now u can test our double jump plugin!");
-        }
-    }
-```
-#### Events
-* `DoubleJumpEvent` - Called when the player tries to use a double jump
-* `JumpStreakResetEvent` - Called when the player's jump streak will be reset.
+---
 
-Example usage:
-```java
-    @EventHandler
-    public void onPlayerDoubleJump(DoubleJumpEvent event) {
-        Player player = event.getPlayer();
+## 🖼️ Showcase
 
-        System.out.println(player.getName() + " used double jump.");
-    }
-    
-    @EventHandler
-    public void onJumpStreakReset(JumpStreakResetEvent event) {
-        Player player = event.getPlayer();
-        
-        if (player.isOp()) {
-            event.setCancelled(true);
-            return;
-        }
-        
-        if (event.getResetReason() == JumpStreakResetReason.PLAYER_ON_GROUND) {
-            player.teleport(
-                new Location(player.getWorld(), 100, 100, 100)
-            );
-        }
-    }
-```
-### Reporting issues
-If you have any suggestions or find a bug, please report it using [this](https://github.com/imDMK/DoubleJump/issues/new/choose) site.
+🎬 Real footage. No BS.
 
-### Support project 
-If you would like to appreciate this project you can do so [here](https://www.buymeacoffee.com/imdmk)
+✅ Smooth double jump animation  
+![doublejump](assets/doublejump.gif)
+
+✅ No delay jumping  
+![doublejump-without-delay](assets/doublejump-without-delay.gif)
+
+✅ Elytra protection  
+![doublejump-elytra](assets/doublejump-elytra.gif)
+
+✅ GUI for effects customization  
+![doublejump-visual-gui](assets/doublejump-visual-gui.gif)
+
+✅ Choose your sound 🎵  
+![doublejump-visual-gui-sound](assets/doublejump-visual-gui-sound.png)
+
+✅ Choose your particles ✨  
+![doublejump-visual-gui-particle](assets/doublejump-visual-gui-particle.png)
+
+✅ Jump off trees 🌲  
+![doublejump-tree](assets/doublejump-tree.gif)
+
+✅ Activate with item  
+![doublejump-item](assets/doublejump-item.gif)
+
+---
+
+## 💻 Commands & Permissions
+
+| Command                | Permission                  | Description                         |
+|------------------------|-----------------------------|-------------------------------------|
+| `/doublejump`          | `command.doublejump`        | 🎮 Toggle double jump for yourself  |
+| `/doublejump <player>` | `command.doublejump.target` | 🎯 Toggle for another player        | 
+| `/doublejump item`     | `command.doublejump.item`   | 🎁 Give/remove jump item            |
+| `/doublejump visual`   | `command.doublejump.visual` | 🎨 Open effect GUI                  |
+| `/doublejump reload`   | `command.doublejump.reload` | ♻️ Reload plugin config             |
+
+---
+
+## 🛒 Buy With Confidence
+
+💬 **Need help?**  
+Join our support Discord for:
+- Fast responses
+- Patch releases
+- Real, hands-on support
+
+🔁 **Refund Policy**  
+Refunds granted only if:
+- A critical bug breaks the plugin
+- It cannot be resolved in a reasonable timeframe
+
+🤝 I stand behind this plugin. Got a problem? I’ll fix it.
+
+---
+
+## 🌟 Why DoubleJump+?
+
+Because you’re done with:
+- 🚫 Glitchy free plugins
+- 💤 Limited configs
+- 🐌 Laggy code on big servers
+
+With **DoubleJump+**, you get:
+✅ Polished mechanics  
+✅ Premium support  
+✅ Professional code  
+✅ Total customization  
+✅ Constant updates
+
+> 💡 Join the servers flying high — powered by DoubleJump+
+
+---
+
+## ❤️ Like What You See?
+
+⭐ Leave a 5-star review  
+📢 Share your server setup  
+🎨 Show off your jump effects
+
+**Let’s elevate your server — literally. 🚀**
