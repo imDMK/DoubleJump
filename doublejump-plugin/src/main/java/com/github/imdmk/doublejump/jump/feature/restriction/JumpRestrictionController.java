@@ -112,7 +112,10 @@ public class JumpRestrictionController extends PluginListener {
             return false;
         }
 
-        if (player.isOp() && this.jumpConfiguration.autoEnableForAdmins) {
+        String autoEnablePermission = this.jumpConfiguration.autoEnableForPermission;
+        if (autoEnablePermission != null
+                && !autoEnablePermission.isEmpty()
+                && player.hasPermission(autoEnablePermission)) {
             return true;
         }
 

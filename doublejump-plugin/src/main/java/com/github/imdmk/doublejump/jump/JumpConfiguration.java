@@ -36,8 +36,8 @@ public class JumpConfiguration extends ConfigSection {
     @Comment("# Automatically enables double jump for players when they join the server.")
     public boolean autoEnableOnJoin = true;
 
-    @Comment("# Automatically enables double jump for operators or players with high permissions.")
-    public boolean autoEnableForAdmins = false;
+    @Comment("# Automatically enables double jump for players with permission.")
+    public String autoEnableForPermission = "doublejump.join";
 
     @Comment("# Determines whether players receive fall damage after performing a double jump.")
     public boolean applyFallDamage = true;
