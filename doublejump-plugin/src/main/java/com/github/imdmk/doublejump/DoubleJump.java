@@ -71,6 +71,7 @@ import org.panda_lang.utilities.inject.DependencyInjectionException;
 import org.panda_lang.utilities.inject.Injector;
 
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -328,26 +329,26 @@ class DoubleJump implements DoubleJumpApi {
 
     @Override
     public @NotNull ConfigurationManager getConfigurationManager() {
-        return this.configurationManager;
+        return Objects.requireNonNull(this.configurationManager, "configurationManager cannot be null");
     }
 
     @Override
     public @NotNull JumpPlayerCache getJumpPlayerCache() {
-        return this.jumpPlayerCache;
+        return Objects.requireNonNull(this.jumpPlayerCache, "jumpPlayerCache cannot be null");
     }
 
     @Override
     public @NotNull RestrictionChecker getRestrictionChecker() {
-        return this.jumpRestrictionService;
+        return Objects.requireNonNull(this.jumpRestrictionService, "jumpRestrictionService cannot be null");
     }
 
     @Override
     public @NotNull JumpVisualCache getJumpVisualCache() {
-        return this.jumpVisualCache;
+        return Objects.requireNonNull(this.jumpVisualCache, "jumpVisualCache cannot be null");
     }
 
     @Override
     public @NotNull JumpVisualRepository getJumpVisualRepository() {
-        return this.jumpVisualRepository;
+        return Objects.requireNonNull(this.jumpVisualRepository, "jumpVisualRepository cannot be null");
     }
 }
