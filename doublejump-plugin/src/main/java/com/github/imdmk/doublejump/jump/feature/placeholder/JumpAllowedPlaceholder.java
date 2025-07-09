@@ -24,8 +24,11 @@ public class JumpAllowedPlaceholder extends PluginPlaceholder {
     @Override
     protected @Nullable String onRequestExpansion(@NotNull OfflinePlayer player, @NotNull String params) {
         return this.cache.get(player.getUniqueId())
-                .filter(JumpPlayer::isJumpAllowed)
-                .map(jump -> this.config.placeholders.jumpAllowedText)
-                .orElse(this.config.placeholders.jumpNotAllowedText);
+                .map(this::formatJumpAllowed)
+                .orElse(this.config.placeholders.jumpDisabledText);
+    }
+
+    private String formatJumpAllowed(@NotNull JumpPlayer jump) {
+        return jump.isJumpAllowed() ? this.config.placeholders.jumpAllowedText : this.config.placeholders.jumpNotAllowedText;
     }
 }
