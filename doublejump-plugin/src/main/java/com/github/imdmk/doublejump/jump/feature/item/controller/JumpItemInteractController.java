@@ -27,8 +27,8 @@ public class JumpItemInteractController extends PluginListener {
     @Inject private ItemUsageStrategy itemUsageStrategy;
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onDoubleJump(final DoubleJumpEvent event) {
-        int reduceDurability = this.jumpConfiguration.jumpItem.reduceDurability;
+    void onDoubleJump(DoubleJumpEvent event) {
+        int reduceDurability = this.jumpConfig.item.reduceDurability;
 
         if (reduceDurability > 0 && event.getJumpPlayer().isActivationType(JumpActivationType.ITEM)) {
             Arrays.stream(event.getPlayer().getInventory().getContents())
@@ -39,7 +39,7 @@ public class JumpItemInteractController extends PluginListener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    void onPlayerMove(final PlayerMoveEvent event) {
+    void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
         if (!this.jumpItemService.isEnabled()) {
@@ -67,7 +67,7 @@ public class JumpItemInteractController extends PluginListener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    void onItemInteract(final PlayerInteractEvent event) {
+    void onItemInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
         if (!this.jumpItemService.isEnabled(ItemUsage.CLICK_ITEM)) {
@@ -98,9 +98,8 @@ public class JumpItemInteractController extends PluginListener {
      * @param player the player performing the jump
      * @param jump the {@link JumpPlayer} instance associated with the player
      */
-    private void useDoubleJump(@NotNull Player player, @NotNull JumpPlayer jump, JumpItem jumpItem) {
-        DoubleJumpEvent jumpEvent = new DoubleJumpEvent(player, jump, jumpItem.jumpVelocity());
-        this.server.getPluginManager().callEvent(jumpEvent);
+    private void useDoubleJump(@NotNull Player player, @NotNull JumpPlayer jump, @NotNull JumpItem item) {
+        this.eventCaller.callEvent(new DoubleJumpEvent(player, jump, item.jumpVelocity()));
     }
 
     /**

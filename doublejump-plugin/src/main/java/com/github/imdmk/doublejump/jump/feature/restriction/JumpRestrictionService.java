@@ -1,13 +1,13 @@
 package com.github.imdmk.doublejump.jump.feature.restriction;
 
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
+import com.github.imdmk.doublejump.jump.JumpConfig;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.SetRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.WorldGuardRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.GlidingRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PermissionRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PingRestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.delay.DelayRestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.delay.CooldownRestrictionChecker;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;
@@ -26,7 +26,7 @@ import java.util.function.Consumer;
  */
 public class JumpRestrictionService implements RestrictionChecker {
 
-    @Inject private JumpConfiguration jumpConfiguration;
+    @Inject private JumpConfig jumpConfig;
     @Inject private JumpPlayerCache jumpCache;
 
     /** List of active restriction checkers based on configuration. */
@@ -34,7 +34,7 @@ public class JumpRestrictionService implements RestrictionChecker {
 
     @PostConstruct
     private void postConstruct() {
-        this.checkers = this.createDefaultCheckers(this.jumpConfiguration.jumpRestrictions);
+        this.checkers = this.createDefaultCheckers(this.jumpConfig.restrictions);
     }
 
     /**
@@ -89,9 +89,9 @@ public class JumpRestrictionService implements RestrictionChecker {
      * @param configuration the configuration containing restriction sets
      * @return list of initialized restriction checkers
      */
-    private List<RestrictionChecker> createDefaultCheckers(@NotNull JumpRestrictionConfiguration configuration) {
+    private List<RestrictionChecker> createDefaultCheckers(@NotNull JumpRestrictionConfig configuration) {
         return List.of(
-                new DelayRestrictionChecker(this.jumpConfiguration, this.jumpCache),
+                new CooldownRestrictionChecker(this.jumpCache),
                 new PingRestrictionChecker(configuration.disableIfPlayerLagging),
                 new SetRestrictionChecker<>(
                         configuration.disabledWorlds,

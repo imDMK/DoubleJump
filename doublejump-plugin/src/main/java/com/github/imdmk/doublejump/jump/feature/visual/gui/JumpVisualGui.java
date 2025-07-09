@@ -28,8 +28,8 @@ public class JumpVisualGui extends AbstractGui implements ParameterizedGui<JumpV
 
     @Override
     public void prepareBorderItems(@NotNull BaseGui gui) {
-        if (this.guiConfiguration.fillBorder) {
-            gui.getFiller().fillBorder(this.guiConfiguration.borderItem.asGuiItem());
+        if (this.guiConfig.fillBorder) {
+            gui.getFiller().fillBorder(this.guiConfig.borderItem.asGuiItem());
         }
     }
 
@@ -70,6 +70,6 @@ public class JumpVisualGui extends AbstractGui implements ParameterizedGui<JumpV
     }
 
     private @NotNull JumpVisualGuiConfiguration getConfig() {
-        return this.guiConfiguration.jumpVisualGui;
+        return this.guiConfig.jumpVisualGui;
     }
 }

@@ -6,7 +6,7 @@ import org.bukkit.GameMode;
 
 import java.util.Set;
 
-public class JumpRestrictionConfiguration extends OkaeriConfig {
+public class JumpRestrictionConfig extends OkaeriConfig {
 
     @Comment("# List of worlds where double jumping is disabled. Leave empty to disable this restriction.")
     public Set<String> disabledWorlds = Set.of("world1");

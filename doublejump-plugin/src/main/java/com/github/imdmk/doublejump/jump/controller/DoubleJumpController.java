@@ -22,13 +22,13 @@ public class DoubleJumpController extends PluginListener {
      * @param event Custom DoubleJumpEvent.
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onDoubleJump(final DoubleJumpEvent event) {
-        final Player player = event.getPlayer();
-        final JumpVelocity properties = event.getJumpProperties();
+    void onDoubleJump(DoubleJumpEvent event) {
+        Player player = event.getPlayer();
+        JumpVelocity velocity = event.getJumpVelocity();
 
-        final Vector vector = player.getLocation().getDirection()
-                .multiply(properties.horizontalBoost())
-                .setY(properties.verticalBoost());
+        Vector vector = player.getLocation().getDirection()
+                .multiply(velocity.horizontalBoost())
+                .setY(velocity.verticalBoost());
 
         this.flyingService.disable(player, false);
         player.setVelocity(vector);
@@ -41,13 +41,13 @@ public class DoubleJumpController extends PluginListener {
      * @param event PlayerToggleFlightEvent from Bukkit API.
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onToggleFlight(final PlayerToggleFlightEvent event) {
+    void onToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
 
         this.jumpCache.getActive(player.getUniqueId())
                 .ifPresent(jump -> {
                     event.setCancelled(true);
-                    this.server.getPluginManager().callEvent(new DoubleJumpEvent(player, jump, jump.getJumpVelocity()));
+                    this.eventCaller.callEvent(new DoubleJumpEvent(player, jump));
                 });
     }
 }

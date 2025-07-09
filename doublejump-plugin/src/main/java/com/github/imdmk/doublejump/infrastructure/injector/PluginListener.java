@@ -36,7 +36,7 @@ public abstract class PluginListener extends DefaultInjectable implements Listen
      * @param to   the second location to compare; may be {@code null}
      * @return {@code true} if {@code to} is {@code null} or both locations are in the same block; {@code false} otherwise
      */
-    protected boolean isSameBlockPosition(@NotNull final Location from, @Nullable final Location to) {
+    protected boolean isSameBlockPosition(@NotNull Location from, @Nullable Location to) {
         if (to == null) {
             return true;
         }

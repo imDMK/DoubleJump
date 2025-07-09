@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.database;
 
-import com.github.imdmk.doublejump.configuration.ConfigSection;
+import com.github.imdmk.doublejump.config.ConfigSection;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
         "# Support development: https://github.com/sponsors/imDMK",
         "# "
 })
-public class DatabaseConfiguration extends ConfigSection {
+public class DatabaseConfig extends ConfigSection {
 
     @Comment({
             "# Database mode to use.",
@@ -46,6 +46,6 @@ public class DatabaseConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "databaseConfiguration.yml";
+        return "databaseConfig.yml";
     }
 }

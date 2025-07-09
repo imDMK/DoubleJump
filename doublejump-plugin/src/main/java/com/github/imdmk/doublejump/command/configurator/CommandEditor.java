@@ -10,23 +10,23 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public class CommandConfigurator implements Editor<CommandSender> {
+public class CommandEditor implements Editor<CommandSender> {
 
     private final Logger logger;
-    private final CommandConfiguration commandConfiguration;
+    private final CommandConfig commandConfig;
 
-    public CommandConfigurator(@NotNull Logger logger, @NotNull CommandConfiguration commandConfiguration) {
+    public CommandEditor(@NotNull Logger logger, @NotNull CommandConfig commandConfig) {
         this.logger = Objects.requireNonNull(logger, "logger cannot be null");
-        this.commandConfiguration = Objects.requireNonNull(commandConfiguration, "commandConfiguration cannot be null");
+        this.commandConfig = Objects.requireNonNull(commandConfig, "commandConfiguration cannot be null");
     }
 
     @Override
     public CommandBuilder<CommandSender> edit(CommandBuilder<CommandSender> context) {
-        if (!this.commandConfiguration.configuratorEnabled) {
+        if (!this.commandConfig.enabled) {
             return context;
         }
 
-        return this.commandConfiguration.getCommand(context.name())
+        return this.commandConfig.getCommand(context.name())
                 .map(command -> {
                     CommandBuilder<CommandSender> updated = this.updateCommand(context, command);
                     return this.updateSubCommand(updated, command.subCommands());

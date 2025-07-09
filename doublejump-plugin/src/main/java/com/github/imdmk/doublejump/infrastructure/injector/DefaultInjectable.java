@@ -1,7 +1,8 @@
 package com.github.imdmk.doublejump.infrastructure.injector;
 
+import com.github.imdmk.doublejump.event.EventCaller;
 import com.github.imdmk.doublejump.infrastructure.message.MessageService;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
+import com.github.imdmk.doublejump.jump.JumpConfig;
 import com.github.imdmk.doublejump.jump.PlayerFlyingService;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import org.bukkit.Server;
@@ -25,12 +26,14 @@ public abstract class DefaultInjectable {
 
     @Inject protected Logger logger;
 
-    @Inject protected JumpConfiguration jumpConfiguration;
+    @Inject protected JumpConfig jumpConfig;
 
     @Inject protected MessageService messageService;
 
     @Inject protected JumpPlayerCache jumpCache;
 
     @Inject protected PlayerFlyingService flyingService;
+
+    @Inject protected EventCaller eventCaller;
 
 }

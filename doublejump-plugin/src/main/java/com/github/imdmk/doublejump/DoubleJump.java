@@ -4,19 +4,22 @@ import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.doublejump.command.MissingPermissionHandler;
 import com.github.imdmk.doublejump.command.PlayerContextual;
 import com.github.imdmk.doublejump.command.UsageHandler;
-import com.github.imdmk.doublejump.command.configurator.CommandConfiguration;
-import com.github.imdmk.doublejump.command.configurator.CommandConfigurator;
-import com.github.imdmk.doublejump.configuration.ConfigurationManager;
-import com.github.imdmk.doublejump.configuration.PluginConfiguration;
-import com.github.imdmk.doublejump.database.DatabaseConfiguration;
+import com.github.imdmk.doublejump.command.configurator.CommandConfig;
+import com.github.imdmk.doublejump.command.configurator.CommandEditor;
+import com.github.imdmk.doublejump.config.ConfigManager;
+import com.github.imdmk.doublejump.config.PluginConfig;
+import com.github.imdmk.doublejump.database.DatabaseConfig;
 import com.github.imdmk.doublejump.database.DatabaseService;
+import com.github.imdmk.doublejump.event.EventCaller;
 import com.github.imdmk.doublejump.infrastructure.gui.GuiManager;
-import com.github.imdmk.doublejump.infrastructure.gui.configuration.GuiConfiguration;
-import com.github.imdmk.doublejump.infrastructure.message.MessageConfiguration;
+import com.github.imdmk.doublejump.infrastructure.gui.configuration.GuiConfig;
+import com.github.imdmk.doublejump.infrastructure.message.MessageConfig;
 import com.github.imdmk.doublejump.infrastructure.message.MessageResultHandler;
 import com.github.imdmk.doublejump.infrastructure.message.MessageService;
+import com.github.imdmk.doublejump.infrastructure.placeholder.PlaceholderHook;
+import com.github.imdmk.doublejump.infrastructure.placeholder.PlaceholderRegistry;
 import com.github.imdmk.doublejump.infrastructure.scheduler.BukkitTaskScheduler;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
+import com.github.imdmk.doublejump.jump.JumpConfig;
 import com.github.imdmk.doublejump.jump.PlayerFlyingService;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import com.github.imdmk.doublejump.jump.controller.DoubleJumpController;
@@ -36,15 +39,17 @@ import com.github.imdmk.doublejump.jump.feature.item.controller.JumpItemResetCon
 import com.github.imdmk.doublejump.jump.feature.item.controller.JumpItemRestrictionController;
 import com.github.imdmk.doublejump.jump.feature.item.usage.ItemUsageStrategy;
 import com.github.imdmk.doublejump.jump.feature.item.usage.ItemUsageStrategyFactory;
+import com.github.imdmk.doublejump.jump.feature.placeholder.JumpAllowedPlaceholder;
+import com.github.imdmk.doublejump.jump.feature.placeholder.JumpCooldownPlaceholder;
 import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionController;
 import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionNotifier;
 import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.delay.DelayRestrictionController;
+import com.github.imdmk.doublejump.jump.feature.restriction.delay.CooldownRestrictionController;
 import com.github.imdmk.doublejump.jump.feature.velocity.JumpVelocityService;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualService;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualSessionController;
-import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
+import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfig;
 import com.github.imdmk.doublejump.jump.feature.visual.gui.JumpVisualGui;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticleController;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.gui.JumpParticleGui;
@@ -91,12 +96,13 @@ class DoubleJump implements DoubleJumpApi {
     private final Server server;
     private final Logger logger;
 
-    private final ConfigurationManager configurationManager;
+    private final ConfigManager configManager;
 
     private final MessageService messageService;
     private final DatabaseService databaseService;
 
     private final TaskScheduler taskScheduler;
+    private final EventCaller eventCaller;
     private final Injector injector;
 
     private JumpPlayerCache jumpPlayerCache;
@@ -115,6 +121,8 @@ class DoubleJump implements DoubleJumpApi {
 
     private LiteCommands<CommandSender> liteCommands;
 
+    private PlaceholderRegistry placeholderRegistry;
+
     private Metrics metrics;
 
     /**
@@ -131,21 +139,21 @@ class DoubleJump implements DoubleJumpApi {
         this.logger = plugin.getLogger();
 
         /* Configuration */
-        this.configurationManager = new ConfigurationManager(this.logger, plugin.getDataFolder());
+        this.configManager = new ConfigManager(this.logger, plugin.getDataFolder());
 
-        PluginConfiguration pluginConfiguration = this.configurationManager.create(PluginConfiguration.class);
-        DatabaseConfiguration databaseConfiguration = this.configurationManager.create(DatabaseConfiguration.class);
-        MessageConfiguration messageConfiguration = this.configurationManager.create(MessageConfiguration.class);
-        CommandConfiguration commandConfiguration = this.configurationManager.create(CommandConfiguration.class);
+        PluginConfig pluginConfig = this.configManager.create(PluginConfig.class);
+        DatabaseConfig databaseConfig = this.configManager.create(DatabaseConfig.class);
+        MessageConfig messageConfig = this.configManager.create(MessageConfig.class);
+        CommandConfig commandConfig = this.configManager.create(CommandConfig.class);
 
-        JumpConfiguration jumpConfiguration = this.configurationManager.create(JumpConfiguration.class);
-        JumpVisualConfiguration jumpVisualConfiguration = this.configurationManager.create(JumpVisualConfiguration.class);
+        JumpConfig jumpConfig = this.configManager.create(JumpConfig.class);
+        JumpVisualConfig jumpVisualConfig = this.configManager.create(JumpVisualConfig.class);
 
-        GuiConfiguration guiConfiguration = this.configurationManager.create(GuiConfiguration.class);
+        GuiConfig guiConfig = this.configManager.create(GuiConfig.class);
 
         /* Services */
-        this.messageService = new MessageService(this.logger, messageConfiguration, BukkitAudiences.create(plugin), MiniMessage.miniMessage());
-        this.databaseService = new DatabaseService(this.logger, plugin.getDataFolder(), databaseConfiguration);
+        this.messageService = new MessageService(this.logger, messageConfig, BukkitAudiences.create(plugin), MiniMessage.miniMessage());
+        this.databaseService = new DatabaseService(this.logger, plugin.getDataFolder(), databaseConfig);
 
         /* Database connection, jump visual */
         this.jumpVisualCache = new JumpVisualCache();
@@ -163,6 +171,10 @@ class DoubleJump implements DoubleJumpApi {
         /* Scheduler */
         this.taskScheduler = new BukkitTaskScheduler(plugin, this.server);
 
+        /* Event caller */
+        this.eventCaller = event -> this.server.getPluginManager().callEvent(event);
+
+        /* Gui manager */
         GuiManager guiManager = new GuiManager(this.taskScheduler);
 
         /* Injector */
@@ -172,18 +184,21 @@ class DoubleJump implements DoubleJumpApi {
             resources.on(Logger.class).assignInstance(this.logger);
 
             /* Configuration */
-            resources.on(ConfigurationManager.class).assignInstance(this.configurationManager);
-            resources.on(PluginConfiguration.class).assignInstance(pluginConfiguration);
-            resources.on(MessageConfiguration.class).assignInstance(messageConfiguration);
-            resources.on(JumpConfiguration.class).assignInstance(jumpConfiguration);
-            resources.on(JumpVisualConfiguration.class).assignInstance(jumpVisualConfiguration);
-            resources.on(GuiConfiguration.class).assignInstance(guiConfiguration);
+            resources.on(ConfigManager.class).assignInstance(this.configManager);
+            resources.on(PluginConfig.class).assignInstance(pluginConfig);
+            resources.on(MessageConfig.class).assignInstance(messageConfig);
+            resources.on(JumpConfig.class).assignInstance(jumpConfig);
+            resources.on(JumpVisualConfig.class).assignInstance(jumpVisualConfig);
+            resources.on(GuiConfig.class).assignInstance(guiConfig);
 
             /* Services */
             resources.on(MessageService.class).assignInstance(this.messageService);
 
             /* Scheduler */
             resources.on(TaskScheduler.class).assignInstance(this.taskScheduler);
+
+            /* Event caller */
+            resources.on(EventCaller.class).assignInstance(this.eventCaller);
 
             /* GuiManager */
             resources.on(GuiManager.class).assignInstance(guiManager);
@@ -218,7 +233,7 @@ class DoubleJump implements DoubleJumpApi {
             this.jumpRestrictionNotifier = this.createInstance(JumpRestrictionNotifier.class);
 
             this.jumpItemService = this.createInstance(JumpItemService.class);
-            this.itemUsageStrategy = ItemUsageStrategyFactory.create(jumpConfiguration.jumpItem.usageMode, this.injector);
+            this.itemUsageStrategy = ItemUsageStrategyFactory.create(jumpConfig.item.usageMode, this.injector);
         }
         catch (DependencyInjectionException injectionException) {
             this.logger.log(Level.SEVERE, "An error occurred while dependency injecting", injectionException);
@@ -238,7 +253,7 @@ class DoubleJump implements DoubleJumpApi {
 
                 /* Restrictions */
                 JumpRestrictionController.class,
-                DelayRestrictionController.class,
+                CooldownRestrictionController.class,
 
                 /* Jump particles */
                 JumpParticleController.class,
@@ -275,7 +290,7 @@ class DoubleJump implements DoubleJumpApi {
                         this.createInstance(JumpReloadCommand.class)
                 )
 
-                .editorGlobal(new CommandConfigurator(this.logger, commandConfiguration))
+                .editorGlobal(new CommandEditor(this.logger, commandConfig))
 
                 .build();
 
@@ -285,6 +300,17 @@ class DoubleJump implements DoubleJumpApi {
                 JumpParticleGui.class,
                 JumpSoundGui.class
         ).forEach(gui -> guiManager.registerGui(this.createInstance(gui)));
+
+        /* Placeholder API */
+        PlaceholderHook placeholderHook = new PlaceholderHook(this.server, jumpConfig.placeholders);
+        this.placeholderRegistry = new PlaceholderRegistry(placeholderHook);
+
+        if (placeholderHook.isAvailable()) {
+            Stream.of(
+                    JumpAllowedPlaceholder.class,
+                    JumpCooldownPlaceholder.class
+            ).forEach(placeholder -> this.placeholderRegistry.register(this.createInstance(placeholder)));
+        }
 
         /* Metrics */
         this.metrics = new Metrics(plugin, DoubleJumpPlugin.METRICS_SERVICE_ID);
@@ -299,11 +325,12 @@ class DoubleJump implements DoubleJumpApi {
     void disable() {
         DoubleJumpApiProvider.unregister();
 
-        this.configurationManager.shutdown();
+        this.configManager.shutdown();
         this.databaseService.close();
         this.messageService.close();
         this.taskScheduler.shutdown();
         this.liteCommands.unregister();
+        this.placeholderRegistry.unregisterAll();
         this.metrics.shutdown();
 
         this.logger.info("Successfully disabled plugin.");
@@ -328,8 +355,8 @@ class DoubleJump implements DoubleJumpApi {
     }
 
     @Override
-    public @NotNull ConfigurationManager getConfigurationManager() {
-        return Objects.requireNonNull(this.configurationManager, "configurationManager cannot be null");
+    public @NotNull ConfigManager getConfigurationManager() {
+        return Objects.requireNonNull(this.configManager, "configurationManager cannot be null");
     }
 
     @Override

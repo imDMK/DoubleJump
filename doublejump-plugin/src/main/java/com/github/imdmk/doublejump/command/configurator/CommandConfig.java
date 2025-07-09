@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.command.configurator;
 
-import com.github.imdmk.doublejump.configuration.ConfigSection;
+import com.github.imdmk.doublejump.config.ConfigSection;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
@@ -22,17 +22,17 @@ import java.util.Optional;
         "# Support development: https://github.com/sponsors/imDMK",
         "# "
 })
-public class CommandConfiguration extends ConfigSection {
+public class CommandConfig extends ConfigSection {
 
     @Comment("# Enable or disable the command configurator feature.")
-    public boolean configuratorEnabled = false;
+    public boolean enabled = false;
 
     @Comment({
             "# Commands map: each command can be configured individually.",
             "# You can rename commands, enable/disable them, add aliases and permissions.",
             "# Nested subCommands can also be configured similarly."
     })
-    public Map<String, Command> commands = new HashMap<>(Map.of(
+    public Map<String, Command> commandsToEdit = new HashMap<>(Map.of(
             "doublejump", new Command(
                     "doublejump",
                     true,
@@ -55,7 +55,7 @@ public class CommandConfiguration extends ConfigSection {
      * @return Optional containing the command if present
      */
     public Optional<Command> getCommand(String name) {
-        return Optional.ofNullable(this.commands.get(name));
+        return Optional.ofNullable(this.commandsToEdit.get(name));
     }
 
     @Override
@@ -66,6 +66,6 @@ public class CommandConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "commandConfiguration.yml";
+        return "commandConfig.yml";
     }
 }

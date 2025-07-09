@@ -13,7 +13,7 @@ import java.time.temporal.ChronoUnit;
  */
 public final class DurationUtil {
 
-    public static TemporalAmountParser<Duration> DATE_TIME_PARSER = new DurationParser()
+    public static final TemporalAmountParser<Duration> DATE_TIME_PARSER = new DurationParser()
             .withUnit("s", ChronoUnit.SECONDS)
             .withUnit("m", ChronoUnit.MINUTES)
             .withUnit("h", ChronoUnit.HOURS)
@@ -22,18 +22,18 @@ public final class DurationUtil {
             .withUnit("mo", ChronoUnit.MONTHS)
             .withUnit("y", ChronoUnit.YEARS);
 
+    private static final long MILLIS_PER_TICK = 50L;
+
     private DurationUtil() {
-        throw new UnsupportedOperationException("This is utility class.");
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated.");
     }
 
     /**
      * Formats the provided {@link Duration} into a human-readable string.
-     * <p>
-     * If the duration is {@code null}, zero, or negative, the method returns {@code "<1s"}.
-     * Otherwise, it formats the duration using the predefined {@link #DATE_TIME_PARSER}.
+     * Returns {@code "<1s"} for null, zero, or negative durations.
      *
-     * @param duration the duration to format; must not be {@code null}
-     * @return a formatted string representing the duration, or {@code "<1s"} if the duration is invalid
+     * @param duration the duration to format
+     * @return a formatted string or {@code "<1s"}
      */
     public static @NotNull String format(@NotNull Duration duration) {
         if (!isValid(duration)) {
@@ -44,44 +44,33 @@ public final class DurationUtil {
     }
 
     /**
-     * Checks whether the given {@link Duration} is valid.
-     * <p>
-     * A duration is considered valid if it is not {@code null} and not equal to {@link Duration#ZERO}.
-     * Negative durations are considered valid as long as they are non-zero.
+     * Checks whether the given {@link Duration} is valid (non-null, non-zero, positive).
      *
-     * @param duration the duration to check, may be {@code null}
-     * @return {@code true} if the duration is non-null and not zero; {@code false} otherwise
+     * @param duration the duration to check
+     * @return {@code true} if valid, otherwise {@code false}
      */
-    public static boolean isValid(@Nullable final Duration duration) {
+    public static boolean isValid(@Nullable Duration duration) {
         return duration != null && !duration.isZero() && !duration.isNegative();
     }
 
     /**
-     * Converts a duration to Minecraft ticks (1 tick = 50 ms).
+     * Converts a {@link Duration} to Minecraft ticks (1 tick = 50ms).
      *
      * @param duration the duration to convert
-     * @return duration in ticks
+     * @return number of ticks
      */
-    public static long toTicks(@NotNull final Duration duration) {
-        if (duration.isZero() || duration.isNegative()) {
-            return 0L;
-        }
-
-        return duration.toMillis() / 50;
+    public static long toTicks(@NotNull Duration duration) {
+        return isValid(duration) ? duration.toMillis() / MILLIS_PER_TICK : 0L;
     }
 
     /**
-     * Converts Minecraft ticks to a {@link Duration}.
+     * Converts ticks to {@link Duration}.
      * 1 tick = 50 milliseconds.
      *
-     * @param ticks the number of ticks to convert
-     * @return a {@link Duration} representing the given number of ticks
+     * @param ticks the number of ticks
+     * @return a {@link Duration} representation
      */
-    public static @NotNull Duration fromTicks(final long ticks) {
-        if (ticks <= 0) {
-            return Duration.ZERO;
-        }
-
-        return Duration.ofMillis(ticks * 50L);
+    public static @NotNull Duration fromTicks(long ticks) {
+        return ticks > 0 ? Duration.ofMillis(ticks * MILLIS_PER_TICK) : Duration.ZERO;
     }
 }

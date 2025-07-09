@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.configuration.serializer;
+package com.github.imdmk.doublejump.config.serializer;
 
 import com.github.imdmk.doublejump.util.ComponentUtil;
 import eu.okaeri.configs.schema.GenericsDeclaration;

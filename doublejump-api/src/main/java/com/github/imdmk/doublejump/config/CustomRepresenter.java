@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.configuration;
+package com.github.imdmk.doublejump.config;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.nodes.Node;

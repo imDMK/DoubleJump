@@ -18,10 +18,10 @@ import java.util.Optional;
 public class JumpBlockController extends PluginListener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    void onPlayerDeath(final PlayerDeathEvent event) {
-        final Player player = event.getEntity();
+    void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
 
-        if (!this.jumpConfiguration.jumpBlock.enabled) {
+        if (!this.jumpConfig.blocks.enabled) {
             return;
         }
 
@@ -37,10 +37,10 @@ public class JumpBlockController extends PluginListener {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    void onPlayerMove(final PlayerMoveEvent event) {
+    void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (!this.jumpConfiguration.jumpBlock.enabled) {
+        if (!this.jumpConfig.blocks.enabled) {
             return;
         }
 
@@ -77,7 +77,6 @@ public class JumpBlockController extends PluginListener {
         this.flyingService.enable(player);
     }
 
-
     /**
      * Deactivates block-based double jump if conditions are met (e.g., stepping off the block).
      */
@@ -101,7 +100,7 @@ public class JumpBlockController extends PluginListener {
      * Gets the JumpBlock instance for a material, if configured.
      */
     private Optional<JumpBlock> getJumpBlock(@NotNull Material material) {
-        return this.jumpConfiguration.jumpBlock.getJumpBlock(material);
+        return this.jumpConfig.blocks.getJumpBlock(material);
     }
 
     /**

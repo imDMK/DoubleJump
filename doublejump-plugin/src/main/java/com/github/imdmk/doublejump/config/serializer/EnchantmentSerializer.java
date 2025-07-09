@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.configuration.serializer;
+package com.github.imdmk.doublejump.config.serializer;
 
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;

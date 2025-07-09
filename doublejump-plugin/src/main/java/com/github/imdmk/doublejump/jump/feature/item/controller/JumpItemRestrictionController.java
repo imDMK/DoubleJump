@@ -20,8 +20,8 @@ public class JumpItemRestrictionController extends PluginListener {
     @Inject private JumpItemService jumpItemService;
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    void onItemEnchant(final EnchantItemEvent event) {
-        if (!this.jumpItemService.isEnabled() || !this.jumpConfiguration.jumpItem.preventEnchant) {
+    void onItemEnchant(EnchantItemEvent event) {
+        if (!this.jumpItemService.isEnabled() || !this.jumpConfig.item.preventEnchant) {
             return;
         }
 
@@ -31,8 +31,8 @@ public class JumpItemRestrictionController extends PluginListener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    void onItemAnvil(final InventoryClickEvent event) {
-        if (!this.jumpItemService.isEnabled() || !this.jumpConfiguration.jumpItem.preventRepair) {
+    void onItemAnvil(InventoryClickEvent event) {
+        if (!this.jumpItemService.isEnabled() || !this.jumpConfig.item.preventRepair) {
             return;
         }
 
@@ -53,10 +53,10 @@ public class JumpItemRestrictionController extends PluginListener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    void onItemDrop(final PlayerDropItemEvent event) {
+    void onItemDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
 
-        if (!this.jumpItemService.isEnabled() || !this.jumpConfiguration.jumpItem.preventDrop) {
+        if (!this.jumpItemService.isEnabled() || !this.jumpConfig.item.preventDrop) {
             return;
         }
 

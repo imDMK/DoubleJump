@@ -24,7 +24,7 @@ public class PlayerFlyingService {
      * </p>
      * @param player The player to modify.
      */
-    public void enable(@NotNull final Player player) {
+    public void enable(@NotNull Player player) {
         this.taskScheduler.run(() -> player.setAllowFlight(true));
     }
 
@@ -33,7 +33,7 @@ public class PlayerFlyingService {
      *
      * @param player The player to modify.
      */
-    public void disable(@NotNull final Player player) {
+    public void disable(@NotNull Player player) {
         this.disable(player, GameModeUtil.isFlyingGameMode(player.getGameMode()));
     }
 
@@ -46,7 +46,7 @@ public class PlayerFlyingService {
      * @param player      the player whose flying state will be disabled; must not be null
      * @param allowFlight true to allow the player to start flying later, false to revoke flight permission
      */
-    public void disable(@NotNull final Player player, final boolean allowFlight) {
+    public void disable(@NotNull Player player, boolean allowFlight) {
         this.taskScheduler.run(() -> {
             player.setFlying(false);
             player.setAllowFlight(allowFlight);

@@ -27,24 +27,24 @@ public class JumpRestrictionController extends PluginListener {
     @Inject private JumpVelocityService velocityService;
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    void onDoubleJump(final DoubleJumpEvent event) {
+    void onDoubleJump(DoubleJumpEvent event) {
         Player player = event.getPlayer();
         this.jumpCache.ifActive(player.getUniqueId(), jump -> this.handleRestrictions(player, jump));
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    void onPlayerMove(final PlayerMoveEvent event) {
+    void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         this.jumpCache.ifActive(player.getUniqueId(), jump -> this.handleRestrictions(player, jump));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onPlayerJoin(final PlayerJoinEvent event) {
+    void onPlayerJoin(PlayerJoinEvent event) {
         this.attemptEnableDoubleJump(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
+    void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         this.attemptEnableDoubleJump(event.getPlayer());
     }
 
@@ -112,13 +112,13 @@ public class JumpRestrictionController extends PluginListener {
             return false;
         }
 
-        String autoEnablePermission = this.jumpConfiguration.autoEnableForPermission;
+        String autoEnablePermission = this.jumpConfig.autoEnableForPermission;
         if (autoEnablePermission != null
                 && !autoEnablePermission.isEmpty()
                 && player.hasPermission(autoEnablePermission)) {
             return true;
         }
 
-        return this.jumpConfiguration.autoEnableOnJoin;
+        return this.jumpConfig.autoEnableOnJoin;
     }
 }

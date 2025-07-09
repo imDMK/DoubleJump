@@ -10,7 +10,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 public class JumpItemResetController extends PluginListener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    void onPlayerDeath(final PlayerDeathEvent event) {
+    void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
         this.jumpCache.getActive(player.getUniqueId())

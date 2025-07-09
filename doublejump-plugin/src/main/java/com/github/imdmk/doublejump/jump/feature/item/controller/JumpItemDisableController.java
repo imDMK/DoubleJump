@@ -74,7 +74,7 @@ public class JumpItemDisableController extends PluginListener {
      * @param event the item held event
      */
     @EventHandler
-    public void onPlayerItemHeld(final PlayerItemHeldEvent event) {
+    public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
 
         if (!this.jumpItemService.isEnabled(ItemUsage.HOLD_ITEM)) {

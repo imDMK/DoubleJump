@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.configuration;
+package com.github.imdmk.doublejump.config;
 
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -23,10 +23,11 @@ import java.time.Duration;
         "# SpigotMC — your support means a lot!",
         "#",
         "# Support development: https://github.com/sponsors/imDMK",
+        "# Paypal.me: https://paypal.me/dominiksuliga",
         "#",
 })
 
-public class PluginConfiguration extends ConfigSection {
+public class PluginConfig extends ConfigSection {
 
     @Comment("# Check for plugin update and send notification after administrator join to server?")
     public boolean checkUpdate = true;
@@ -43,6 +44,6 @@ public class PluginConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "pluginConfiguration.yml";
+        return "pluginConfig.yml";
     }
 }

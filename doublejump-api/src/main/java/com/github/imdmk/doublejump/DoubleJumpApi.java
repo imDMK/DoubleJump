@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump;
 
-import com.github.imdmk.doublejump.configuration.ConfigurationManager;
+import com.github.imdmk.doublejump.config.ConfigManager;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;
 import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualCache;
@@ -23,17 +23,17 @@ import org.jetbrains.annotations.NotNull;
 public interface DoubleJumpApi {
 
     /**
-     * Retrieves the {@link ConfigurationManager} responsible for loading,
+     * Retrieves the {@link ConfigManager} responsible for loading,
      * parsing, and providing access to all plugin configuration files.
      * <p>
      * This manager provides methods to obtain current configuration values
      * and supports dynamic reloads if implemented.
      * </p>
      *
-     * @return a non-null instance of {@link ConfigurationManager} used by the plugin.
+     * @return a non-null instance of {@link ConfigManager} used by the plugin.
      */
     @NotNull
-    ConfigurationManager getConfigurationManager();
+    ConfigManager getConfigurationManager();
 
     /**
      * Returns the {@link JumpPlayerCache} containing runtime data for all active players

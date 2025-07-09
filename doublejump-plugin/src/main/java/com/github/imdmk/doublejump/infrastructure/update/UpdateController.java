@@ -3,7 +3,7 @@ package com.github.imdmk.doublejump.infrastructure.update;
 import com.eternalcode.gitcheck.GitCheckResult;
 import com.eternalcode.gitcheck.git.GitException;
 import com.eternalcode.multification.notice.Notice;
-import com.github.imdmk.doublejump.configuration.PluginConfiguration;
+import com.github.imdmk.doublejump.config.PluginConfig;
 import com.github.imdmk.doublejump.infrastructure.message.MessageService;
 import com.github.imdmk.doublejump.task.TaskScheduler;
 import com.github.imdmk.doublejump.util.DurationUtil;
@@ -34,14 +34,14 @@ public class UpdateController implements Listener {
     );
 
     @Inject private Logger logger;
-    @Inject private PluginConfiguration pluginConfiguration;
+    @Inject private PluginConfig pluginConfig;
     @Inject private MessageService messageService;
     @Inject private UpdateService updateService;
     @Inject private TaskScheduler taskScheduler;
 
     @EventHandler(priority = EventPriority.HIGHEST)
     void onPlayerJoin(PlayerJoinEvent event) {
-        if (!this.pluginConfiguration.checkUpdate) {
+        if (!this.pluginConfig.checkUpdate) {
             return;
         }
 
@@ -74,7 +74,7 @@ public class UpdateController implements Listener {
     private void sendNotice(@NotNull Player player, @NotNull Notice notice) {
         this.messageService.create()
                 .notice(notice)
-                .placeholder("{UPDATE_CHECK_INTERVAL}", DurationUtil.format(this.pluginConfiguration.updateInterval))
+                .placeholder("{UPDATE_CHECK_INTERVAL}", DurationUtil.format(this.pluginConfig.updateInterval))
                 .viewer(player)
                 .send();
     }

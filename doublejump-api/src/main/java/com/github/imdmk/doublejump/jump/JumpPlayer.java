@@ -40,10 +40,10 @@ public class JumpPlayer {
     private boolean jumpAllowed = true;
 
     /**
-     * Timestamp of the player's last performed jump.
+     * Timestamp of the player's performed jump delay.
      * Used for applying cooldowns and delay-based restrictions.
      */
-    private Instant lastJump;
+    private Instant nextAllowedJump;
 
     /**
      * The last restriction reason that was notified to the player.
@@ -154,21 +154,23 @@ public class JumpPlayer {
     }
 
     /**
-     * Gets the timestamp of the player's last jump, if present.
+     * Gets the timestamp indicating when the player is next allowed to perform a jump.
+     * This value is used to enforce cooldowns between jumps.
      *
-     * @return an optional containing the last jump time, or empty if not set
+     * @return an optional containing the next allowed jump time, or empty if not set
      */
-    public Optional<Instant> getLastJump() {
-        return Optional.ofNullable(this.lastJump);
+    public Optional<Instant> getNextAllowedJump() {
+        return Optional.ofNullable(this.nextAllowedJump);
     }
 
     /**
-     * Sets the timestamp of the player's last jump.
+     * Sets the timestamp after which the player is allowed to perform the next jump.
+     * This is typically used to apply a cooldown delay.
      *
-     * @param lastJump the time the last jump occurred
+     * @param nextAllowedJump the time after which jumping is allowed again; may be null to clear
      */
-    public void setLastJump(@Nullable Instant lastJump) {
-        this.lastJump = lastJump;
+    public void setNextAllowedJump(@Nullable Instant nextAllowedJump) {
+        this.nextAllowedJump = nextAllowedJump;
     }
 
     /**
@@ -255,7 +257,7 @@ public class JumpPlayer {
                 ", activationType=" + this.activationType +
                 ", active=" + this.active +
                 ", jumpAllowed=" + this.jumpAllowed +
-                ", lastJump=" + this.lastJump +
+                ", nextAllowedJump=" + this.nextAllowedJump +
                 ", lastNotifiedReason=" + this.lastNotifiedReason +
                 ", jumpProperties=" + this.jumpVelocity +
                 '}';

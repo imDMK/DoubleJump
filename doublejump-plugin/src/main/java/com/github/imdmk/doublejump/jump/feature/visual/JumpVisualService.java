@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump.feature.visual;
 
-import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
+import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfig;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualRepository;
 import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;
@@ -18,7 +18,7 @@ public class JumpVisualService {
 
     @Inject private Logger logger;
     @Inject private JumpVisualRepository visualRepository;
-    @Inject private JumpVisualConfiguration visualConfiguration;
+    @Inject private JumpVisualConfig visualConfiguration;
 
     /**
      * Retrieves visual settings for the given player UUID.

@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump.feature.visual.configuration;
 
-import com.github.imdmk.doublejump.configuration.ConfigSection;
+import com.github.imdmk.doublejump.config.ConfigSection;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisual;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.JumpParticle;
 import com.github.imdmk.doublejump.jump.feature.visual.particle.configuration.JumpParticleConfiguration;
@@ -32,7 +32,7 @@ import java.util.List;
         "# Support development: https://github.com/sponsors/imDMK",
         "# "
 })
-public class JumpVisualConfiguration extends ConfigSection {
+public class JumpVisualConfig extends ConfigSection {
 
     @Comment({
             "# Default visual settings applied to players without custom visuals.",
@@ -66,6 +66,6 @@ public class JumpVisualConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "visualConfiguration.yml";
+        return "visualConfig.yml";
     }
 }

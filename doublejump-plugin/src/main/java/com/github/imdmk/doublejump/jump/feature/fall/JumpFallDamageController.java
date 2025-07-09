@@ -28,8 +28,8 @@ public class JumpFallDamageController extends PluginListener {
      * @param event The EntityDamageEvent to handle.
      */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    void onPlayerDamage(final EntityDamageEvent event) {
-        if (this.jumpConfiguration.applyFallDamage) {
+    void onPlayerDamage(EntityDamageEvent event) {
+        if (this.jumpConfig.applyFallDamage) {
             return;
         }
 
@@ -52,8 +52,8 @@ public class JumpFallDamageController extends PluginListener {
      * @param event The PlayerMoveEvent to handle.
      */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    void onPlayerMove(final PlayerMoveEvent event) {
-        if (!this.jumpConfiguration.applyFallDamage) {
+    void onPlayerMove(PlayerMoveEvent event) {
+        if (!this.jumpConfig.applyFallDamage) {
             return;
         }
 

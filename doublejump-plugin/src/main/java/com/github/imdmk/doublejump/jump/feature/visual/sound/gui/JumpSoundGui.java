@@ -4,7 +4,7 @@ import com.github.imdmk.doublejump.infrastructure.gui.AbstractGui;
 import com.github.imdmk.doublejump.infrastructure.gui.ParameterizedGui;
 import com.github.imdmk.doublejump.infrastructure.gui.configuration.ConfigGuiItem;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisual;
-import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
+import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfig;
 import com.github.imdmk.doublejump.jump.feature.visual.gui.JumpVisualGui;
 import com.github.imdmk.doublejump.util.ComponentUtil;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
@@ -27,7 +27,7 @@ public class JumpSoundGui extends AbstractGui implements ParameterizedGui<JumpVi
     private static final int ROWS = 6;
     private static final Map<Enchantment, Integer> ACTIVE_ENCHANTMENTS = Map.of(Enchantment.LOYALTY, 3);
 
-    @Inject protected JumpVisualConfiguration visualConfiguration;
+    @Inject protected JumpVisualConfig visualConfiguration;
 
     @Override
     public @NotNull BaseGui createGui(@NotNull Player viewer, @NotNull JumpVisual visual) {
@@ -47,8 +47,8 @@ public class JumpSoundGui extends AbstractGui implements ParameterizedGui<JumpVi
 
     @Override
     public void prepareBorderItems(@NotNull BaseGui gui) {
-        if (this.guiConfiguration.fillBorder) {
-            gui.getFiller().fillBorder(this.guiConfiguration.borderItem.asGuiItem());
+        if (this.guiConfig.fillBorder) {
+            gui.getFiller().fillBorder(this.guiConfig.borderItem.asGuiItem());
         }
     }
 
@@ -107,6 +107,6 @@ public class JumpSoundGui extends AbstractGui implements ParameterizedGui<JumpVi
     }
 
     private @NotNull JumpSoundGuiConfiguration getConfig() {
-        return this.guiConfiguration.jumpVisualGui.soundGui;
+        return this.guiConfig.jumpVisualGui.soundGui;
     }
 }

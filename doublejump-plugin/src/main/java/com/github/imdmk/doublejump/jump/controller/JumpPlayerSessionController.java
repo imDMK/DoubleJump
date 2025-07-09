@@ -20,7 +20,7 @@ public class JumpPlayerSessionController extends PluginListener {
      * @param event Player join event.
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onPlayerJoin(final PlayerJoinEvent event) {
+    void onPlayerJoin(PlayerJoinEvent event) {
         this.createJumpPlayer(event.getPlayer());
     }
 
@@ -30,7 +30,7 @@ public class JumpPlayerSessionController extends PluginListener {
      * @param event The server load event.
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    void onServerReload(final ServerLoadEvent event) {
+    void onServerReload(ServerLoadEvent event) {
         if (event.getType() != ServerLoadEvent.LoadType.RELOAD) {
             return;
         }
@@ -44,7 +44,7 @@ public class JumpPlayerSessionController extends PluginListener {
      * @param event Player quit event.
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    void onPlayerQuit(final PlayerQuitEvent event) {
+    void onPlayerQuit(PlayerQuitEvent event) {
         this.jumpCache.remove(event.getPlayer().getUniqueId());
     }
 

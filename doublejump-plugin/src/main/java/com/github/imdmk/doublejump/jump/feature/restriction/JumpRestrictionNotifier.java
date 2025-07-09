@@ -2,9 +2,9 @@ package com.github.imdmk.doublejump.jump.feature.restriction;
 
 import com.eternalcode.multification.notice.provider.NoticeProvider;
 import com.eternalcode.multification.shared.Formatter;
-import com.github.imdmk.doublejump.infrastructure.message.MessageConfiguration;
+import com.github.imdmk.doublejump.infrastructure.message.MessageConfig;
 import com.github.imdmk.doublejump.infrastructure.message.MessageService;
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
+import com.github.imdmk.doublejump.jump.JumpConfig;
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.util.DurationUtil;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import org.panda_lang.utilities.inject.annotations.Inject;
 public class JumpRestrictionNotifier {
 
     @Inject private MessageService messageService;
-    @Inject private JumpConfiguration jumpConfiguration;
+    @Inject private JumpConfig jumpConfig;
 
     /**
      * Sends a notification to the player if the restriction applies and
@@ -67,12 +67,12 @@ public class JumpRestrictionNotifier {
         // This switch allows future extension for other reasons needing custom formatting
         return switch (reason) {
             case JUMP_DELAY -> new Formatter()
-                    .register("{TIME}", DurationUtil.format(this.jumpConfiguration.jumpDelay));
+                    .register("{TIME}", DurationUtil.format(this.jumpConfig.cooldown));
             default -> new Formatter();
         };
     }
 
-    private @NotNull NoticeProvider<MessageConfiguration> getNoticeProvider(@NotNull RestrictionDenyReason reason) {
+    private @NotNull NoticeProvider<MessageConfig> getNoticeProvider(@NotNull RestrictionDenyReason reason) {
         return switch (reason) {
             case WORLD_DISABLED -> n -> n.worldRestricted;
             case REGION_DISABLED -> n -> n.regionRestricted;

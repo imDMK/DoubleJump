@@ -3,7 +3,7 @@ package com.github.imdmk.doublejump.infrastructure.message;
 import com.eternalcode.multification.notice.Notice;
 import com.eternalcode.multification.notice.resolver.NoticeResolverDefaults;
 import com.eternalcode.multification.okaeri.MultificationSerdesPack;
-import com.github.imdmk.doublejump.configuration.ConfigSection;
+import com.github.imdmk.doublejump.config.ConfigSection;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
         "# Support development: https://github.com/sponsors/imDMK",
         "# "
 })
-public class MessageConfiguration extends ConfigSection {
+public class MessageConfig extends ConfigSection {
 
     @Comment("# Sent when all plugin configuration files have been successfully reloaded.")
     public Notice reload = Notice.chat("<green>The plugin configuration files have been reloaded. <yellow>Note that some features may require a full restart to take effect.");
@@ -108,6 +108,6 @@ public class MessageConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "messageConfiguration.yml";
+        return "messageConfig.yml";
     }
 }

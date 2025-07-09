@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.infrastructure.gui;
 
-import com.github.imdmk.doublejump.infrastructure.gui.configuration.GuiConfiguration;
+import com.github.imdmk.doublejump.infrastructure.gui.configuration.GuiConfig;
 import com.github.imdmk.doublejump.infrastructure.injector.DefaultInjectable;
 import com.github.imdmk.doublejump.task.TaskScheduler;
 import dev.triumphteam.gui.guis.BaseGui;
@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 public abstract class AbstractGui extends DefaultInjectable {
 
-    @Inject protected GuiConfiguration guiConfiguration;
+    @Inject protected GuiConfig guiConfig;
     @Inject protected TaskScheduler taskScheduler;
     @Inject protected GuiManager guiManager;
 
@@ -37,9 +37,9 @@ public abstract class AbstractGui extends DefaultInjectable {
             throw new IllegalArgumentException("Gui is not a paginated gui to create a next page item");
         }
 
-        return this.guiConfiguration.nextItem.asGuiItem(event -> {
+        return this.guiConfig.nextItem.asGuiItem(event -> {
             if (!paginatedGui.next()) {
-                paginatedGui.updateItem(event.getSlot(), this.guiConfiguration.noNextItem.asGuiItem());
+                paginatedGui.updateItem(event.getSlot(), this.guiConfig.noNextItem.asGuiItem());
                 this.restoreItemLater(event, gui, this.createNextPageItem(gui));
             }
         });
@@ -64,9 +64,9 @@ public abstract class AbstractGui extends DefaultInjectable {
             throw new IllegalArgumentException("Gui is not a paginated gui to create previous page item");
         }
 
-        return this.guiConfiguration.previousItem.asGuiItem(event -> {
+        return this.guiConfig.previousItem.asGuiItem(event -> {
             if (!paginatedGui.previous()) {
-                paginatedGui.updateItem(event.getSlot(), this.guiConfiguration.noPreviousItem.asGuiItem());
+                paginatedGui.updateItem(event.getSlot(), this.guiConfig.noPreviousItem.asGuiItem());
                 this.restoreItemLater(event, gui, this.createPreviousPageItem(gui));
             }
         });
@@ -87,7 +87,7 @@ public abstract class AbstractGui extends DefaultInjectable {
     }
 
     protected GuiItem createExitPageItem(@NotNull Consumer<InventoryClickEvent> exit) {
-        return this.guiConfiguration.exitItem.asGuiItem(exit::accept);
+        return this.guiConfig.exitItem.asGuiItem(exit::accept);
     }
 
     protected void restoreItemLater(@NotNull InventoryClickEvent event, @NotNull BaseGui gui, @NotNull GuiItem item) {

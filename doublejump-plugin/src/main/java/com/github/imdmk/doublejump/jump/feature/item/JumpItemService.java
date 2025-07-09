@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump.feature.item;
 
-import com.github.imdmk.doublejump.jump.JumpConfiguration;
+import com.github.imdmk.doublejump.jump.JumpConfig;
 import com.github.imdmk.doublejump.jump.feature.item.usage.ItemUsage;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class JumpItemService {
 
-    @Inject private JumpConfiguration jumpConfiguration;
+    @Inject private JumpConfig jumpConfig;
 
     /**
      * Checks whether the provided item matches the configured jump item.
@@ -85,7 +85,7 @@ public class JumpItemService {
      * @return the jump {@link ItemStack}
      */
     public JumpItem getJumpItem() {
-        return this.jumpConfiguration.jumpItem.item;
+        return this.jumpConfig.item.item;
     }
 
     /**
@@ -94,7 +94,7 @@ public class JumpItemService {
      * @return {@code true} if enabled, {@code false} otherwise
      */
     public boolean isEnabled() {
-        return this.jumpConfiguration.jumpItem.enabled;
+        return this.jumpConfig.item.enabled;
     }
 
     /**
@@ -104,6 +104,6 @@ public class JumpItemService {
      * @return {@code true} if enabled and matches the given usage mode
      */
     public boolean isEnabled(@NotNull ItemUsage usage) {
-        return this.isEnabled() && this.jumpConfiguration.jumpItem.usageMode.equals(usage);
+        return this.isEnabled() && this.jumpConfig.item.usageMode.equals(usage);
     }
 }

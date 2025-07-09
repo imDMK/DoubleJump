@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.configuration;
+package com.github.imdmk.doublejump.config;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.exception.OkaeriException;

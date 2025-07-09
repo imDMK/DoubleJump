@@ -3,7 +3,7 @@ package com.github.imdmk.doublejump.jump.feature.visual.particle;
 import com.github.imdmk.doublejump.infrastructure.injector.PluginListener;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisual;
-import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfiguration;
+import com.github.imdmk.doublejump.jump.feature.visual.configuration.JumpVisualConfig;
 import com.github.imdmk.doublejump.jump.feature.visual.repository.JumpVisualCache;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,10 +14,10 @@ import org.panda_lang.utilities.inject.annotations.Inject;
 public class JumpParticleController extends PluginListener {
 
     @Inject private JumpVisualCache visualCache;
-    @Inject private JumpVisualConfiguration visualConfiguration;
+    @Inject private JumpVisualConfig visualConfiguration;
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onDoubleJump(final DoubleJumpEvent event) {
+    void onDoubleJump(DoubleJumpEvent event) {
         if (!this.visualConfiguration.particles.enabled) {
             return;
         }

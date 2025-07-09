@@ -1,8 +1,8 @@
 package com.github.imdmk.doublejump.infrastructure.gui.configuration;
 
-import com.github.imdmk.doublejump.configuration.ConfigSection;
-import com.github.imdmk.doublejump.configuration.serializer.ComponentSerializer;
-import com.github.imdmk.doublejump.configuration.serializer.EnchantmentSerializer;
+import com.github.imdmk.doublejump.config.ConfigSection;
+import com.github.imdmk.doublejump.config.serializer.ComponentSerializer;
+import com.github.imdmk.doublejump.config.serializer.EnchantmentSerializer;
 import com.github.imdmk.doublejump.jump.feature.visual.gui.JumpVisualGuiConfiguration;
 import com.github.imdmk.doublejump.jump.feature.visual.sound.configuration.JumpSoundSerializer;
 import com.github.imdmk.doublejump.jump.feature.visual.sound.configuration.SoundSerializer;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
         "# Support development: https://github.com/sponsors/imDMK",
         "# "
 })
-public class GuiConfiguration extends ConfigSection {
+public class GuiConfig extends ConfigSection {
 
     @Comment("# Enable border around all GUIs")
     public boolean fillBorder = true;
@@ -86,6 +86,6 @@ public class GuiConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "guiConfiguration.yml";
+        return "guiConfig.yml";
     }
 }

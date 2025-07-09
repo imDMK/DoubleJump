@@ -19,28 +19,28 @@ import java.util.logging.Logger;
 /**
  * Service responsible for sending formatted messages to command senders using the configured notice system.
  */
-public class MessageService extends BukkitMultification<MessageConfiguration> {
+public class MessageService extends BukkitMultification<MessageConfig> {
 
     private final Logger logger;
-    private final MessageConfiguration messageConfiguration;
+    private final MessageConfig messageConfig;
     private final AudienceProvider audienceProvider;
     private final MiniMessage miniMessage;
 
     public MessageService(
             @NotNull Logger logger,
-            @NotNull MessageConfiguration messageConfiguration,
+            @NotNull MessageConfig messageConfig,
             @NotNull AudienceProvider audienceProvider,
             @NotNull MiniMessage miniMessage
     ) {
         this.logger = Objects.requireNonNull(logger, "logger cannot be null");
-        this.messageConfiguration = Objects.requireNonNull(messageConfiguration, "messageConfiguration cannot be null");
+        this.messageConfig = Objects.requireNonNull(messageConfig, "messageConfiguration cannot be null");
         this.audienceProvider = Objects.requireNonNull(audienceProvider, "audienceProvider cannot be null");
         this.miniMessage = Objects.requireNonNull(miniMessage, "miniMessage cannot be null");
     }
 
     @Override
-    protected @NotNull TranslationProvider<MessageConfiguration> translationProvider() {
-        return locale -> this.messageConfiguration;
+    protected @NotNull TranslationProvider<MessageConfig> translationProvider() {
+        return locale -> this.messageConfig;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MessageService extends BukkitMultification<MessageConfiguration> {
      * @param sender the target recipient, must not be {@code null}
      * @param notice the notice to send, must not be {@code null}
      */
-    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfiguration> notice) {
+    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfig> notice) {
         this.create().viewer(sender).notice(notice).send();
     }
 
@@ -76,7 +76,7 @@ public class MessageService extends BukkitMultification<MessageConfiguration> {
      * @param notice    the notice to send, must not be {@code null}
      * @param formatter the formatter used to replace placeholders, must not be {@code null}
      */
-    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfiguration> notice, @NotNull Formatter formatter) {
+    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfig> notice, @NotNull Formatter formatter) {
         this.create()
                 .viewer(sender)
                 .notice(notice)

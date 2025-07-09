@@ -14,12 +14,12 @@ import org.bukkit.event.server.ServerLoadEvent;
 public class FlightStateController extends PluginListener {
 
     @EventHandler(priority = EventPriority.LOW)
-    void onPlayerQuit(final PlayerQuitEvent event) {
+    void onPlayerQuit(PlayerQuitEvent event) {
         this.jumpCache.ifActive(event.getPlayer().getUniqueId(), jump -> this.flyingService.disable(event.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    void onServerReload(final ServerLoadEvent event) {
+    void onServerReload(ServerLoadEvent event) {
         if (event.getType() != ServerLoadEvent.LoadType.RELOAD) {
             return;
         }
@@ -28,7 +28,7 @@ public class FlightStateController extends PluginListener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onPlayerMove(final PlayerMoveEvent event) {
+    void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
         Location from = event.getFrom();
@@ -47,7 +47,7 @@ public class FlightStateController extends PluginListener {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    void onPlayerDeath(final PlayerDeathEvent event) {
+    void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
         this.jumpCache.getActive(player.getUniqueId())
@@ -55,7 +55,7 @@ public class FlightStateController extends PluginListener {
                 .ifPresent(jump -> {
                     jump.setJumpAllowed(true);
                     jump.setLastNotifiedReason(null);
-                    jump.setLastJump(null);
+                    jump.setNextAllowedJump(null);
 
                     this.flyingService.enable(player);
                 });

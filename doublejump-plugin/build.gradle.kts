@@ -10,7 +10,8 @@ version = "1.0.0"
 repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // SpigotMC
     maven("https://repo.eternalcode.pl/releases") // EternalCode
-    maven("https://maven.enginehub.org/repo/") //World Guard API
+    maven("https://maven.enginehub.org/repo/") // World Guard API
+    maven("https://repo.extendedclip.com/releases/") // Placeholder API
 }
 
 dependencies {
@@ -18,6 +19,7 @@ dependencies {
 
     compileOnly("org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
+    compileOnly("me.clip:placeholderapi:2.11.6")
 
     implementation("com.zaxxer:HikariCP:6.2.1")
     implementation("com.j256.ormlite:ormlite-jdbc:6.1")
@@ -46,7 +48,7 @@ bukkit {
     author = "imDMK"
     description = "Game-changing double jump mechanics. Feels native. Lag-free performance."
     website = "https://github.com/imDMK/DoubleJump"
-    softDepend = listOf("WorldGuard")
+    softDepend = listOf("WorldGuard", "PlaceholderAPI")
 }
 
 tasks.withType<ShadowJar> {

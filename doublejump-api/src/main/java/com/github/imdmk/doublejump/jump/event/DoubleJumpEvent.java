@@ -29,13 +29,22 @@ public final class DoubleJumpEvent extends Event implements Cancellable {
      * @param jumpPlayer     The JumpPlayer data associated with the player.
      * @param jumpVelocity The jump properties (boosts) applied during this double jump.
      */
-    public DoubleJumpEvent(
-            final @NotNull Player player,
-            final @NotNull JumpPlayer jumpPlayer,
-            final @NotNull JumpVelocity jumpVelocity) {
+    public DoubleJumpEvent(final @NotNull Player player, final @NotNull JumpPlayer jumpPlayer, final @NotNull JumpVelocity jumpVelocity) {
         this.player = player;
         this.jumpPlayer = jumpPlayer;
         this.jumpVelocity = jumpVelocity;
+    }
+
+    /**
+     * Constructs a new DoubleJumpEvent.
+     *
+     * @param player         The player who performed the double jump.
+     * @param jumpPlayer     The JumpPlayer data associated with the player.
+     */
+    public DoubleJumpEvent(final @NotNull Player player, final @NotNull JumpPlayer jumpPlayer) {
+        this.player = player;
+        this.jumpPlayer = jumpPlayer;
+        this.jumpVelocity = jumpPlayer.getJumpVelocity();
     }
 
     @Override
@@ -75,7 +84,7 @@ public final class DoubleJumpEvent extends Event implements Cancellable {
      *
      * @return The DoubleJumpProperties instance.
      */
-    public @NotNull JumpVelocity getJumpProperties() {
+    public @NotNull JumpVelocity getJumpVelocity() {
         return this.jumpVelocity;
     }
 
@@ -84,7 +93,7 @@ public final class DoubleJumpEvent extends Event implements Cancellable {
      *
      * @param jumpVelocity The new jump properties.
      */
-    public void setJumpProperties(final @NotNull JumpVelocity jumpVelocity) {
+    public void setJumpVelocity(@NotNull JumpVelocity jumpVelocity) {
         this.jumpVelocity = jumpVelocity;
     }
 
@@ -94,7 +103,7 @@ public final class DoubleJumpEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(final boolean cancel) {
+    public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
     }
 }

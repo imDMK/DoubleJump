@@ -1,6 +1,6 @@
 package com.github.imdmk.doublejump.jump.feature.command;
 
-import com.github.imdmk.doublejump.configuration.ConfigurationManager;
+import com.github.imdmk.doublejump.config.ConfigManager;
 import com.github.imdmk.doublejump.infrastructure.message.MessageService;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -17,12 +17,12 @@ import java.util.logging.Logger;
 public class JumpReloadCommand {
 
     @Inject private Logger logger;
-    @Inject private ConfigurationManager configurationManager;
+    @Inject private ConfigManager configManager;
     @Inject private MessageService messageService;
 
     @Execute
     void reload(@Context CommandSender sender) {
-        this.configurationManager.reloadAll()
+        this.configManager.reloadAll()
                 .thenAccept(v -> this.messageService.send(sender, notice -> notice.reload))
                 .exceptionally(throwable -> {
                     this.messageService.send(sender, notice -> notice.reloadError);

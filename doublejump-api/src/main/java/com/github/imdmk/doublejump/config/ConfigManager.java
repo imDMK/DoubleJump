@@ -1,6 +1,5 @@
-package com.github.imdmk.doublejump.configuration;
+package com.github.imdmk.doublejump.config;
 
-import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.exception.OkaeriException;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
@@ -29,7 +28,7 @@ import java.util.logging.Logger;
  * Supports asynchronous reload of all configs and tracks created config instances.
  * </p>
  */
-public final class ConfigurationManager {
+public final class ConfigManager {
 
     private final Set<ConfigSection> configs = ConcurrentHashMap.newKeySet();
 
@@ -37,7 +36,7 @@ public final class ConfigurationManager {
     private final File dataFolder;
     private final ExecutorService executor;
 
-    public ConfigurationManager(@NotNull Logger logger, @NotNull File dataFolder) {
+    public ConfigManager(@NotNull Logger logger, @NotNull File dataFolder) {
         this.logger = Objects.requireNonNull(logger, "logger cannot be null");
         this.dataFolder = Objects.requireNonNull(dataFolder, "dataFolder cannot be null");
         this.executor = Executors.newSingleThreadExecutor();
@@ -54,7 +53,7 @@ public final class ConfigurationManager {
      * @return the created and loaded configuration instance
      */
     public <T extends ConfigSection> T create(@NotNull Class<T> config) {
-        T configFile = ConfigManager.create(config);
+        T configFile = eu.okaeri.configs.ConfigManager.create(config);
         String fileName = configFile.getFileName();
 
         if (fileName.isEmpty()) {
@@ -121,7 +120,7 @@ public final class ConfigurationManager {
      * If loading fails, logs the error and throws a runtime exception.
      *
      * @param config the configuration instance to load, must not be null
-     * @throws ConfigurationLoadException if an error occurs during loading
+     * @throws ConfigLoadException if an error occurs during loading
      */
     public void load(@NotNull OkaeriConfig config) {
         try {
@@ -129,7 +128,7 @@ public final class ConfigurationManager {
         }
         catch (OkaeriException exception) {
             this.logger.log(Level.SEVERE, "Failed to load config: " + config.getClass().getSimpleName(), exception);
-            throw new ConfigurationLoadException(exception);
+            throw new ConfigLoadException(exception);
         }
     }
 

@@ -16,7 +16,7 @@ public class DatabaseService {
 
     private final Logger logger;
     private final File dataFolder;
-    private final DatabaseConfiguration databaseConfiguration;
+    private final DatabaseConfig databaseConfig;
 
     private HikariDataSource dataSource;
     private ConnectionSource connectionSource;
@@ -24,11 +24,11 @@ public class DatabaseService {
     public DatabaseService(
             @NotNull Logger logger,
             @NotNull File dataFolder,
-            @NotNull DatabaseConfiguration databaseConfiguration
+            @NotNull DatabaseConfig databaseConfig
     ) {
         this.logger = Objects.requireNonNull(logger, "logger cannot be null");
         this.dataFolder = Objects.requireNonNull(dataFolder, "dataFolder cannot be null");
-        this.databaseConfiguration = Objects.requireNonNull(databaseConfiguration, "databaseConfiguration cannot be null");
+        this.databaseConfig = Objects.requireNonNull(databaseConfig, "databaseConfiguration cannot be null");
     }
 
     public void connect() throws SQLException, IllegalStateException {
@@ -42,7 +42,7 @@ public class DatabaseService {
 
         this.dataSource = this.createHikariDataSource();
 
-        DatabaseMode mode = this.databaseConfiguration.databaseMode;
+        DatabaseMode mode = this.databaseConfig.databaseMode;
         switch (mode) {
             case SQLITE -> {
                 this.dataSource.setDriverClassName("org.sqlite.JDBC");
@@ -51,7 +51,7 @@ public class DatabaseService {
 
             case MYSQL -> {
                 this.dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-                this.dataSource.setJdbcUrl("jdbc:mysql://" + this.databaseConfiguration.hostname + ":" + this.databaseConfiguration.port + "/" + this.databaseConfiguration.database);
+                this.dataSource.setJdbcUrl("jdbc:mysql://" + this.databaseConfig.hostname + ":" + this.databaseConfig.port + "/" + this.databaseConfig.database);
             }
 
             default -> throw new IllegalStateException("Unknown database mode: " + mode.name());
@@ -73,8 +73,8 @@ public class DatabaseService {
     private @NotNull HikariDataSource createHikariDataSource() {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setMaximumPoolSize(5);
-        dataSource.setUsername(this.databaseConfiguration.username);
-        dataSource.setPassword(this.databaseConfiguration.password);
+        dataSource.setUsername(this.databaseConfig.username);
+        dataSource.setPassword(this.databaseConfig.password);
         dataSource.addDataSourceProperty("cachePrepStmts", true);
         dataSource.addDataSourceProperty("prepStmtCacheSize", 250);
         dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
