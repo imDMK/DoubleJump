@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 public class JumpCooldownPlaceholder extends PluginPlaceholder {
 
-    private static final String PLACEHOLDER_IDENTIFIER = "doublejump_cooldown";
+    private static final String PLACEHOLDER_IDENTIFIER = "doublejump-cooldown";
 
     @Inject private JumpConfig config;
     @Inject private JumpPlayerCache cache;

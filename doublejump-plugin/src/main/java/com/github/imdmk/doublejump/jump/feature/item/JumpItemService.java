@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class JumpItemService {
 
-    @Inject private JumpConfig jumpConfig;
+    @Inject private JumpConfig config;
 
     /**
      * Checks whether the provided item matches the configured jump item.
@@ -84,8 +84,8 @@ public class JumpItemService {
      *
      * @return the jump {@link ItemStack}
      */
-    public JumpItem getJumpItem() {
-        return this.jumpConfig.item.item;
+    public @NotNull JumpItem getJumpItem() {
+        return this.config.item.item;
     }
 
     /**
@@ -94,7 +94,7 @@ public class JumpItemService {
      * @return {@code true} if enabled, {@code false} otherwise
      */
     public boolean isEnabled() {
-        return this.jumpConfig.item.enabled;
+        return this.config.item.enabled;
     }
 
     /**
@@ -104,6 +104,6 @@ public class JumpItemService {
      * @return {@code true} if enabled and matches the given usage mode
      */
     public boolean isEnabled(@NotNull ItemUsage usage) {
-        return this.isEnabled() && this.jumpConfig.item.usageMode.equals(usage);
+        return this.isEnabled() && this.config.item.usageMode.equals(usage);
     }
 }

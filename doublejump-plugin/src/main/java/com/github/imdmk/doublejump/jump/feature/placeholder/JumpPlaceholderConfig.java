@@ -11,6 +11,9 @@ public class JumpPlaceholderConfig extends OkaeriConfig {
     })
     public boolean enabled = true;
 
+    @Comment("# Text to display when the player's doublejump mode is deactivated.")
+    public String jumpDisabledText = "doublejump disabled";
+
     @Comment({
             "# Text to display when the player's cooldown has expired or is not set.",
             "# Example: 'ready', 'now', '✓'"

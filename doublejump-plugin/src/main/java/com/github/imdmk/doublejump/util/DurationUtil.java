@@ -23,6 +23,7 @@ public final class DurationUtil {
             .withUnit("y", ChronoUnit.YEARS);
 
     private static final long MILLIS_PER_TICK = 50L;
+    private static final long ONE_SECOND_IN_MILLIS = 1000L;
 
     private DurationUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated.");
@@ -36,7 +37,7 @@ public final class DurationUtil {
      * @return a formatted string or {@code "<1s"}
      */
     public static @NotNull String format(@NotNull Duration duration) {
-        if (!isValid(duration)) {
+        if (duration.toMillis() < ONE_SECOND_IN_MILLIS || !isValid(duration)) {
             return "<1s";
         }
 

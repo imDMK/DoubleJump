@@ -11,7 +11,7 @@ import org.panda_lang.utilities.inject.annotations.Inject;
 
 public class JumpAllowedPlaceholder extends PluginPlaceholder {
 
-    private static final String PLACEHOLDER_IDENTIFIER = "doublejump_allowed";
+    private static final String PLACEHOLDER_IDENTIFIER = "doublejump-allowed";
 
     @Inject private JumpConfig config;
     @Inject private JumpPlayerCache cache;
