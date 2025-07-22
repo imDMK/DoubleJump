@@ -1,4 +1,4 @@
-package com.github.imdmk.doublejump.jump.feature.restriction.delay;
+package com.github.imdmk.doublejump.jump.feature.restriction.cooldown;
 
 import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.cache.JumpPlayerCache;

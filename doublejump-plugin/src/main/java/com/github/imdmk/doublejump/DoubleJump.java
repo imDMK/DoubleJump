@@ -45,7 +45,8 @@ import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionContr
 import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionNotifier;
 import com.github.imdmk.doublejump.jump.feature.restriction.JumpRestrictionService;
 import com.github.imdmk.doublejump.jump.feature.restriction.RestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.delay.CooldownRestrictionController;
+import com.github.imdmk.doublejump.jump.feature.restriction.cooldown.CooldownRestrictionController;
+import com.github.imdmk.doublejump.jump.feature.restriction.cooldown.CooldownRestrictionService;
 import com.github.imdmk.doublejump.jump.feature.velocity.JumpVelocityService;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualService;
 import com.github.imdmk.doublejump.jump.feature.visual.JumpVisualSessionController;
@@ -115,6 +116,8 @@ class DoubleJump implements DoubleJumpApi {
 
     private JumpRestrictionService jumpRestrictionService;
     private JumpRestrictionNotifier jumpRestrictionNotifier;
+
+    private CooldownRestrictionService cooldownRestrictionService;
 
     private JumpItemService jumpItemService;
     private ItemUsageStrategy itemUsageStrategy;
@@ -216,6 +219,8 @@ class DoubleJump implements DoubleJumpApi {
             /* Jump restrictions, lazy */
             resources.on(JumpRestrictionService.class).assignInstance(() -> this.jumpRestrictionService);
             resources.on(JumpRestrictionNotifier.class).assignInstance(() -> this.jumpRestrictionNotifier);
+            
+            resources.on(CooldownRestrictionService.class).assignInstance(() -> this.cooldownRestrictionService);
 
             /* Jump items, lazy */
             resources.on(JumpItemService.class).assignInstance(() -> this.jumpItemService);
@@ -231,6 +236,8 @@ class DoubleJump implements DoubleJumpApi {
 
             this.jumpRestrictionService = this.createInstance(JumpRestrictionService.class);
             this.jumpRestrictionNotifier = this.createInstance(JumpRestrictionNotifier.class);
+
+            this.cooldownRestrictionService = this.createInstance(CooldownRestrictionService.class);
 
             this.jumpItemService = this.createInstance(JumpItemService.class);
             this.itemUsageStrategy = ItemUsageStrategyFactory.create(jumpConfig.item.usageMode, this.injector);

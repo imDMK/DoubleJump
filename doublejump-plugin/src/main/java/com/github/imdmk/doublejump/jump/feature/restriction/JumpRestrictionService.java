@@ -7,7 +7,7 @@ import com.github.imdmk.doublejump.jump.feature.restriction.checker.WorldGuardRe
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.GlidingRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PermissionRestrictionChecker;
 import com.github.imdmk.doublejump.jump.feature.restriction.checker.player.PingRestrictionChecker;
-import com.github.imdmk.doublejump.jump.feature.restriction.delay.CooldownRestrictionChecker;
+import com.github.imdmk.doublejump.jump.feature.restriction.cooldown.CooldownRestrictionChecker;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;

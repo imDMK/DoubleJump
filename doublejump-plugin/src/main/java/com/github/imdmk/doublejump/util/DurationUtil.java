@@ -37,8 +37,13 @@ public final class DurationUtil {
      * @return a formatted string or {@code "<1s"}
      */
     public static @NotNull String format(@NotNull Duration duration) {
-        if (duration.toMillis() < ONE_SECOND_IN_MILLIS || !isValid(duration)) {
-            return "<1s";
+        if (!isValid(duration)) {
+            return "0s";
+        }
+
+        long millis = duration.toMillis();
+        if (millis < ONE_SECOND_IN_MILLIS) {
+            return millis + "ms";
         }
 
         return DATE_TIME_PARSER.format(duration);

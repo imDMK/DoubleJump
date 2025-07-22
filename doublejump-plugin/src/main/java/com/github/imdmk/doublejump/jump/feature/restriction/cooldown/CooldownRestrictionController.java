@@ -1,12 +1,12 @@
-package com.github.imdmk.doublejump.jump.feature.restriction.delay;
+package com.github.imdmk.doublejump.jump.feature.restriction.cooldown;
 
 import com.github.imdmk.doublejump.infrastructure.injector.PluginListener;
-import com.github.imdmk.doublejump.jump.JumpPlayer;
 import com.github.imdmk.doublejump.jump.event.DoubleJumpEvent;
 import com.github.imdmk.doublejump.util.DurationUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
+import org.panda_lang.utilities.inject.annotations.Inject;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -17,16 +17,14 @@ import java.time.Instant;
  */
 public class CooldownRestrictionController extends PluginListener {
 
+    @Inject private CooldownRestrictionService cooldownRestrictionService;
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    void onDoubleJump(final DoubleJumpEvent event) {
-        JumpPlayer player = event.getJumpPlayer();
-        Duration delay = this.jumpConfig.cooldown;
-
-        if (!DurationUtil.isValid(delay)) {
-            return;
+    void onDoubleJump(DoubleJumpEvent event) {
+        Duration delay = this.cooldownRestrictionService.forPlayer(event.getPlayer());
+        if (DurationUtil.isValid(delay)) {
+            event.getJumpPlayer().setNextAllowedJump(this.calculateNextAllowedJump(delay));
         }
-
-        player.setNextAllowedJump(this.calculateNextAllowedJump(delay));
     }
 
     /**

@@ -56,7 +56,11 @@ public class JumpConfig extends ConfigSection {
     );
 
     @Comment("# Cooldown duration that a player must wait before performing another double jump. Set to 0 to disable.")
-    public Duration cooldown = Duration.ofSeconds(3L);
+    public Map<String, Duration> cooldowns = Map.of(
+            "default", Duration.ofSeconds(3L),
+            "doublejump.cooldown.vip", Duration.ofSeconds(2L),
+            "doublejump.cooldown.supervip", Duration.ofSeconds(1L)
+    );
 
     @Comment("# Configuration for restrictions that limit or disable double jumping under certain conditions.")
     public JumpRestrictionConfig restrictions = new JumpRestrictionConfig();
@@ -74,6 +78,10 @@ public class JumpConfig extends ConfigSection {
     public void loadProcessedProperties() {
         if (!this.velocities.containsKey("default")) {
             throw new MissingConfigValueException("velocities.default", "Default jump velocity must be defined for players without specific permissions.");
+        }
+
+        if (!this.cooldowns.containsKey("default")) {
+            throw new MissingConfigValueException("cooldowns.default", "Default jump cooldown must be  defined for players without specific permissions.");
         }
     }
 

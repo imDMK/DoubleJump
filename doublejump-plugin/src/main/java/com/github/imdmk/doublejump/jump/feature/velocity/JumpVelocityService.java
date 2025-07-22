@@ -4,7 +4,6 @@ import com.github.imdmk.doublejump.jump.JumpConfig;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.panda_lang.utilities.inject.annotations.Inject;
-import org.panda_lang.utilities.inject.annotations.PostConstruct;
 
 import java.util.Map;
 
@@ -12,14 +11,7 @@ public class JumpVelocityService {
 
     private static final String DEFAULT_IDENTIFIER = "default";
 
-    @Inject private JumpConfig jumpConfig;
-
-    @PostConstruct
-    private void postConstruct() {
-        if (!this.jumpConfig.velocities.containsKey(DEFAULT_IDENTIFIER)) {
-            throw new IllegalStateException("Missing required 'default' JumpProperties configuration.");
-        }
-    }
+    @Inject private JumpConfig config;
 
     /**
      * Returns the JumpProperties for the given player based on their permissions.
@@ -29,7 +21,7 @@ public class JumpVelocityService {
      * @return the matching JumpProperties instance
      */
     public @NotNull JumpVelocity forPlayer(@NotNull Player player) {
-        for (Map.Entry<String, JumpVelocity> entry : this.jumpConfig.velocities.entrySet()) {
+        for (Map.Entry<String, JumpVelocity> entry : this.config.velocities.entrySet()) {
             String permission = entry.getKey();
 
             if (this.isCustomPermissionKey(permission) && player.hasPermission(permission)) {
@@ -48,7 +40,7 @@ public class JumpVelocityService {
      * @throws IllegalStateException if the default properties are missing
      */
     public @NotNull JumpVelocity defaultProperties() {
-        return this.jumpConfig.velocities.get(DEFAULT_IDENTIFIER);
+        return this.config.velocities.get(DEFAULT_IDENTIFIER);
     }
 
     /**
