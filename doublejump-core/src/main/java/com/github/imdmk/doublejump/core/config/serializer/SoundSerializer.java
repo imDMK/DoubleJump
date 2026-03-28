@@ -1,0 +1,43 @@
+package com.github.imdmk.doublejump.core.config.serializer;
+
+import eu.okaeri.configs.schema.GenericsDeclaration;
+import eu.okaeri.configs.serdes.DeserializationData;
+import eu.okaeri.configs.serdes.ObjectSerializer;
+import eu.okaeri.configs.serdes.SerializationData;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.Sound;
+import org.jetbrains.annotations.NotNull;
+
+public final class SoundSerializer implements ObjectSerializer<Sound> {
+
+    @Override
+    public boolean supports(@NotNull Class<? super Sound> type) {
+        return Sound.class.isAssignableFrom(type);
+    }
+
+    @Override
+    public void serialize(Sound sound, SerializationData data, @NotNull GenericsDeclaration generics) {
+        data.setValue(sound.getKey().getKey(), String.class);
+    }
+
+    @Override
+    public Sound deserialize(DeserializationData data, @NotNull GenericsDeclaration generics) {
+        String value = data.getValue(String.class);
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Sound cannot be null or empty");
+        }
+
+        NamespacedKey key = NamespacedKey.fromString(value);
+        if (key == null) {
+            throw new IllegalArgumentException("Invalid sound key: " + value);
+        }
+
+        Sound sound = Registry.SOUNDS.get(key);
+        if (sound == null) {
+            throw new IllegalArgumentException("Unknown sound: " + value);
+        }
+
+        return sound;
+    }
+}

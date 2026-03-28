@@ -1,87 +1,62 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
-    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
-}
+    `doublejump-java`
+    `doublejump-repositories`
+    `doublejump-shadow`
 
-group = "com.github.imdmk"
-version = "1.0.1"
-
-repositories {
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // SpigotMC
-    maven("https://repo.eternalcode.pl/releases") // EternalCode
-    maven("https://maven.enginehub.org/repo/") // World Guard API
-    maven("https://repo.extendedclip.com/releases/") // Placeholder API
+    id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
 dependencies {
-    implementation(project(":doublejump-api"))
-
-    compileOnly("org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
-    compileOnly("me.clip:placeholderapi:2.11.6")
-
-    implementation("com.zaxxer:HikariCP:6.2.1")
-    implementation("com.j256.ormlite:ormlite-jdbc:6.1")
-
-    implementation("org.panda-lang.utilities:di:1.8.0")
-
-    implementation("net.kyori:adventure-platform-bukkit:4.4.0")
-    implementation("net.kyori:adventure-text-minimessage:4.19.0")
-
-    implementation("com.eternalcode:multification-bukkit:1.1.4")
-    implementation("com.eternalcode:multification-okaeri:1.1.4")
-    implementation("com.eternalcode:gitcheck:1.0.0")
-
-    implementation("dev.triumphteam:triumph-gui:3.1.11")
-    implementation("org.bstats:bstats-bukkit:3.1.0")
-
-    implementation("dev.rollczi:litecommands-bukkit:3.9.7")
-    implementation("dev.rollczi:litecommands-annotations:3.9.7")
+    implementation("com.alessiodp.libby:libby-bukkit:${Versions.LIBBY_BUKKIT}")
+    api(project(":doublejump-core"))
 }
 
-bukkit {
-    name = "DoubleJump"
-    version = "${project.version}"
-    apiVersion = "1.17"
-    main = "com.github.imdmk.doublejump.DoubleJumpPlugin"
-    author = "imDMK"
-    description = "Game-changing double jump mechanics. Feels native. Lag-free performance."
-    website = "https://github.com/imDMK/DoubleJump"
-    softDepend = listOf("WorldGuard", "PlaceholderAPI")
+tasks.build {
+    dependsOn(tasks.test)
+    dependsOn(tasks.shadowJar)
 }
 
-tasks.withType<ShadowJar> {
-    archiveFileName.set("DoubleJump v${project.version}.jar")
+doubleJumpShadow {
+    pluginYml {
+        name = "DoubleJump"
+        version = project.version.toString()
+        apiVersion = "1.21"
+        softDepend = listOf("WorldGuard", "EternalCombat")
+        main = "com.github.imdmk.doublejump.plugin.DoubleJumpPlugin"
+        author = "imDMK (dominiks8318@gmail.com)"
+        description = "An efficient plugin for calculating your time spent in the game with many features and configuration possibilities."
+        website = "https://github.com/imDMK/AdvancedPlayTime"
+    }
 
-    dependsOn("checkstyleMain")
-    dependsOn("checkstyleTest")
-    dependsOn("test")
+    shadowJar {
+        archiveFileName.set("AdvancedPlayTime v${project.version} (MC 1.21.x).jar")
 
-    exclude(
-        "org/intellij/lang/annotations/**",
-        "org/jetbrains/annotations/**",
-        "META-INF/**",
-    )
+        mergeServiceFiles()
 
-    val libPrefix = "com.github.imdmk.doublejump.lib"
-    listOf(
-        "com.eternalcode",
-        "com.github.benmanes",
-        "dev.rollczi",
-        "dev.triumphteam",
-        "com.j256.ormlite",
-        "eu.okaeri",
-        "javassist",
-        "net.kyori",
-        "org.bstats",
-        "org.checkerframework",
-        "org.json",
-        "org.panda_lang",
-        "org.yaml",
-        "panda.std",
-        "panda.utilities"
-    ).forEach { lib ->
-        relocate(lib, "$libPrefix.$lib")
+        exclude(
+            "META-INF/*.SF",
+            "META-INF/*.DSA",
+            "META-INF/*.RSA",
+            "module-info.class",
+            "org/intellij/lang/annotations/**",
+            "org/jetbrains/annotations/**"
+        )
+
+        val relocationPrefix = "com.github.imdmk.doublejump.lib"
+        listOf(
+            "org.bstats",
+        ).forEach { pkg ->
+            relocate(pkg, "$relocationPrefix.$pkg")
+        }
+    }
+}
+
+tasks {
+    runServer {
+        minecraftVersion("1.21.11")
+        downloadPlugins.modrinth("WorldGuard", Versions.WORLDGUARD)
+        downloadPlugins.modrinth("WorldEdit", Versions.WORLDEDIT)
+        downloadPlugins.modrinth("PacketEvents", "${Versions.PACKETEVENTS}+spigot")
+        downloadPlugins.modrinth("EternalCombat", Versions.ETERNAL_COMBAT)
     }
 }

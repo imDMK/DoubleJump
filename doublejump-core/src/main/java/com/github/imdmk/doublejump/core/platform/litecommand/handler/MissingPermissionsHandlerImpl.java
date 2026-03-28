@@ -1,0 +1,31 @@
+package com.github.imdmk.doublejump.core.platform.litecommand.handler;
+
+import com.github.imdmk.doublejump.core.injector.annotations.lite.LiteHandler;
+import com.github.imdmk.doublejump.core.message.MessageService;
+import dev.rollczi.litecommands.handler.result.ResultHandlerChain;
+import dev.rollczi.litecommands.invocation.Invocation;
+import dev.rollczi.litecommands.permission.MissingPermissions;
+import dev.rollczi.litecommands.permission.MissingPermissionsHandler;
+import org.bukkit.command.CommandSender;
+import org.panda_lang.utilities.inject.annotations.Inject;
+
+
+@LiteHandler(value = CommandSender.class)
+final class MissingPermissionsHandlerImpl implements MissingPermissionsHandler<CommandSender> {
+
+    private final MessageService messageService;
+
+    @Inject
+    MissingPermissionsHandlerImpl(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    @Override
+    public void handle(Invocation<CommandSender> invocation, MissingPermissions permissions, ResultHandlerChain<CommandSender> chain) {
+        messageService.create()
+                .viewer(invocation.sender())
+                .notice(n -> n.commandPermissionMissing)
+                .placeholder("{PERMISSIONS}", String.join(", ", permissions.getPermissions()))
+                .send();
+    }
+}
