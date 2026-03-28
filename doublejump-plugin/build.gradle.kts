@@ -24,12 +24,12 @@ doubleJumpShadow {
         softDepend = listOf("WorldGuard", "EternalCombat")
         main = "com.github.imdmk.doublejump.plugin.DoubleJumpPlugin"
         author = "imDMK (dominiks8318@gmail.com)"
-        description = "An efficient plugin for calculating your time spent in the game with many features and configuration possibilities."
-        website = "https://github.com/imDMK/AdvancedPlayTime"
+        description = "Game-changing double jump mechanics. Feels native. Lag-free performance. Fully customizable, lag-free double jumping."
+        website = "https://github.com/imDMK/DoubleJump"
     }
 
     shadowJar {
-        archiveFileName.set("AdvancedPlayTime v${project.version} (MC 1.21.x).jar")
+        archiveFileName.set("DoubleJump v${project.version} (MC 1.21.x).jar")
 
         mergeServiceFiles()
 
