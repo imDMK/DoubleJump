@@ -3,7 +3,7 @@
 ![JDK](https://img.shields.io/badge/JDK-1.21-blue.svg)
 ![Supported versions](https://img.shields.io/badge/Minecraft-1.21-green.svg)
 [![SpigotMC](https://img.shields.io/badge/Buy_on_SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/%E2%9C%A8-doublejump.125526/)
-[![Modrinth](https://img.shields.io/badge/Download_on_Modrinth-green.svg)](https://polymart.org/product/7887/doublejump-1-17-1-21-5)
+[![Modrinth](https://img.shields.io/badge/Download_on_Modrinth-green.svg)](https://modrinth.com/plugin/advanceddoublejump)
 [![bStats](https://img.shields.io/badge/Servers_using_doublejump-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
 
 > **Smooth, fully customizable double jump — predictable, stable, and lag-free.**
