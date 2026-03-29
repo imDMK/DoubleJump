@@ -3,74 +3,77 @@
 ![JDK](https://img.shields.io/badge/JDK-1.21-blue.svg)
 ![Supported versions](https://img.shields.io/badge/Minecraft-1.21-green.svg)
 [![SpigotMC](https://img.shields.io/badge/Buy_on_SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/%E2%9C%A8-doublejump.125526/)
-[![Modrtinth](https://img.shields.io/badge/Download_on_Modrinth-green.svg)](https://polymart.org/product/7887/doublejump-1-17-1-21-5)
+[![Modrinth](https://img.shields.io/badge/Download_on_Modrinth-green.svg)](https://polymart.org/product/7887/doublejump-1-17-1-21-5)
 [![bStats](https://img.shields.io/badge/Servers_using_doublejump-00695c)](https://bstats.org/plugin/bukkit/Double-Jump/19387)
 
-> **Smooth, fully customizable double jump — no glitches, no lag.**
+> **Smooth, fully customizable double jump — predictable, stable, and lag-free.**
 
 ---
 
 ## ✨ Features
 
-### ⚡ Clean & Smooth Mechanics
-- Custom double jump system (not vanilla-based)
-- Predictable, consistent movement
-- No random bugs or desync
+### ⚡ Clean & Predictable Mechanics
+- Fully custom double jump system (not based on vanilla)
+- Consistent movement without desync
+- No random glitches or unexpected behavior
 
 ---
 
 ### 🎒 Jump Items
-Define how players activate jump:
+Flexible ways to activate double jump:
 - `WEAR_ITEM` – wear specific boots  
-- `HOLD_ITEM` – hold an item
-- `HAVE_ITEM` – have an item
-- `CLICK_ITEM` – right-click to trigger 
+- `HOLD_ITEM` – hold an item  
+- `HAVE_ITEM` – keep item in inventory  
+- `CLICK_ITEM` – trigger on right-click  
 
-Everything configurable per item.
+Each mode is fully configurable per item.
 
 ---
 
-### 🎨 Jump Effects
-You can customize effects e.g. partciles, sounds on jump. Permission-based. Base and can be ovverides by opermissions.
+### 🎨 Effects Customization
+- Particles and sounds on jump  
+- Permission-based overrides  
+- Fine-grained control for different player groups  
 
 ---
 
 ### 🔐 Permission-Based Control
-- Control:
-  - velocity
-  - cooldown
-  - effects
-  - access
-- Perfect for rank systems
+Control everything via permissions:
+- velocity  
+- cooldown  
+- effects  
+- access  
+
+Perfect for rank-based servers.
 
 ---
 
 ### 🛡️ Smart Restrictions
-Disable jump when needed:
+Disable or limit jumping in specific scenarios:
 - Elytra equipped  
-- In specific worlds  
-- In WorldGuard regions
-- In combat (EternalCombat support)
-- For high-ping players  
+- Selected worlds  
+- WorldGuard regions  
+- Combat (EternalCombat support)  
+- High-ping players  
 - Or allow only via permission  
 
 ---
 
 ### ⏱️ Cooldown System
-- Limit jump usage (e.g. every X seconds)
-- Prevents abuse and spam
+- Limit jump usage (e.g. every X seconds)  
+- Prevent spam and abuse  
 
 ---
 
 ### 💥 Fall Damage Control
-- Disable for parkour/fun modes  
-- Enable for PvP balance  
+- Disable for parkour or fun modes  
+- Enable for balanced PvP  
 
 ---
 
 ### 🔄 Auto Enable
-- Enable on join
-- Optional permission-based access (e.g. VIP)
+- Automatically enable on join  
+- Optional permission-based activation (e.g. VIP)  
 
 ---
 
@@ -85,9 +88,9 @@ No hardcoded limitations.
 ---
 
 ### 🚀 Performance
-- Designed for high-performance servers  
-- No unnecessary overhead  
-- Scales well even with many players  
+- Optimized for high-performance servers  
+- Minimal overhead  
+- Scales well with large player counts  
 
 ---
 
@@ -113,7 +116,7 @@ No hardcoded limitations.
 | `/doublejump disable-for` | `command.doublejump.target` | Disable for another player | 
 | `/doublejump item give`   | `command.doublejump.item`   | Give jump item             |
 | `/doublejump item remove` | `command.doublejump.item`   | Remove jump item           |
-| `/doublejump reload`      | `command.doublejump.reload` | Reload config             |
+| `/doublejump reload`      | `command.doublejump.reload` | Reload config              |
 
 ---
 
@@ -121,35 +124,35 @@ No hardcoded limitations.
 
 💬 Discord: `imdmk`
 
-Refund only if:
-- Critical bug breaks the plugin
-- Cannot be fixed in reasonable time
+Refunds are provided only if:
+- A critical bug breaks core functionality  
+- The issue cannot be resolved in a reasonable time  
 
 ---
 
 ## 🌟 Why DoubleJump?
 
-Because most plugins:
+Most plugins:
 - glitch  
 - are limited  
-- or kill performance  
+- or impact performance  
 
-**This one doesn’t.**
+**This one focuses on stability, control, and clean design.**
 
 You get:
-- stable mechanics  
-- full control  
-- clean implementation  
+- reliable mechanics  
+- full configurability  
+- predictable behavior  
 
 ---
 
 ## ❤️ Support
 
-⭐ Leave a review  
+⭐ Leave a star  
 ☕ Donate: https://paypal.me/dominiksuliga  
 
 ---
 
 ## 💡 Summary
 
-If you want **reliable, configurable double jump without bullshit**, this is it.
+If you want a **stable, configurable double jump system that just works**, this is it.
